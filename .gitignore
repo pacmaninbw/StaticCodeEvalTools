@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+## Temporarily ignore documentation files
+Documentation/
+*.docx
+*.vsdx
+
 # User-specific files
 *.rsuser
 *.suo
