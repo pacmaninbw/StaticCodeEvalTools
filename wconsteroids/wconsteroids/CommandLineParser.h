@@ -11,7 +11,7 @@ public:
 	CommandLineParser(int argc, char* argv[]);
 	CmdLineOutputTypes getOutputTypes();
 	std::vector<std::string> getFileList();
-	void parse();
+	bool parse();
 
 private:
 	std::vector<std::string> arguments;

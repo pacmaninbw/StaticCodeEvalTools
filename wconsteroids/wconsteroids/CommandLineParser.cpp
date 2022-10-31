@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <vector>
 #include <program_options.hpp>
@@ -32,9 +33,18 @@ CommandLineParser::CommandLineParser(int argc, char* argv[])
 	initProgramOptions();
 }
 
-void CommandLineParser::parse()
+bool CommandLineParser::parse()
 {
+	constexpr size_t MinimumCommandLineCount = 2;	// Program name plus file name
 
+	bool hasFiles = false;
+
+	if (argCount < MinimumCommandLineCount)
+	{
+		std::cout << desc << "\n";
+	}
+
+	return hasFiles;
 }
 
 CmdLineOutputTypes CommandLineParser::getOutputTypes()

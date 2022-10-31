@@ -5,8 +5,10 @@
 #include "FileStatistics.h"
 #include "ReportWriter.h"
 
-static void mainLoop(CmdLineOutputTypes outputCtrl, FileStatistics allFiles)
+static void mainLoop(CommandLineParser &cmdLineParser)
 {
+	CmdLineOutputTypes outputCtrl = CmdLineOutputTypes::Default;
+	FileStatistics allFiles;
 
 }
 
@@ -14,15 +16,13 @@ int main(int argc, char* argv[])
 {
 	int exit_status = EXIT_SUCCESS;
 
-	CmdLineOutputTypes outputCtrl = CmdLineOutputTypes::Default;
-
-	FileStatistics allFiles;
-
 	try
 	{
 		CommandLineParser cmdLineParser(argc, argv);
-		cmdLineParser.parse();
-		outputCtrl = cmdLineParser.getOutputTypes();
+		if (cmdLineParser.parse())
+		{
+			mainLoop(cmdLineParser);
+		}
 	}
 
 	catch (std::exception ex)
