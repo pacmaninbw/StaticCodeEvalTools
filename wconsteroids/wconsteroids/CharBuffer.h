@@ -2,7 +2,6 @@
 #define CHARBUFFER_H
 #define INPUTBUFFERSIZE	(2048 * 4)
 
-//#include <memory>
 #include <string>
 
 /*
@@ -15,7 +14,6 @@
 class CharBuffer
 {
 public:
-	CharBuffer();
 	CharBuffer(size_t buffSize);
 	CharBuffer(CharBuffer&& other) noexcept;			// Move Constructor
 	CharBuffer& operator=(CharBuffer&& other) noexcept;	// Move Assignment
@@ -26,11 +24,12 @@ public:
 	[[nodiscard]] char* getCurrentLine();
 	// The addLine function returns true if the line can be added and
 	// false if the buffer does not have the capacity to store the new line
-	[[nodiscard]] bool addLine(const char* line) noexcept;
+	[[nodiscard]] bool addLine(std::string& line) noexcept;
 	// While the inline key word is only a recommendation, hopefully these 2 functions
 	// can be inline.
 	inline char getCurrentCharacter() const noexcept { return *currentChar; }
 	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; lastInBuffer++; };
+	inline void inputComplete() noexcept { lastInBuffer = &internalBuffer[actualSize]; }
 
 private:
 	char* internalBuffer;

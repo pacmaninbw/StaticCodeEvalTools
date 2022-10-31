@@ -2,13 +2,7 @@
 #include <string>
 #include "CharBuffer.h"
 
-CharBuffer::CharBuffer()
-	: capacity{ INPUTBUFFERSIZE }, actualSize{ 0 }, currentChar { &internalBuffer[0] }, lastInBuffer{ currentChar}
-{
-	internalBuffer = new char[INPUTBUFFERSIZE];
-}
-
-CharBuffer::CharBuffer(size_t bufferSize)
+CharBuffer::CharBuffer(size_t bufferSize = INPUTBUFFERSIZE)
 	: capacity{ bufferSize }, actualSize{ 0 }, currentChar{ &internalBuffer[0] }, lastInBuffer{ currentChar }
 {
 	internalBuffer = new char[capacity];
@@ -48,24 +42,15 @@ CharBuffer::~CharBuffer()
 	lastInBuffer = nullptr;
 }
 
-[[nodiscard]] bool CharBuffer::addLine(const char* line) noexcept
+[[nodiscard]] bool CharBuffer::addLine(std::string& line) noexcept
 {
-	bool canAddLine = true;
-	size_t length = strlen(line);
-	if (length < (capacity - actualSize))
+	bool canAddLine = line.size() > 0 && (line.size() < capacity - actualSize);
+
+	if (canAddLine)
 	{
-		const char* c = line;
-		while (*c)
-		{
-			currentChar++;
-			*currentChar = *c;
-			*c++;
-		}
-		actualSize += length;
-	}
-	else
-	{
-		canAddLine = false;
+		line.copy(currentChar, line.size());
+		currentChar += line.size();
+		actualSize += line.size();
 	}
 
 	return canAddLine;
