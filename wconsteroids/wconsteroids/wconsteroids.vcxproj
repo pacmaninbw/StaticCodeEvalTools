@@ -135,12 +135,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CharBuffer.cpp" />
     <ClCompile Include="CommandLineParser.cpp" />
     <ClCompile Include="FileStatistics.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReportWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CharBuffer.h" />
     <ClInclude Include="cmdlineoutputtypes.h" />
     <ClInclude Include="CommandLineParser.h" />
     <ClInclude Include="FileStatistics.h" />
