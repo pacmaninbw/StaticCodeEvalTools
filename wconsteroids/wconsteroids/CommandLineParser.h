@@ -10,12 +10,14 @@ class CommandLineParser
 public:
 	CommandLineParser(int argc, char* argv[]);
 	CmdLineOutputTypes getOutputTypes();
+	std::vector<std::string> getFileList();
 	void parse();
 
 private:
 	std::vector<std::string> arguments;
 	char** args;
 	int argCount;
+	std::vector<std::string> fileList;
 };
 
 #endif // COMMANDlINEPARSER_H
