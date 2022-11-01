@@ -9,6 +9,7 @@ CharBuffer::CharBuffer(size_t bufferSize = INPUTBUFFERSIZE)
 	: capacity{ bufferSize }, actualSize{ 0 }, currentChar{ &internalBuffer[0] }, lastInBuffer{ currentChar }
 {
 	internalBuffer = new char[capacity];
+	memset(internalBuffer, 0, capacity);
 }
 
 /*
@@ -47,6 +48,21 @@ CharBuffer::CharBuffer(const CharBuffer& original)
 	memcpy(internalBuffer, original.internalBuffer, actualSize);
 	currentChar = internalBuffer;
 	lastInBuffer = &internalBuffer[actualSize];
+}
+/*
+ * Rule of 5 Copy Operator
+ */
+CharBuffer& CharBuffer::operator=(const CharBuffer& original)
+{
+	capacity = original.capacity;
+	actualSize = original.actualSize;
+	internalBuffer = new char[capacity];
+	memset(internalBuffer, 0, capacity);
+	memcpy(internalBuffer, original.internalBuffer, actualSize);
+	currentChar = internalBuffer;
+	lastInBuffer = &internalBuffer[actualSize];
+
+	return *this;
 }
 
 /*

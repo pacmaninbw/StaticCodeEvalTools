@@ -17,10 +17,11 @@ public:
 	CharBuffer(size_t buffSize);
 	CharBuffer(CharBuffer&& other) noexcept;			// Move Constructor
 	CharBuffer& operator=(CharBuffer&& other) noexcept;	// Move Assignment
-	CharBuffer& operator=(const CharBuffer& other);		// Copy Assignment
-	CharBuffer(const CharBuffer& other);				// Copy Constructor
+	CharBuffer& operator=(const CharBuffer& original);		// Copy Assignment
+	CharBuffer(const CharBuffer& original);				// Copy Constructor
 	~CharBuffer();
 	// returns a NULL terminated array of characters
+	// Caller is responsible for deleting after use.
 	[[nodiscard]] char* getCurrentLine() noexcept;
 	// The addLine function returns true if the line can be added and
 	// false if the buffer does not have the capacity to store the new line
