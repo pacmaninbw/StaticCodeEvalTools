@@ -20,19 +20,21 @@ public:
 	FileStatistics(std::string inFileName);
 	void setFileName(std::string inFileName) { fileName = inFileName; }
 	void addTotals(FileStatistics &allFiles);
-	void incrementTotalLines() { totalLineCount++; }
+	// While the inline key word is only a recommendation, hopefully the increment
+	// functions can be inline.
+	inline void incrementTotalLines() { totalLineCount++; }
 	size_t getTotalLines() const { return totalLineCount; }
-	void incrementCodeLines() { codeLineCount++; }
+	inline void incrementCodeLines() { codeLineCount++; }
 	size_t getCodeLines() const { return codeLineCount; }
-	void incrementCommentsLines() { commentLineCount++; }
+	inline void incrementCommentsLines() { commentLineCount++; }
 	size_t getCommentLines() const { return commentLineCount; }
-	void incrementWhitespace() { whiteSpaceCount++; }
+	inline void incrementWhitespace() { whiteSpaceCount++; }
 	size_t getWhitespace() const { return whiteSpaceCount; }
-	void incrementCharacter() { characterCount++; }
+	inline void incrementCharacter() { characterCount++; }
 	size_t getCharacters() const { return characterCount; }
-	void incrementWords() { wordCount++; }
+	inline void incrementWords() { wordCount++; }
 	size_t getWords() const { return wordCount; }
-	void incrementCodeWithComment() { codeWithCommentCount++; }
+	inline void incrementCodeWithComment() { codeWithCommentCount++; }
 	size_t getCodeWithComment() const { return codeWithCommentCount; }
 };
 
