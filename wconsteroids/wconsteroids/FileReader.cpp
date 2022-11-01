@@ -10,6 +10,12 @@ FileReader::FileReader(std::string inFileName)
 {
 	fileName = inFileName;
 	inputFile.open(fileName);
+	if (!inputFile.is_open())
+	{
+		std::string eMsg("Runtime error:  Can't open file " + fileName + " for input.");
+		std::runtime_error FileInputError(eMsg);
+		throw FileInputError;
+	}
 }
 
 FileReader::~FileReader()

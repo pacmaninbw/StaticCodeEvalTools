@@ -10,6 +10,9 @@ static void mainLoop(CommandLineParser &cmdLineParser)
 	CmdLineOutputTypes outputCtrl = CmdLineOutputTypes::Default;
 	FileStatistics allFiles;
 
+	outputCtrl = cmdLineParser.getOutputTypes();
+	std::vector<std::string> filesToProcess = cmdLineParser.getFileList();
+
 }
 
 int main(int argc, char* argv[])
