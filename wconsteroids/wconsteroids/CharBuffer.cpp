@@ -5,7 +5,7 @@
 /*
  * Rule of 5 Constructor 
  */
-CharBuffer::CharBuffer(size_t bufferSize = INPUTBUFFERSIZE)
+CharBuffer::CharBuffer(size_t bufferSize = CB_INPUTBUFFERSIZE)
 	: capacity{ bufferSize }, actualSize{ 0 }, currentChar{ &internalBuffer[0] }, lastInBuffer{ currentChar }
 {
 	internalBuffer = new char[capacity];

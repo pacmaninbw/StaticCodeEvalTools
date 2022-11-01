@@ -26,7 +26,7 @@ FileReader::~FileReader()
 
 CharBuffer* FileReader::readBlockOfText()
 {
-	CharBuffer* inputBuffer = new CharBuffer(INPUTBUFFERSIZE);
+	CharBuffer* inputBuffer = new CharBuffer(CB_INPUTBUFFERSIZE);
 
 	inputBuffer->inputComplete();
 
