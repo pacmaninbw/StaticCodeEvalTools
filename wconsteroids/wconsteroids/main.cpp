@@ -5,6 +5,13 @@
 #include "FileStatistics.h"
 #include "ReportWriter.h"
 
+static bool checkEnvironmentVariable()
+{
+	bool checked = false;
+
+	return checked;
+}
+
 static void mainLoop(CommandLineParser &cmdLineParser)
 {
 	CmdLineOutputTypes outputCtrl = CmdLineOutputTypes::Default;

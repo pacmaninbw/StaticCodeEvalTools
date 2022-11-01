@@ -7,6 +7,7 @@
 static std::ifstream inputFile;
 
 FileReader::FileReader(std::string inFileName)
+	:endOfFileEncountered{false}
 {
 	fileName = inFileName;
 	inputFile.open(fileName);
@@ -27,5 +28,12 @@ CharBuffer* FileReader::readBlockOfText()
 {
 	CharBuffer* inputBuffer = new CharBuffer(INPUTBUFFERSIZE);
 
+	inputBuffer->inputComplete();
+
 	return inputBuffer;
+}
+
+bool FileReader::atEndOfFile()
+{
+	return (endOfFileEncountered || inputFile.peek() == EOF);
 }

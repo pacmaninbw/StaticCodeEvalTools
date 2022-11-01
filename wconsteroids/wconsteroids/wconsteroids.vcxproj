@@ -137,6 +137,8 @@
   <ItemGroup>
     <ClCompile Include="CharBuffer.cpp" />
     <ClCompile Include="CommandLineParser.cpp" />
+    <ClCompile Include="FileParser.cpp" />
+    <ClCompile Include="FileProcessor.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FileStatistics.cpp" />
     <ClCompile Include="main.cpp" />
@@ -146,6 +148,8 @@
     <ClInclude Include="CharBuffer.h" />
     <ClInclude Include="cmdlineoutputtypes.h" />
     <ClInclude Include="CommandLineParser.h" />
+    <ClInclude Include="FileParser.h" />
+    <ClInclude Include="FileProcessor.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FileStatistics.h" />
     <ClInclude Include="ReportWriter.h" />

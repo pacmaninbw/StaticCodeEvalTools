@@ -29,7 +29,8 @@ public:
 	// can be inline.
 	inline char getCurrentCharacter() const noexcept { return *currentChar; }
 	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; lastInBuffer++; };
-	inline void inputComplete() noexcept { lastInBuffer = &internalBuffer[actualSize]; }
+	inline void inputComplete() noexcept { lastInBuffer = &internalBuffer[actualSize]; currentChar = &internalBuffer[0]; }
+	bool endOfBuffer() { return currentChar == lastInBuffer; }
 
 private:
 	char* internalBuffer;
