@@ -2,6 +2,9 @@
 #include <string>
 #include "CharBuffer.h"
 
+/*
+ * Rule of 5 Constructor 
+ */
 CharBuffer::CharBuffer(size_t bufferSize = INPUTBUFFERSIZE)
 	: capacity{ bufferSize }, actualSize{ 0 }, currentChar{ &internalBuffer[0] }, lastInBuffer{ currentChar }
 {
@@ -9,7 +12,7 @@ CharBuffer::CharBuffer(size_t bufferSize = INPUTBUFFERSIZE)
 }
 
 /*
- * Implement move semantics
+ * Rule of 5 Implement move semantics
  */
 CharBuffer::CharBuffer(CharBuffer&& other) noexcept
 	: capacity{ other.capacity }, actualSize{ other.actualSize },
@@ -20,7 +23,7 @@ CharBuffer::CharBuffer(CharBuffer&& other) noexcept
 }
 
 /*
- * Implement move operator
+ * Rule of 5 Implement move operator
  */
 CharBuffer& CharBuffer::operator=(CharBuffer&& other) noexcept
 {
@@ -33,6 +36,22 @@ CharBuffer& CharBuffer::operator=(CharBuffer&& other) noexcept
 	return *this;
 }
 
+/*
+ * Rule of 5 Copy Constructor
+ */
+CharBuffer::CharBuffer(const CharBuffer& original)
+	: capacity{ original.capacity }, actualSize{original.actualSize}
+{
+	internalBuffer = new char[capacity];
+	memset(internalBuffer, 0, capacity);
+	memcpy(internalBuffer, original.internalBuffer, actualSize);
+	currentChar = internalBuffer;
+	lastInBuffer = &internalBuffer[actualSize];
+}
+
+/*
+ * Rule of 5 Destructor 
+ */
 CharBuffer::~CharBuffer()
 {
 	delete[] internalBuffer;
@@ -42,6 +61,10 @@ CharBuffer::~CharBuffer()
 	lastInBuffer = nullptr;
 }
 
+/*
+ * Add a line of text to the buffer.
+ * Return value indicates if there was sufficient space to store the new line.
+ */
 [[nodiscard]] bool CharBuffer::addLine(std::string& line) noexcept
 {
 	bool canAddLine = line.size() > 0 && (line.size() < capacity - actualSize);
@@ -56,35 +79,38 @@ CharBuffer::~CharBuffer()
 	return canAddLine;
 }
 
-[[nodiscard]] char* CharBuffer::getCurrentLine()
+/*
+ * Return a copy of the current line and advance the current pointer to the new line.
+ * Caller is responsible for deleting the char array after use.
+ */
+[[nodiscard]] char* CharBuffer::getCurrentLine() noexcept
 {
 	if (!*currentChar)
 	{
 		return nullptr;
 	}
 
+	// Advance to the start of the line
 	if (*currentChar == '\n')
 	{
 		currentChar++;
 	}
 
 	char* findEndOfLine = currentChar;
-	while (*findEndOfLine != '\n' && findEndOfLine <= lastInBuffer)
-	{
-		findEndOfLine++;
-	}
+	for (; *findEndOfLine != '\n' && findEndOfLine < lastInBuffer; findEndOfLine++);
 
 	size_t length = findEndOfLine - currentChar;
 
 	char* line = new char[length+1];
-	char* l = line;
-	while (l < findEndOfLine)
+	memset(line, 0, length + 1);
+	memcpy(line, currentChar, length);
+
+	currentChar = findEndOfLine + 1;	// reset currentChar to point to the new start location.
+	if (currentChar > lastInBuffer)
 	{
-		*l = *currentChar;
-		l++;
-		currentChar++;
+		currentChar = lastInBuffer;
 	}
-	line[length] = 0;
+
 
 	return line;
 }

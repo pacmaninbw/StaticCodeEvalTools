@@ -21,7 +21,7 @@ public:
 	CharBuffer(const CharBuffer& other);				// Copy Constructor
 	~CharBuffer();
 	// returns a NULL terminated array of characters
-	[[nodiscard]] char* getCurrentLine();
+	[[nodiscard]] char* getCurrentLine() noexcept;
 	// The addLine function returns true if the line can be added and
 	// false if the buffer does not have the capacity to store the new line
 	[[nodiscard]] bool addLine(std::string& line) noexcept;
@@ -30,7 +30,7 @@ public:
 	inline char getCurrentCharacter() const noexcept { return *currentChar; }
 	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; lastInBuffer++; };
 	inline void inputComplete() noexcept { lastInBuffer = &internalBuffer[actualSize]; currentChar = &internalBuffer[0]; }
-	bool endOfBuffer() { return currentChar == lastInBuffer; }
+	bool endOfBuffer() noexcept { return currentChar == lastInBuffer; }
 
 private:
 	char* internalBuffer;
