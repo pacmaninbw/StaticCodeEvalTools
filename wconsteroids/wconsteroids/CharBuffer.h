@@ -41,14 +41,13 @@ public:
 	// While the inline key word is only a recommendation, hopefully these 2 functions
 	// can be inline.
 	inline char getCurrentCharacter() const noexcept { return internalBuffer[currentCharIdx]; }
-	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; lastInBufferIdx++; };
-	inline void inputComplete() noexcept { lastInBufferIdx = actualSize; currentCharIdx = 0; }
-	bool endOfBuffer() noexcept { return currentCharIdx >= lastInBufferIdx; }
+	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; };
+	inline void inputComplete() noexcept { currentCharIdx = 0; }
+	bool endOfBuffer() noexcept { return currentCharIdx >= actualSize; }
 
 private:
 	std::vector<char> internalBuffer;
 	size_t currentCharIdx;
-	size_t lastInBufferIdx;
 	size_t capacity;
 	size_t actualSize;
 };

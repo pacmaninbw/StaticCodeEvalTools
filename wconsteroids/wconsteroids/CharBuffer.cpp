@@ -8,7 +8,7 @@
  * Rule of 5 Constructor 
  */
 CharBuffer::CharBuffer(size_t bufferSize = CB_INPUTBUFFERSIZE)
-	: capacity{ bufferSize }, actualSize{ 0 }, currentCharIdx{ 0 }, lastInBufferIdx{ 0 }
+	: capacity{ bufferSize }, actualSize{ 0 }, currentCharIdx{ 0 }
 {
 	internalBuffer.reserve(capacity);
 }
@@ -19,7 +19,7 @@ CharBuffer::CharBuffer(size_t bufferSize = CB_INPUTBUFFERSIZE)
 CharBuffer::CharBuffer(CharBuffer&& other) noexcept
 	: capacity{ other.capacity }, actualSize{ other.actualSize },
 	internalBuffer{std::move(other.internalBuffer)},
-	currentCharIdx{ 0 }, lastInBufferIdx{ actualSize }
+	currentCharIdx{ 0 }
 {
 
 }
@@ -33,7 +33,6 @@ CharBuffer& CharBuffer::operator=(CharBuffer&& other) noexcept
 	capacity = other.capacity;
 	actualSize = other.actualSize;
 	currentCharIdx = 0;
-	lastInBufferIdx = actualSize;
 
 	return *this;
 }
@@ -46,7 +45,6 @@ CharBuffer::CharBuffer(const CharBuffer& original)
 {
 	internalBuffer = original.internalBuffer;
 	currentCharIdx = original.currentCharIdx;
-	lastInBufferIdx = original.lastInBufferIdx;
 }
 /*
  * Rule of 5 Copy Operator
@@ -57,7 +55,6 @@ CharBuffer& CharBuffer::operator=(const CharBuffer& original)
 	actualSize = original.actualSize;
 	internalBuffer = original.internalBuffer;
 	currentCharIdx = original.currentCharIdx;
-	lastInBufferIdx = original.lastInBufferIdx;
 
 	return *this;
 }
@@ -70,7 +67,6 @@ CharBuffer::~CharBuffer()
 	capacity = 0;
 	actualSize = 0;
 	currentCharIdx = 0;
-	lastInBufferIdx = 0;
 }
 
 /*
@@ -101,7 +97,7 @@ std::vector<char> CharBuffer::getCurrentLine() noexcept
 	std::vector<char>::iterator findEndOfLine = std::find(internalBuffer.begin()+currentCharIdx, internalBuffer.end(), '\n');
 	if (findEndOfLine == internalBuffer.end())
 	{
-		findEndOfLine = internalBuffer.begin() + lastInBufferIdx;
+		findEndOfLine = internalBuffer.begin() + actualSize;
 	}
 
 	std::copy(internalBuffer.begin() + currentCharIdx, findEndOfLine, line.begin());
