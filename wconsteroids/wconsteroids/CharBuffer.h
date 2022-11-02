@@ -2,6 +2,18 @@
 #define CHARBUFFER_H
 
 /*
+ * Buffer for character file input.
+ * Maintains an index to the last character in the current block of input.
+ * Returns the current character
+ * Returns a line in the block.
+ *
+ * Follows rule of 5 since Move might be needed. Implementations that use this
+ * buffer might be multi-threaded and move semantics would be necessary for
+ * performance reasons. One thread would be the process that reads a file and
+ * creates the buffer, a second process would be the consumer of the buffer.
+ */
+
+/*
  * Old style C macros so that symbolic constants are not defined in multiple files.
  * Attempting to make it type safe with the static cast to size_t. The multiplier
  * is used to be able to increase or decrease the size of the buffer easily.
@@ -14,17 +26,6 @@
 #include <string>
 #include <vector>
 
-/*
- * Buffer for character file input. 
- * Maintains a pointer to the last character in the current block of input.
- * Returns the current character
- * Returns a line in the block.
- * 
- * Follows rule of 5 since Move might be needed. Implementations that use this
- * buffer might be multi-threaded and move semantics would be necessary for
- * performance reasons. One thread would be the process that reads a file and
- * creates the buffer, a second process would be the consumer of the buffer.
- */
 class CharBuffer
 {
 public:
