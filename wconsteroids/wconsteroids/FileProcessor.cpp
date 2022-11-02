@@ -35,11 +35,19 @@ bool FileProcessor::processFile()
 {
 	bool processComplete = true;
 
-	while (!reader->atEndOfFile())
+	try{
+		while (!reader->atEndOfFile())
+		{
+			CharBuffer* inputBuffer = reader->readBlockOfText();
+			statistics.addToCharCount(reader->getCharCount());
+			statistics.addToLineCount(reader->getLineCount());
+		}
+	}
+	catch(std::exception ex)
 	{
-		CharBuffer* inputBuffer = reader->readBlockOfText();
-		statistics.addToCharCount(reader->getCharCount());
-		statistics.addToLineCount(reader->getLineCount());
+		std::cerr << "Error: unable to complete processing file statistics for "
+			<< fileName << " Error: " << ex.what() << std::endl;
+		processComplete = false;
 	}
 
 	return processComplete;
