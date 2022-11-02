@@ -38,6 +38,8 @@ bool FileProcessor::processFile()
 	while (!reader->atEndOfFile())
 	{
 		CharBuffer* inputBuffer = reader->readBlockOfText();
+		statistics.addToCharCount(reader->getCharCount());
+		statistics.addToLineCount(reader->getLineCount());
 	}
 
 	return processComplete;

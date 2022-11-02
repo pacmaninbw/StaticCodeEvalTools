@@ -39,8 +39,8 @@ CharBuffer* FileReader::readBlockOfText()
 			charCount += line.size();
 		}
 
-
-	} while (!bufferFull && !inputFile.eof());
+		endOfFileEncountered = inputFile.eof();
+	} while (!bufferFull && !endOfFileEncountered);
 
 	return inputBuffer;
 }
