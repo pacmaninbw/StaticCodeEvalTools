@@ -12,6 +12,7 @@
 #define CB_INPUTBUFFERSIZE	static_cast<size_t>(CB_MINBUFFERSIZE * CB_PERFORMANCE_MULTIPLIER)
 
 #include <string>
+#include <vector>
 
 /*
  * Buffer for character file input. 
@@ -27,29 +28,27 @@
 class CharBuffer
 {
 public:
-	CharBuffer(size_t buffSize);
+	CharBuffer(size_t bufferSize);
 	CharBuffer(CharBuffer&& other) noexcept;			// Move Constructor
 	CharBuffer& operator=(CharBuffer&& other) noexcept;	// Move Assignment
 	CharBuffer& operator=(const CharBuffer& original);	// Copy Assignment
 	CharBuffer(const CharBuffer& original);				// Copy Constructor
 	~CharBuffer();
-	// returns a NULL terminated array of characters
-	// Caller is responsible for deleting after use.
-	[[nodiscard]] char* getCurrentLine() noexcept;
+	std::vector<char> getCurrentLine() noexcept;
 	// The addLine function returns true if the line can be added and
 	// false if the buffer does not have the capacity to store the new line
 	[[nodiscard]] bool addLine(std::string& line) noexcept;
 	// While the inline key word is only a recommendation, hopefully these 2 functions
 	// can be inline.
-	inline char getCurrentCharacter() const noexcept { return *currentChar; }
-	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; lastInBuffer++; };
-	inline void inputComplete() noexcept { lastInBuffer = &internalBuffer[actualSize]; currentChar = &internalBuffer[0]; }
-	bool endOfBuffer() noexcept { return currentChar == lastInBuffer; }
+	inline char getCurrentCharacter() const noexcept { return internalBuffer[currentCharIdx]; }
+	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; lastInBufferIdx++; };
+	inline void inputComplete() noexcept { lastInBufferIdx = actualSize; currentCharIdx = 0; }
+	bool endOfBuffer() noexcept { return currentCharIdx >= lastInBufferIdx; }
 
 private:
-	char* internalBuffer;
-	char* currentChar;
-	char* lastInBuffer;
+	std::vector<char> internalBuffer;
+	size_t currentCharIdx;
+	size_t lastInBufferIdx;
 	size_t capacity;
 	size_t actualSize;
 };

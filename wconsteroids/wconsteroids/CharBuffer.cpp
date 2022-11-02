@@ -1,15 +1,16 @@
 #include <memory>
+#include <iterator>
 #include <string>
+#include <vector>
 #include "CharBuffer.h"
 
 /*
  * Rule of 5 Constructor 
  */
 CharBuffer::CharBuffer(size_t bufferSize = CB_INPUTBUFFERSIZE)
-	: capacity{ bufferSize }, actualSize{ 0 }, currentChar{ &internalBuffer[0] }, lastInBuffer{ currentChar }
+	: capacity{ bufferSize }, actualSize{ 0 }, currentCharIdx{ 0 }, lastInBufferIdx{ 0 }
 {
-	internalBuffer = new char[capacity];
-	memset(internalBuffer, 0, capacity);
+	internalBuffer.reserve(capacity);
 }
 
 /*
@@ -17,8 +18,8 @@ CharBuffer::CharBuffer(size_t bufferSize = CB_INPUTBUFFERSIZE)
  */
 CharBuffer::CharBuffer(CharBuffer&& other) noexcept
 	: capacity{ other.capacity }, actualSize{ other.actualSize },
-	internalBuffer{other.internalBuffer},
-	currentChar{ &internalBuffer[0] }, lastInBuffer{ currentChar }
+	internalBuffer{std::move(other.internalBuffer)},
+	currentCharIdx{ 0 }, lastInBufferIdx{ actualSize }
 {
 
 }
@@ -28,11 +29,11 @@ CharBuffer::CharBuffer(CharBuffer&& other) noexcept
  */
 CharBuffer& CharBuffer::operator=(CharBuffer&& other) noexcept
 {
-	std::swap(internalBuffer, other.internalBuffer);
+	internalBuffer =  std::move(other.internalBuffer);
 	capacity = other.capacity;
 	actualSize = other.actualSize;
-	currentChar = &internalBuffer[0];
-	lastInBuffer = &internalBuffer[actualSize];
+	currentCharIdx = 0;
+	lastInBufferIdx = actualSize;
 
 	return *this;
 }
@@ -43,11 +44,9 @@ CharBuffer& CharBuffer::operator=(CharBuffer&& other) noexcept
 CharBuffer::CharBuffer(const CharBuffer& original)
 	: capacity{ original.capacity }, actualSize{original.actualSize}
 {
-	internalBuffer = new char[capacity];
-	memset(internalBuffer, 0, capacity);
-	memcpy(internalBuffer, original.internalBuffer, actualSize);
-	currentChar = internalBuffer;
-	lastInBuffer = &internalBuffer[actualSize];
+	internalBuffer = original.internalBuffer;
+	currentCharIdx = original.currentCharIdx;
+	lastInBufferIdx = original.lastInBufferIdx;
 }
 /*
  * Rule of 5 Copy Operator
@@ -56,11 +55,9 @@ CharBuffer& CharBuffer::operator=(const CharBuffer& original)
 {
 	capacity = original.capacity;
 	actualSize = original.actualSize;
-	internalBuffer = new char[capacity];
-	memset(internalBuffer, 0, capacity);
-	memcpy(internalBuffer, original.internalBuffer, actualSize);
-	currentChar = internalBuffer;
-	lastInBuffer = &internalBuffer[actualSize];
+	internalBuffer = original.internalBuffer;
+	currentCharIdx = original.currentCharIdx;
+	lastInBufferIdx = original.lastInBufferIdx;
 
 	return *this;
 }
@@ -70,11 +67,10 @@ CharBuffer& CharBuffer::operator=(const CharBuffer& original)
  */
 CharBuffer::~CharBuffer()
 {
-	delete[] internalBuffer;
 	capacity = 0;
 	actualSize = 0;
-	currentChar = nullptr;
-	lastInBuffer = nullptr;
+	currentCharIdx = 0;
+	lastInBufferIdx = 0;
 }
 
 /*
@@ -87,8 +83,8 @@ CharBuffer::~CharBuffer()
 
 	if (canAddLine)
 	{
-		line.copy(currentChar, line.size());
-		currentChar += line.size();
+		std::copy(line.begin(), line.end(), std::back_inserter(internalBuffer));
+		currentCharIdx += line.size();
 		actualSize += line.size();
 	}
 
@@ -97,35 +93,19 @@ CharBuffer::~CharBuffer()
 
 /*
  * Return a copy of the current line and advance the current pointer to the new line.
- * Caller is responsible for deleting the char array after use.
  */
-[[nodiscard]] char* CharBuffer::getCurrentLine() noexcept
+std::vector<char> CharBuffer::getCurrentLine() noexcept
 {
-	if (!*currentChar)
+	std::vector<char> line;
+
+	std::vector<char>::iterator findEndOfLine = std::find(internalBuffer.begin()+currentCharIdx, internalBuffer.end(), '\n');
+	if (findEndOfLine == internalBuffer.end())
 	{
-		return nullptr;
+		findEndOfLine = internalBuffer.begin() + lastInBufferIdx;
 	}
 
-	// Advance to the start of the line
-	if (*currentChar == '\n')
-	{
-		currentChar++;
-	}
-
-	char* findEndOfLine = currentChar;
-	for (; *findEndOfLine != '\n' && findEndOfLine < lastInBuffer; findEndOfLine++);
-
-	size_t length = findEndOfLine - currentChar;
-
-	char* line = new char[length+1];
-	memset(line, 0, length + 1);
-	memcpy(line, currentChar, length);
-
-	currentChar = findEndOfLine + 1;	// reset currentChar to point to the new start location.
-	if (currentChar > lastInBuffer)
-	{
-		currentChar = lastInBuffer;
-	}
+	std::copy(internalBuffer.begin() + currentCharIdx, findEndOfLine, line.begin());
+	currentCharIdx += line.size();
 
 
 	return line;
