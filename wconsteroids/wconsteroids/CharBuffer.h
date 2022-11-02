@@ -38,11 +38,12 @@ public:
 	// The addLine function returns true if the line can be added and
 	// false if the buffer does not have the capacity to store the new line
 	[[nodiscard]] bool addLine(std::string& line) noexcept;
-	// While the inline key word is only a recommendation, hopefully these 2 functions
-	// can be inline.
-	inline char getCurrentCharacter() const noexcept { return internalBuffer[currentCharIdx]; }
-	inline void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; };
-	inline void inputComplete() noexcept { currentCharIdx = 0; }
+	char getCurrentCharacter() noexcept {
+		return internalBuffer[currentCharIdx];
+		currentCharIdx++;
+	}
+	void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; };
+	void inputComplete() noexcept { currentCharIdx = 0; }
 	bool endOfBuffer() noexcept { return currentCharIdx >= actualSize; }
 
 private:

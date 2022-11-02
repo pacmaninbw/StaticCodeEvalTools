@@ -11,6 +11,7 @@ CharBuffer::CharBuffer(size_t bufferSize = CB_INPUTBUFFERSIZE)
 	: capacity{ bufferSize }, actualSize{ 0 }, currentCharIdx{ 0 }
 {
 	internalBuffer.reserve(capacity);
+	internalBuffer = { 0 };
 }
 
 /*
@@ -94,13 +95,15 @@ std::vector<char> CharBuffer::getCurrentLine() noexcept
 {
 	std::vector<char> line;
 
-	std::vector<char>::iterator findEndOfLine = std::find(internalBuffer.begin()+currentCharIdx, internalBuffer.end(), '\n');
-	if (findEndOfLine == internalBuffer.end())
+	std::vector<char>::iterator startOfLine = internalBuffer.begin() + currentCharIdx;
+	std::vector<char>::iterator endOfLine = std::find(startOfLine, internalBuffer.end(),
+		'\n');
+	if (endOfLine == internalBuffer.end())
 	{
-		findEndOfLine = internalBuffer.begin() + actualSize;
+		endOfLine = internalBuffer.begin() + actualSize;
 	}
 
-	std::copy(internalBuffer.begin() + currentCharIdx, findEndOfLine, line.begin());
+	std::copy(startOfLine, endOfLine, line.begin());
 	currentCharIdx += line.size();
 
 
