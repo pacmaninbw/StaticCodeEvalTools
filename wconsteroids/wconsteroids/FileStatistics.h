@@ -1,6 +1,10 @@
 #ifndef	FILESTATISTICS_H
 #define FILESTATISTICS_H
 
+/*
+ * Class to collect all the statistics about the code in a file.
+ * 
+ */
 #include <string>
 
 class FileStatistics
@@ -20,6 +24,9 @@ public:
 	FileStatistics(std::string inFileName);
 	void setFileName(std::string inFileName) { fileName = inFileName; }
 	void addTotals(FileStatistics &allFiles);
+	void addToLineCount(size_t lineCount) { totalLineCount += lineCount; }
+	void addToCharCount(size_t charCount) { characterCount += charCount; }
+	void addToWordCount(size_t wordCountUpdate) { wordCount += wordCountUpdate; }
 	// While the inline key word is only a recommendation, hopefully the increment
 	// functions can be inline.
 	inline void incrementTotalLines() { totalLineCount++; }

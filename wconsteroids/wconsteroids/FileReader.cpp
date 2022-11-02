@@ -7,7 +7,7 @@
 static std::ifstream inputFile;
 
 FileReader::FileReader(std::string inFileName)
-	:endOfFileEncountered{false}
+	:endOfFileEncountered{false}, charCount{0}, lineCount{0}
 {
 	fileName = inFileName;
 	inputFile.open(fileName);
@@ -27,8 +27,20 @@ FileReader::~FileReader()
 CharBuffer* FileReader::readBlockOfText()
 {
 	CharBuffer* inputBuffer = new CharBuffer(CB_INPUTBUFFERSIZE);
+	bool bufferFull = false;
+	std::string line;
 
-	inputBuffer->inputComplete();
+	do {
+		getline(inputFile, line);
+		if (line.size() > 0)
+		{
+			bufferFull = !inputBuffer->addLine(line);
+			lineCount++;
+			charCount += line.size();
+		}
+
+
+	} while (!bufferFull && !inputFile.eof());
 
 	return inputBuffer;
 }
