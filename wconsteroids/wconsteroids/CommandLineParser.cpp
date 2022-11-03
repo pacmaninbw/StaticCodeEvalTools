@@ -3,7 +3,7 @@
 #include <vector>
 #include <program_options.hpp>
 #include "CommandLineParser.h"
-#include "cmdlineoutputtypes.h"
+#include "Executionctrlvalues.h"
 
 namespace ProgOpts = boost::program_options;
 
@@ -33,7 +33,7 @@ CommandLineParser::CommandLineParser(int argc, char* argv[])
 	initProgramOptions();
 }
 
-bool CommandLineParser::parse()
+bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
 	constexpr size_t MinimumCommandLineCount = 2;	// Program name plus file name
 
@@ -45,16 +45,4 @@ bool CommandLineParser::parse()
 	}
 
 	return hasFiles;
-}
-
-CmdLineOutputTypes CommandLineParser::getOutputTypes()
-{
-	CmdLineOutputTypes outputTypes = CmdLineOutputTypes::Default;
-
-	return outputTypes;
-}
-
-std::vector<std::string> CommandLineParser::getFileList()
-{
-	return fileList;
 }
