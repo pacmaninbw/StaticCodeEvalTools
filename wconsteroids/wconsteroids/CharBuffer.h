@@ -21,7 +21,8 @@
  */
 #define CB_MINBUFFERSIZE				2048	// 2 Kbytes
 #define CB_PERFORMANCE_MULTIPLIER		4
-#define CB_INPUTBUFFERSIZE	static_cast<size_t>(CB_MINBUFFERSIZE * CB_PERFORMANCE_MULTIPLIER)
+#define CB_INPUTBUFFERSIZE	static_cast<size_t>(CB_MINBUFFERSIZE * \
+		CB_PERFORMANCE_MULTIPLIER)
 
 #include <string>
 #include <vector>
@@ -43,7 +44,10 @@ public:
 		return internalBuffer[currentCharIdx];
 		currentCharIdx++;
 	}
-	void addCharacter(char c) noexcept { internalBuffer[actualSize] = c; actualSize++; };
+	void addCharacter(char c) noexcept {
+		internalBuffer[actualSize] = c;
+		actualSize++;
+	};
 	void inputComplete() noexcept { currentCharIdx = 0; }
 	bool endOfBuffer() noexcept { return currentCharIdx >= actualSize; }
 
