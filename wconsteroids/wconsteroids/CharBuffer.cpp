@@ -71,16 +71,18 @@ CharBuffer::~CharBuffer()
 }
 
 /*
- * Add a line of text to the buffer.
- * Return value indicates if there was sufficient space to store the new line.
+ * Add a line of text to the buffer. Return value indicates if there
+ * was sufficient space to store the new line.
  */
 [[nodiscard]] bool CharBuffer::addLine(std::string& line) noexcept
 {
-	bool canAddLine = line.size() > 0 && (line.size() < capacity - actualSize);
+	bool canAddLine = line.size() > 0 &&
+		(line.size() < capacity - actualSize);
 
 	if (canAddLine)
 	{
-		std::copy(line.begin(), line.end(), std::back_inserter(internalBuffer));
+		std::copy(line.begin(), line.end(),
+			std::back_inserter(internalBuffer));
 		currentCharIdx += line.size();
 		actualSize += line.size();
 	}
@@ -89,14 +91,17 @@ CharBuffer::~CharBuffer()
 }
 
 /*
- * Return a copy of the current line and advance the current pointer to the new line.
+ * Return a copy of the current line and advance the current
+ * pointer to the new line.
  */
 std::vector<char> CharBuffer::getCurrentLine() noexcept
 {
 	std::vector<char> line;
 
-	std::vector<char>::iterator startOfLine = internalBuffer.begin() + currentCharIdx;
-	std::vector<char>::iterator endOfLine = std::find(startOfLine, internalBuffer.end(),
+	std::vector<char>::iterator startOfLine =
+		internalBuffer.begin() + currentCharIdx;
+	std::vector<char>::iterator endOfLine =
+		std::find(startOfLine, internalBuffer.end(),
 		'\n');
 	if (endOfLine == internalBuffer.end())
 	{
