@@ -1,37 +1,29 @@
 #include <iostream>
 #include <string>
-#include "cmdlineoutputtypes.h"
+#include "Executionctrlvalues.h"
 #include "CommandLineParser.h"
 #include "FileStatistics.h"
 #include "ReportWriter.h"
 
-static bool checkEnvironmentVariable()
+static void mainLoop(ExecutionCtrlValues& executionCtrl)
 {
-	bool checked = false;
-
-	return checked;
-}
-
-static void mainLoop(CommandLineParser &cmdLineParser)
-{
-	CmdLineOutputTypes outputCtrl = CmdLineOutputTypes::Default;
 	FileStatistics allFiles;
 
-	outputCtrl = cmdLineParser.getOutputTypes();
-	std::vector<std::string> filesToProcess = cmdLineParser.getFileList();
 
 }
 
 int main(int argc, char* argv[])
 {
 	int exit_status = EXIT_SUCCESS;
+	ExecutionCtrlValues executionCtrl;
 
 	try
 	{
+		executionCtrl.initFromEnvironmentVariables();
 		CommandLineParser cmdLineParser(argc, argv);
-		if (cmdLineParser.parse())
+		if (cmdLineParser.parse(executionCtrl))
 		{
-			mainLoop(cmdLineParser);
+			mainLoop(executionCtrl);
 		}
 	}
 

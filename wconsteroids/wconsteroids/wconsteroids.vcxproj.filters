@@ -39,12 +39,12 @@
     <ClCompile Include="FileParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Executionctrlvalues.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileStatistics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cmdlineoutputtypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReportWriter.h">
@@ -63,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Executionctrlvalues.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

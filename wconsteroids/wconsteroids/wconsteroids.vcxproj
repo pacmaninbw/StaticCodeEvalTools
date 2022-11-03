@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CharBuffer.cpp" />
+    <ClCompile Include="Executionctrlvalues.cpp" />
     <ClCompile Include="CommandLineParser.cpp" />
     <ClCompile Include="FileParser.cpp" />
     <ClCompile Include="FileProcessor.cpp" />
@@ -146,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CharBuffer.h" />
-    <ClInclude Include="cmdlineoutputtypes.h" />
+    <ClInclude Include="Executionctrlvalues.h" />
     <ClInclude Include="CommandLineParser.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="FileProcessor.h" />
