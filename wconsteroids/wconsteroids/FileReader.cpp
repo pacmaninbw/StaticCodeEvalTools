@@ -13,7 +13,8 @@ FileReader::FileReader(std::string inFileName)
 	inputFile.open(fileName);
 	if (!inputFile.is_open())
 	{
-		std::string eMsg("Runtime error:  Can't open file " + fileName + " for input.");
+		std::string eMsg("Runtime error:  Can't open file " + fileName +
+			" for input.");
 		std::runtime_error FileInputError(eMsg);
 		throw FileInputError;
 	}
@@ -35,6 +36,8 @@ CharBuffer* FileReader::readBlockOfText()
 		if (line.size() > 0)
 		{
 			bufferFull = !inputBuffer->addLine(line);
+			// These statistics are collected here for performance reasons.
+			// The method of input allows for fast collection of the data.
 			lineCount++;
 			charCount += line.size();
 		}
