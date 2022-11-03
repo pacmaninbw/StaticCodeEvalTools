@@ -8,16 +8,72 @@ void ReportWriter::printResult(FileStatistics& resultsForOutput)
 	std::cout << getResultText(resultsForOutput) << "\n";
 }
 
+/*
+ * Maintain the order between this function and getColumneHeadingsText().  
+ */
 std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
 {
 	std::string outString;
 
-	outString = resultsForOutput.getFileName();
-	outString += ":\t";
+	if (executionCtrl->lineCount)
+	{
+		outString += std::to_string(resultsForOutput.getTotalLines()) + "\t";
+	}
+
+	if (executionCtrl->wordCount)
+	{
+		outString += std::to_string(resultsForOutput.getWords()) + "\t";
+	}
+
+	if (executionCtrl->byteCount)
+	{
+		outString += std::to_string(resultsForOutput.getCharacters()) + "\t";
+	}
+
+	if (executionCtrl->charCount)
+	{
+		outString += std::to_string(resultsForOutput.getCharacters()) + "\t";
+	}
+
+	if (executionCtrl->maxLineWidth)
+	{
+		outString += std::to_string(resultsForOutput.getWidestLine()) + "\t";
+	}
+
+	// End of backwards compatability with wc utility.
+
+	if (executionCtrl->codeCount)
+	{
+		outString += std::to_string(resultsForOutput.getCodeLines()) + "\t";
+	}
+
+	if (executionCtrl->commentCount)
+	{
+		outString += std::to_string(resultsForOutput.getCommentLines()) + "\t";
+	}
+
+	if (executionCtrl->percentages)
+	{
+		outString += std::to_string(resultsForOutput.getPerecentageOfCode()) + "\t";
+	}
+
+	if (executionCtrl->whitespaceCount)
+	{
+		outString += std::to_string(resultsForOutput.getWhitespace()) + "\t";
+	}
+	if (executionCtrl->blankLineCount)
+	{
+		outString += std::to_string(resultsForOutput.getBlankLines()) + "\t";
+	}
+
+	outString += "\t\t" + resultsForOutput.getFileName();
 
 	return outString;
 }
 
+/*
+ * Maintain the order between this function and getResultText().
+ */
 std::vector<std::string> ReportWriter::getColumneHeadingsText()
 {
 	std::string firstLine;

@@ -26,6 +26,7 @@ public:
 	std::vector<std::string> getColumneHeadingsText();
 
 private:
+	// The execution control variables are necessary to know what to outout.
 	std::shared_ptr <ExecutionCtrlValues> executionCtrl;
 
 };
