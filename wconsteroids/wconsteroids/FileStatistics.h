@@ -17,12 +17,15 @@ private:
 	size_t characterCount;
 	size_t wordCount;
 	size_t codeWithCommentCount;
+	size_t widestLine;
+	size_t blankLineCount;
 	std::string fileName; 
 
 public:
 	FileStatistics();
 	FileStatistics(std::string inFileName);
 	void setFileName(std::string inFileName) { fileName = inFileName; }
+	std::string getFileName() { return fileName; }
 	void addTotals(FileStatistics &allFiles);
 	void addToLineCount(size_t lineCount) { totalLineCount += lineCount; }
 	void addToCharCount(size_t charCount) { characterCount += charCount; }
@@ -43,6 +46,15 @@ public:
 	size_t getWords() const { return wordCount; }
 	inline void incrementCodeWithComment() { codeWithCommentCount++; }
 	size_t getCodeWithComment() const { return codeWithCommentCount; }
+	inline void incrementBlankLines() { blankLineCount++; }
+	size_t getBlankLines() { return blankLineCount; }
+	void updateWidestLine(size_t width) {
+		widestLine = (width > widestLine)? width : widestLine;
+	}
+	size_t getWidestLine() { return widestLine; }
+	float getPerecentageOfCode() {
+		return static_cast<float>(codeLineCount / totalLineCount);
+	}
 };
 
 #endif // FILESTATISTICS_H
