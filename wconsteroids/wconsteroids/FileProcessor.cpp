@@ -7,7 +7,8 @@ FileProcessor::FileProcessor(std::string inFileName)
 {
 	if (fileName.size() < 1)
 	{
-		std::string eMsg("Programmer Error: File name is empty in FileProcessor Constructor!");
+		std::string eMsg(
+			"Programmer Error: File name is empty in FileProcessor Constructor!");
 		std::runtime_error programmerError(eMsg);
 		throw programmerError;
 	}
