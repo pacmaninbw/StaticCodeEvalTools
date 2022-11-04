@@ -48,7 +48,8 @@ CommandLineParser::CommandLineParser(int argc, char* argv[], std::string progVer
 {
 	version = progVersion;
 	initHelpMessage();
-	initProgramOptions();
+	// Initialize all options to false;
+	memset(&options, 0, sizeof(options));
 
 	for (size_t i = 0; i < argCount; i++)
 		std::cout << args[i] << "\n";
@@ -60,10 +61,11 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 	if (argCount < MinimumCommandLineCount)
 	{
-		printHelpMessage();
-		hasFiles = false;
+		HelpMe doHelp("Call printHelpMessage");
+		throw doHelp;
 	}
 
+	execVars.options = options;
 	return hasFiles;
 }
 
@@ -81,4 +83,22 @@ void CommandLineParser::printHelpMessage()
 void CommandLineParser::printVersion()
 {
 	std::cout << args[0] << ": version: " << version << "\n";
+}
+
+void CommandLineParser::processDoubleDashOptions(char* currentArg)
+{
+
+}
+
+void CommandLineParser::processSingleDashOptions(char* currentArg)
+{
+
+}
+
+void CommandLineParser::SetDefaultOptionsWhenNoFlags()
+{
+	// Based on the default functionality of the wc program.
+	options.byteCount = true;
+	options.wordCount = true;
+	options.lineCount = true;
 }
