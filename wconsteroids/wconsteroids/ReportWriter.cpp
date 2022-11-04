@@ -14,54 +14,55 @@ void ReportWriter::printResult(FileStatistics& resultsForOutput)
 std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
 {
 	std::string outString;
+	ProgramOptions options = executionCtrl->options;
 
-	if (executionCtrl->lineCount)
+	if (options.lineCount)
 	{
 		outString += std::to_string(resultsForOutput.getTotalLines()) + "\t";
 	}
 
-	if (executionCtrl->wordCount)
+	if (options.wordCount)
 	{
 		outString += std::to_string(resultsForOutput.getWords()) + "\t";
 	}
 
-	if (executionCtrl->byteCount)
+	if (options.byteCount)
 	{
 		outString += std::to_string(resultsForOutput.getCharacters()) + "\t";
 	}
 
-	if (executionCtrl->charCount)
+	if (options.charCount)
 	{
 		outString += std::to_string(resultsForOutput.getCharacters()) + "\t";
 	}
 
-	if (executionCtrl->maxLineWidth)
+	if (options.maxLineWidth)
 	{
 		outString += std::to_string(resultsForOutput.getWidestLine()) + "\t";
 	}
 
 	// End of backwards compatability with wc utility.
 
-	if (executionCtrl->codeCount)
+	if (options.codeCount)
 	{
 		outString += std::to_string(resultsForOutput.getCodeLines()) + "\t";
 	}
 
-	if (executionCtrl->commentCount)
+	if (options.commentCount)
 	{
 		outString += std::to_string(resultsForOutput.getCommentLines()) + "\t";
 	}
 
-	if (executionCtrl->percentages)
+	if (options.percentages)
 	{
 		outString += std::to_string(resultsForOutput.getPerecentageOfCode()) + "\t";
 	}
 
-	if (executionCtrl->whitespaceCount)
+	if (options.whitespaceCount)
 	{
 		outString += std::to_string(resultsForOutput.getWhitespace()) + "\t";
 	}
-	if (executionCtrl->blankLineCount)
+	if (options.blankLineCount)
 	{
 		outString += std::to_string(resultsForOutput.getBlankLines()) + "\t";
 	}
@@ -78,32 +79,33 @@ std::vector<std::string> ReportWriter::getColumneHeadingsText()
 {
 	std::string firstLine;
 	std::string secondline;
+	ProgramOptions options = executionCtrl->options;
 
-	if (executionCtrl->lineCount)
+	if (options.lineCount)
 	{
 		firstLine += "Lines\t";
 		secondline += "of Text\t";
 	}
 
-	if (executionCtrl->wordCount)
+	if (options.wordCount)
 	{
 		firstLine += "Words\t";
 		secondline += "\t";
 	}
 
-	if (executionCtrl->byteCount)
+	if (options.byteCount)
 	{
 		firstLine += "Bytes\t";
 		secondline += "\t";
 	}
 
-	if (executionCtrl->charCount)
+	if (options.charCount)
 	{
 		firstLine += "Characters\t";
 		secondline += "\t\t";
 	}
 
-	if (executionCtrl->maxLineWidth)
+	if (options.maxLineWidth)
 	{
 		firstLine += "Length of\t";
 		secondline += "Longest Line\t";
@@ -111,30 +113,30 @@ std::vector<std::string> ReportWriter::getColumneHeadingsText()
 
 	// End of backwards compatability with wc utility.
 
-	if (executionCtrl->codeCount)
+	if (options.codeCount)
 	{
 		firstLine += "Lines\t";
 		secondline += "of Code\t";
 	}
 
-	if (executionCtrl->commentCount)
+	if (options.commentCount)
 	{
 		firstLine += "Lines of\t";
 		secondline += "Comments\t";
 	}
 
-	if (executionCtrl->percentages)
+	if (options.percentages)
 	{
 		firstLine += "Percentage of\t";
 		secondline += "Lines of Code\t";
 	}
 
-	if (executionCtrl->whitespaceCount)
+	if (options.whitespaceCount)
 	{
 		firstLine += "Whitespace\t";
 		secondline += "Characters\t";
 	}
-	if (executionCtrl->blankLineCount)
+	if (options.blankLineCount)
 	{
 		firstLine += "Blank\t";
 		secondline += "Lines\t";
