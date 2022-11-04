@@ -1,6 +1,7 @@
 #ifndef COMMANDlINEPARSER_H
 #define COMMANDlINEPARSER_H
 
+#include <unordered_map>
 #include "Executionctrlvalues.h"
 #include "HelpMe.h"
 
@@ -16,7 +17,8 @@ protected:
 	void processSingleDashOptions(char *currentArg);
 	void processDoubleDashOptions(char* currentArg);
 	void SetDefaultOptionsWhenNoFlags();
-
+	void initDashMaps();
+	void nonFlagCmdLineInput(char* currentArg);
 
 private:
 	std::vector<std::string> arguments;
@@ -24,6 +26,8 @@ private:
 	int argCount;
 	std::string version;
 	ProgramOptions options;
+	std::unordered_map<std::string, bool&> doubleDashArgs;
+	std::unordered_map<char, bool&> singleDashArgs;
 };
 
 #endif // COMMANDlINEPARSER_H

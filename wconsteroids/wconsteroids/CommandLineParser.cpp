@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include "CommandLineParser.h"
 #include "Executionctrlvalues.h"
@@ -38,11 +39,6 @@ static void initHelpMessage()
 	helpMessage.push_back(veryLongLine);
 }
 
-static void initProgramOptions()
-{
-	
-}
-
 CommandLineParser::CommandLineParser(int argc, char* argv[], std::string progVersion)
 	: argCount { argc }, args{ argv }
 {
@@ -50,19 +46,44 @@ CommandLineParser::CommandLineParser(int argc, char* argv[], std::string progVer
 	initHelpMessage();
 	// Initialize all options to false;
 	memset(&options, 0, sizeof(options));
-
-	for (size_t i = 0; i < argCount; i++)
-		std::cout << args[i] << "\n";
 }
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
 	bool hasFiles = true;
+	unsigned int flagCount = 0;
 
 	if (argCount < MinimumCommandLineCount)
 	{
 		HelpMe doHelp("Call printHelpMessage");
 		throw doHelp;
+	}
+
+	for (size_t i = 0; i < argCount; i++)
+	{
+		std::cout << args[i] << "\n";	// Debug code, remove before review
+		if (args[i][0] == '-')
+		{
+			if (args[i][1] == '-')
+			{
+				processDoubleDashOptions(args[i]);
+				flagCount++;
+			}
+			else
+			{
+				processSingleDashOptions(args[i]);
+				flagCount++;
+			}
+		}
+		else
+		{
+			nonFlagCmdLineInput(args[i]);
+		}
+	}
+
+	if (!flagCount)
+	{
+		SetDefaultOptionsWhenNoFlags();
 	}
 
 	execVars.options = options;
@@ -85,14 +106,59 @@ void CommandLineParser::printVersion()
 	std::cout << args[0] << ": version: " << version << "\n";
 }
 
+/*
+ * Flags starting with -- are full strings that need to be processed
+ * as strings.
+ */
 void CommandLineParser::processDoubleDashOptions(char* currentArg)
 {
+	auto flag = doubleDashArgs.find(currentArg);
+	if (flag != doubleDashArgs.end())
+	{
+		(*flag).second = true;
+		return;
+	}
 
+	// The following switches require alternate handling
+	if (std::strncmp(currentArg, "--help", std::strlen("--help")) == 0)
+	{
+		HelpMe doHelp("Call printHelpMessage");
+		throw doHelp;
+	}
+
+	if (std::strncmp(currentArg, "--version", std::strlen("--version")) == 0)
+	{
+		showVersions sv("Call printVersion");
+		throw sv;
+	}
+
+	if (std::strncmp(currentArg, "--files0-from",
+		std::strlen("--files0-from")) == 0)
+	{
+		std::cerr << "--files0-from Not implemented yet\n";
+		return;
+	}
+
+	std::cerr << "Unknown flag: " << currentArg << "\n";
 }
 
+/*
+ * Each character needs to be processed independently.
+ */
 void CommandLineParser::processSingleDashOptions(char* currentArg)
 {
-
+	for (size_t i = 1; i < std::strlen(currentArg); i++)
+	{
+		auto thisOption = singleDashArgs.find(currentArg[i]);
+		if (thisOption != singleDashArgs.end())
+		{
+			(*thisOption).second = true;
+		}
+		else
+		{
+			std::cerr << "Unknown flag: " << currentArg[i] << "\n";
+		}
+	}
 }
 
 void CommandLineParser::SetDefaultOptionsWhenNoFlags()
@@ -101,4 +167,35 @@ void CommandLineParser::SetDefaultOptionsWhenNoFlags()
 	options.byteCount = true;
 	options.wordCount = true;
 	options.lineCount = true;
+}
+
+void CommandLineParser::initDashMaps()
+{
+	doubleDashArgs.insert({ "--bytes", options.byteCount });
+	doubleDashArgs.insert({ "--chars", options.charCount });
+	doubleDashArgs.insert({ "--lines", options.lineCount });
+	doubleDashArgs.insert({ "--max-line-length", options.maxLineWidth });
+	doubleDashArgs.insert({ "--words", options.wordCount });
+	doubleDashArgs.insert({ "--comment", options.commentCount });
+	doubleDashArgs.insert({ "--code", options.codeCount });
+	doubleDashArgs.insert({ "--whitespace", options.whitespaceCount });
+	doubleDashArgs.insert({ "--percentage", options.percentages });
+	doubleDashArgs.insert({ "--subdirectories", options.recurseSubDirectories });
+
+	singleDashArgs.insert({ 'c', options.byteCount });
+	singleDashArgs.insert({ 'm', options.charCount });
+	singleDashArgs.insert({ 'l', options.lineCount });
+	singleDashArgs.insert({ 'L', options.maxLineWidth });
+	singleDashArgs.insert({ 'w', options.wordCount });
+	singleDashArgs.insert({ 'p', options.percentages });
+	singleDashArgs.insert({ 'R', options.recurseSubDirectories });
+}
+
+/*
+ * This function handles commandline arguments that do not start with -.
+ * These commandline arguments may be file names or file type specifications.
+ */
+void CommandLineParser::nonFlagCmdLineInput(char* currentArg)
+{
+	std::cout << "in nonFlagCmdLineInput current arg = " << currentArg << "\n";
 }
