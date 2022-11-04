@@ -8,12 +8,7 @@
 #include <vector>
 #include <string>
 
-class ExecutionCtrlValues
-{
-public:
-	ExecutionCtrlValues();
-	~ExecutionCtrlValues() = default;
-	void initFromEnvironmentVariables();
+typedef struct {
 	// Output control variables
 	bool blankLineCount;
 	bool byteCount;
@@ -27,6 +22,15 @@ public:
 	bool wordCount;
 	// input control variables
 	bool recurseSubDirectories;
+} ProgramOptions;
+
+class ExecutionCtrlValues
+{
+public:
+	ExecutionCtrlValues();
+	~ExecutionCtrlValues() = default;
+	void initFromEnvironmentVariables();
+	ProgramOptions options;
 	std::vector<std::string> fileSpecTypes;
 	std::vector<std::string> filesToProcess;
 };
