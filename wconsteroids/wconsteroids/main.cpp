@@ -17,17 +17,25 @@ int main(int argc, char* argv[])
 	int exit_status = EXIT_SUCCESS;
 	ExecutionCtrlValues executionCtrl;
 	std::string versionString("1.0.0");
+	CommandLineParser cmdLineParser(argc, argv, versionString);
 
 	try
 	{
 		executionCtrl.initFromEnvironmentVariables();
-		CommandLineParser cmdLineParser(argc, argv, versionString);
 		if (cmdLineParser.parse(executionCtrl))
 		{
 			mainLoop(executionCtrl);
 		}
 	}
 
+	catch (HelpMe helpMe)
+	{
+		cmdLineParser.printHelpMessage();
+	}
+	catch (showVersions sv)
+	{
+		cmdLineParser.printVersion();
+	}
 	catch (std::exception ex)
 	{
 		std::cerr << "Error: " << ex.what() << "\n";

@@ -68,5 +68,8 @@
     <ClInclude Include="Executionctrlvalues.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HelpMe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
