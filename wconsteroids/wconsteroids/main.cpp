@@ -16,11 +16,12 @@ int main(int argc, char* argv[])
 {
 	int exit_status = EXIT_SUCCESS;
 	ExecutionCtrlValues executionCtrl;
+	std::string versionString("1.0.0");
 
 	try
 	{
 		executionCtrl.initFromEnvironmentVariables();
-		CommandLineParser cmdLineParser(argc, argv);
+		CommandLineParser cmdLineParser(argc, argv, versionString);
 		if (cmdLineParser.parse(executionCtrl))
 		{
 			mainLoop(executionCtrl);
