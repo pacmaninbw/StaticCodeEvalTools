@@ -1,6 +1,6 @@
 #ifndef HELPME_H
 #define HELPME_H
-#include <exception>
+#include <stdexcept>
 class HelpMe: public std::runtime_error
 {
 public:
