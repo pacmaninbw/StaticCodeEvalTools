@@ -14,7 +14,8 @@ static const size_t MinimumCommandLineCount = 1;
 static const size_t MinimumCommandLineCount = 2;
 #endif
 
-CommandLineParser::CommandLineParser(int argc, char* argv[], std::string progVersion)
+CommandLineParser::CommandLineParser(int argc, char* argv[],
+	std::string progVersion)
 	: argCount { argc }, args{ argv }
 {
 	version = progVersion;

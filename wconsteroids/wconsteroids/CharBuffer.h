@@ -14,9 +14,11 @@
  */
 
 /*
- * Old style C macros so that symbolic constants are not defined in multiple files.
- * Attempting to make it type safe with the static cast to size_t. The multiplier
- * is used to be able to increase or decrease the size of the buffer easily.
+ * Old style C macros so that symbolic constants are not defined in multiple
+ * files. Attempting to make it type safe with the static cast to size_t. The
+ * multiplier is used to be able to increase or decrease the size of the 
+ * buffer easily.
+ *
  * CB_ stands for CharBuffer.
  */
 #define CB_MINBUFFERSIZE				2048	// 2 Kbytes

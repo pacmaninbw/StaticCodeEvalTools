@@ -55,7 +55,8 @@ std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
 
 	if (options.percentages)
 	{
-		outString += std::to_string(resultsForOutput.getPerecentageOfCode()) + "\t";
+		outString +=
+			std::to_string(resultsForOutput.getPerecentageOfCode()) + "\t";
 	}
 
 	if (options.whitespaceCount)

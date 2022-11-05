@@ -8,7 +8,8 @@ FileProcessor::FileProcessor(std::string inFileName)
 	if (fileName.size() < 1)
 	{
 		std::string eMsg(
-			"Programmer Error: File name is empty in FileProcessor Constructor!");
+			"Programmer Error: File name is empty in "
+			"FileProcessor Constructor!");
 		std::runtime_error programmerError(eMsg);
 		throw programmerError;
 	}
@@ -46,7 +47,8 @@ bool FileProcessor::processFile()
 	}
 	catch(std::exception ex)
 	{
-		std::cerr << "Error: unable to complete processing file statistics for "
+		std::cerr <<
+			"Error: unable to complete processing file statistics for "
 			<< fileName << " Error: " << ex.what() << std::endl;
 		processComplete = false;
 	}
