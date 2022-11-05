@@ -5,11 +5,33 @@
 #include "FileStatistics.h"
 #include "ReportWriter.h"
 
+#ifdef _DEBUG
+static void debugMainLoop(ExecutionCtrlValues& executionCtrl)
+{
+	ProgramOptions debugOptions = executionCtrl.options;
+	debugOptions.debugPrint();
+
+	std::cout << "\nFile specifications:\n";
+	for (auto fileSpec : executionCtrl.fileSpecTypes)
+	{
+		std::cout << "\t" << fileSpec << "\n";
+	}
+
+	std::cout << "\nFile names:\n";
+	for (auto fileName : executionCtrl.filesToProcess)
+	{
+		std::cout << "\t" << fileName << "\n";
+	}
+}
+#endif
+
 static void mainLoop(ExecutionCtrlValues& executionCtrl)
 {
 	FileStatistics allFiles;
 
-
+#ifdef _DEBUG
+	debugMainLoop(executionCtrl);
+#endif
 }
 
 int main(int argc, char* argv[])

@@ -1,9 +1,11 @@
+#include <algorithm>
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
 #include "CommandLineParser.h"
+#include "CmdLineFileExtractor.h"
 #include "Executionctrlvalues.h"
 
 #ifdef _WIN32
@@ -25,20 +27,20 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	memset(&options, 0, sizeof(options));
 }
 
-bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
+void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 {
-	bool hasFiles = true;
-	unsigned int flagCount = 0;
+	bool searchSubDirs = execVars.options.recurseSubDirectories;
+	CmdLineFileExtractor fileExtractor(NotFlags, searchSubDirs);
+	execVars.filesToProcess = fileExtractor.getFileList();
+	execVars.fileSpecTypes = fileExtractor.getFileTypeList();
+}
 
-	if (argCount < MinimumCommandLineCount)
-	{
-		HelpMe doHelp("Call printHelpMessage");
-		throw doHelp;
-	}
+unsigned int CommandLineParser::extractAllArguments()
+{
+	unsigned int flagCount = 0;
 
 	for (size_t i = 0; i < argCount; i++)
 	{
-		std::cout << args[i] << "\n";	// Debug code, remove before review
 		if (args[i][0] == '-')
 		{
 			if (args[i][1] == '-')
@@ -54,14 +56,30 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 		}
 		else
 		{
-			nonFlagArguments.push_back(args[i]);
+			NotFlags.push_back(args[i]);
 		}
 	}
 
+	return flagCount;
+}
+
+bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
+{
+	bool hasFiles = true;
+
+	if (argCount < MinimumCommandLineCount)
+	{
+		HelpMe doHelp("Call printHelpMessage");
+		throw doHelp;
+	}
+
+	unsigned int flagCount = extractAllArguments();
 	if (!flagCount)
 	{
 		SetDefaultOptionsWhenNoFlags();
 	}
+
+	findAllFilesToProcess(execVars);
 
 	execVars.options = options;
 	return hasFiles;
@@ -207,11 +225,3 @@ void CommandLineParser::initHelpMessage()
 	helpMessage.push_back(veryLongLine);
 }
 
-/*
- * This function handles commandline arguments that do not start with -.
- * These commandline arguments may be file names or file type specifications.
- */
-void CommandLineParser::processnonFlagInput(char* currentArg)
-{
-	std::cout << "in nonFlagCmdLineInput current arg = " << currentArg << "\n";
-}
