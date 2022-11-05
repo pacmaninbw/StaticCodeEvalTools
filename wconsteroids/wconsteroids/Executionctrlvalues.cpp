@@ -1,10 +1,8 @@
+#include <cstring>
 #include <vector>
 #include <string>
 #include "Executionctrlvalues.h"
 
-/*
- * The variables are initialized to the current default values of wc. 
- */
 ExecutionCtrlValues::ExecutionCtrlValues()
 {
 	ProgramOptions* op = &this->options;
