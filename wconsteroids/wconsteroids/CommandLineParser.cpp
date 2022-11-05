@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -5,39 +6,13 @@
 #include "CommandLineParser.h"
 #include "Executionctrlvalues.h"
 
-static const size_t MinimumCommandLineCount = 2; // Program name plus file name
-static std::vector<std::string> helpMessage;
-
-static void initHelpMessage()
-{
-	helpMessage.push_back(" file name or file type specification (*.ext)\n");
-	helpMessage.push_back("Otions:\n");
-	helpMessage.push_back("\t-c, --bytes print the byte counts\n");
-	helpMessage.push_back("\t-m, --chars print the character counts\n");
-	helpMessage.push_back("\t-l, --lines print the newline counts\n");
-	std::string veryLongLine = "\t--files0-from=F read input from the files ";
-	veryLongLine +=
-		"specified by NUL - terminated names in file F; If F is - then read ";
-	veryLongLine += "names from standard input\n";
-	helpMessage.push_back(veryLongLine);
-	helpMessage.push_back(
-		"\t-L, --max-line-length print the length of the longest line\n");
-	helpMessage.push_back("\t-w, --words print the word counts\n");
-	helpMessage.push_back("\t--help display this help and exit\n");
-	helpMessage.push_back("\t--version output version information and exit\n");
-	helpMessage.push_back("\t--comment print comment count lines\n");
-	helpMessage.push_back("\t--code print code line counts\n");
-	helpMessage.push_back("\t--whitespace print whitespace count\n");
-	veryLongLine = "\t-p --percentage print percentages of code"
-		" per file and total\n";
-	helpMessage.push_back(veryLongLine);
-	veryLongLine = "\t-R, --subdirectories all files in the"
-		" directory as well as sub directories\n";
-	helpMessage.push_back(veryLongLine);
-	veryLongLine = "\tBy default the -c -l and -w flags are set, setting any"
-		" flag requires all flags you want to be set.\n";
-	helpMessage.push_back(veryLongLine);
-}
+#ifdef _WIN32
+// File Name or File type specification
+static const size_t MinimumCommandLineCount = 1;
+#else
+// On Linux and Unix argv[0] is the program name so a minimum of 2 arguments
+static const size_t MinimumCommandLineCount = 2;
+#endif
 
 CommandLineParser::CommandLineParser(int argc, char* argv[], std::string progVersion)
 	: argCount { argc }, args{ argv }
@@ -78,7 +53,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 		}
 		else
 		{
-			nonFlagCmdLineInput(args[i]);
+			nonFlagArguments.push_back(args[i]);
 		}
 	}
 
@@ -93,7 +68,15 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 void CommandLineParser::printHelpMessage()
 {
-	std::cerr << "\n" << (argCount != 0) ? args[0] : "wconsteriods";
+	std::string programName =
+#ifdef _WIN32
+		"wconsteriods"
+#else
+		// On Linux and Unix argv[0] is the program name;
+		(argCount != 0) ? args[0] : "wconsteriods"
+#endif
+		;
+	std::cerr << "\n" << programName;
 	for (auto line : helpMessage)
 	{
 		std::cerr << line;
@@ -121,20 +104,20 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
 	}
 
 	// The following switches require alternate handling
-	if (std::strncmp(currentArg, "--help", std::strlen("--help")) == 0)
+	if (strncmp(currentArg, "--help", strlen("--help")) == 0)
 	{
 		HelpMe doHelp("Call printHelpMessage");
 		throw doHelp;
 	}
 
-	if (std::strncmp(currentArg, "--version", std::strlen("--version")) == 0)
+	if (strncmp(currentArg, "--version", strlen("--version")) == 0)
 	{
 		showVersions sv("Call printVersion");
 		throw sv;
 	}
 
-	if (std::strncmp(currentArg, "--files0-from",
-		std::strlen("--files0-from")) == 0)
+	if (strncmp(currentArg, "--files0-from",
+		strlen("--files0-from")) == 0)
 	{
 		std::cerr << "--files0-from Not implemented yet\n";
 		return;
@@ -192,11 +175,42 @@ void CommandLineParser::initDashMaps()
 	singleDashArgs.insert({ 'R', options.recurseSubDirectories });
 }
 
+void CommandLineParser::initHelpMessage()
+{
+	helpMessage.push_back(" file name or file type specification (*.ext)\n");
+	helpMessage.push_back("Otions:\n");
+	helpMessage.push_back("\t-c, --bytes print the byte counts\n");
+	helpMessage.push_back("\t-m, --chars print the character counts\n");
+	helpMessage.push_back("\t-l, --lines print the newline counts\n");
+	std::string veryLongLine = "\t--files0-from=F read input from the files ";
+	veryLongLine +=
+		"specified by NUL - terminated names in file F; If F is - then read ";
+	veryLongLine += "names from standard input\n";
+	helpMessage.push_back(veryLongLine);
+	helpMessage.push_back(
+		"\t-L, --max-line-length print the length of the longest line\n");
+	helpMessage.push_back("\t-w, --words print the word counts\n");
+	helpMessage.push_back("\t--help display this help and exit\n");
+	helpMessage.push_back("\t--version output version information and exit\n");
+	helpMessage.push_back("\t--comment print comment count lines\n");
+	helpMessage.push_back("\t--code print code line counts\n");
+	helpMessage.push_back("\t--whitespace print whitespace count\n");
+	veryLongLine = "\t-p --percentage print percentages of code"
+		" per file and total\n";
+	helpMessage.push_back(veryLongLine);
+	veryLongLine = "\t-R, --subdirectories all files in the"
+		" directory as well as sub directories\n";
+	helpMessage.push_back(veryLongLine);
+	veryLongLine = "\tBy default the -c -l and -w flags are set, setting any"
+		" flag requires all flags you want to be set.\n";
+	helpMessage.push_back(veryLongLine);
+}
+
 /*
  * This function handles commandline arguments that do not start with -.
  * These commandline arguments may be file names or file type specifications.
  */
-void CommandLineParser::nonFlagCmdLineInput(char* currentArg)
+void CommandLineParser::processnonFlagInput(char* currentArg)
 {
 	std::cout << "in nonFlagCmdLineInput current arg = " << currentArg << "\n";
 }

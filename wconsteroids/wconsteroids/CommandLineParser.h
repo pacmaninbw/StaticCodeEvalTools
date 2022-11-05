@@ -18,16 +18,18 @@ protected:
 	void processDoubleDashOptions(char* currentArg);
 	void SetDefaultOptionsWhenNoFlags();
 	void initDashMaps();
-	void nonFlagCmdLineInput(char* currentArg);
+	void processnonFlagInput(char* currentArg);
+	void initHelpMessage();
 
 private:
-	std::vector<std::string> arguments;
 	char** args;
 	int argCount;
 	std::string version;
 	ProgramOptions options;
 	std::unordered_map<std::string, bool&> doubleDashArgs;
 	std::unordered_map<char, bool&> singleDashArgs;
+	std::vector<std::string> helpMessage;
+	std::vector<std::string> nonFlagArguments;
 };
 
 #endif // COMMANDlINEPARSER_H
