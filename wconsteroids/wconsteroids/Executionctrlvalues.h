@@ -7,22 +7,7 @@
  */
 #include <vector>
 #include <string>
-
-typedef struct {
-	// Output control variables
-	bool blankLineCount;
-	bool byteCount;
-	bool charCount;
-	bool codeCount;
-	bool commentCount;
-	bool lineCount;
-	bool maxLineWidth;
-	bool percentages;
-	bool whitespaceCount;
-	bool wordCount;
-	// input control variables
-	bool recurseSubDirectories;
-} ProgramOptions;
+#include "ProgramOptions.h"
 
 class ExecutionCtrlValues
 {
