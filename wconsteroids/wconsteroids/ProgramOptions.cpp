@@ -7,6 +7,7 @@ void ProgramOptions::singleLine(std::string flag, bool flagValue)
 	std::cout << "Flag " << flag << ": Flag value " <<
 		((flagValue) ? "True" : "False") << "\n";
 }
+
 void ProgramOptions::debugPrint()
 {
 	singleLine("blankLineCount", blankLineCount);

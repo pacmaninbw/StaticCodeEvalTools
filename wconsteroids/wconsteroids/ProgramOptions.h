@@ -1,6 +1,10 @@
 #ifndef PROGRAM_OPTIONS_STRUCT_H
 #define PROGRAM_OPTIONS_STRUCT_H
 
+/*
+ * This class is not generic except for the public functions. It is used
+ * to contain the the values of the switches/flags on the command line.
+ */
 class ProgramOptions {
 public:
 	// Output control variables
@@ -16,6 +20,7 @@ public:
 	bool wordCount;
 	// input control variables
 	bool recurseSubDirectories;
+
 	ProgramOptions()
 		: blankLineCount{ false },
 		byteCount{ false },
@@ -28,6 +33,10 @@ public:
 		whitespaceCount{ false },
 		wordCount{ false },
 		recurseSubDirectories{ false }
+	{
+
+	}
+	void initFromEnvironmentVars()
 	{
 
 	}
