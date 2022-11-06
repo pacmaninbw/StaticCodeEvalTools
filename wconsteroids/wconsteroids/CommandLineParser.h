@@ -1,6 +1,15 @@
 #ifndef COMMANDlINEPARSER_H
 #define COMMANDlINEPARSER_H
 
+/*
+ * Generic class to parse command lines. The public interface should not
+ * require modifications for different programs. The help message will
+ * need to change on a per program basis. The help message definition may
+ * need to move to the ProgramOptions class.
+ * 
+ * This class should be portable to Windows, Linux and Unix operating
+ * systems. There are ifdefs in the implementation for this purpose.
+ */
 #include <unordered_map>
 #include "Executionctrlvalues.h"
 #include "HelpMe.h"
@@ -30,7 +39,7 @@ private:
 	std::unordered_map<std::string, bool&> doubleDashArgs;
 	std::unordered_map<char, bool&> singleDashArgs;
 	std::vector<std::string> helpMessage;
-	std::vector<std::string> NotFlags;
+	std::vector<std::string> NotFlagsArgs;
 };
 
 #endif // COMMANDlINEPARSER_H

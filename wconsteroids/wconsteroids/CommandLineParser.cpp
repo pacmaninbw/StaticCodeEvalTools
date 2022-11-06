@@ -30,7 +30,7 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 {
 	bool searchSubDirs = execVars.options.recurseSubDirectories;
-	CmdLineFileExtractor fileExtractor(NotFlags, searchSubDirs);
+	CmdLineFileExtractor fileExtractor(NotFlagsArgs, searchSubDirs);
 	fileExtractor.findAllRequiredFiles();
 	execVars.filesToProcess = fileExtractor.getFileList();
 	execVars.fileSpecTypes = fileExtractor.getFileTypeList();
@@ -57,7 +57,7 @@ unsigned int CommandLineParser::extractAllArguments()
 		}
 		else
 		{
-			NotFlags.push_back(args[i]);
+			NotFlagsArgs.push_back(args[i]);
 		}
 	}
 
