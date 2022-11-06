@@ -9,7 +9,7 @@ ExecutionCtrlValues::ExecutionCtrlValues()
 
 void ExecutionCtrlValues::initFromEnvironmentVariables()
 {
-
+	options.initFromEnvironmentVars();
 }
 
 
