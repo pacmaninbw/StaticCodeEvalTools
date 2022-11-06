@@ -51,6 +51,5 @@ std::vector<std::string> CmdLineFileExtractor::getFileTypes()
 
 void CmdLineFileExtractor::findAllRequiredFiles()
 {
-	findAllFileTypeSpecs();
-	std::vector<std::string> fileType = getFileTypes();
+	fileTypeList = getFileTypes();
 }

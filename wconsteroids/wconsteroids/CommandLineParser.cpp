@@ -31,6 +31,7 @@ void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 {
 	bool searchSubDirs = execVars.options.recurseSubDirectories;
 	CmdLineFileExtractor fileExtractor(NotFlags, searchSubDirs);
+	fileExtractor.findAllRequiredFiles();
 	execVars.filesToProcess = fileExtractor.getFileList();
 	execVars.fileSpecTypes = fileExtractor.getFileTypeList();
 }
