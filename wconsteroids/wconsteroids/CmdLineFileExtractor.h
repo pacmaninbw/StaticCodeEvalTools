@@ -9,6 +9,11 @@
  * of the current working directory. The list of files to process will
  * be full file specifications so that all the proper files are read
  * only once.
+ * 
+ * What would be protected or private functions and variables are
+ * implemented as static functions and variables within the
+ * implementation .cpp file to limit the access to the file system to
+ * only this class/module.
  */
 
 #include <string>
@@ -18,28 +23,9 @@ class CmdLineFileExtractor
 {
 public:
 	CmdLineFileExtractor(std::vector<std::string> NonFlagArgs, bool searchSubDirs);
-	void findAllRequiredFiles();
-	std::vector<std::string> getFileList() const noexcept
-	{
-		return fileList;
-	}
-	std::vector<std::string> getFileTypeList() const noexcept
-	{
-		return fileTypeList;
-	}
-
-protected:
-	void findAllInputFiles();
-	std::vector<std::string> findAllFileTypeSpecs();
-	std::vector<std::string> getFileTypes();
-	void addListedFilesToFileList();
-
-private:
-	bool SearchSubDirs;
-	std::vector<std::string> fileList;
-	std::vector<std::string> fileTypeList;
-	std::vector<std::string> nonFlagArgs;
-	std::vector<std::string> subDirectories;
+	void findAllRequiredFiles() noexcept;
+	std::vector<std::string> getFileList() const noexcept;
+	std::vector<std::string> getFileTypeList() const noexcept;
 };
 
 #endif // COMMAND_LINE_FILE_EXTRACTOR_H
