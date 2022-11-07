@@ -24,12 +24,12 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	initHelpMessage();
 	initDashMaps();
 	// Initialize all options to false;
-	memset(&options, 0, sizeof(options));
+	// memset(&options, 0, sizeof(options));
 }
 
 void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 {
-	bool searchSubDirs = execVars.options.recurseSubDirectories;
+	bool searchSubDirs = options.recurseSubDirectories;
 	CmdLineFileExtractor fileExtractor(NotFlagsArgs, searchSubDirs);
 	fileExtractor.findAllRequiredFiles();
 	execVars.filesToProcess = fileExtractor.getFileList();
@@ -66,7 +66,7 @@ unsigned int CommandLineParser::extractAllArguments()
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
-	bool hasFiles = true;
+	bool hasFiles = false;
 
 	if (argCount < MinimumCommandLineCount)
 	{
@@ -81,9 +81,9 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 	}
 
 	findAllFilesToProcess(execVars);
-
 	execVars.options = options;
-	return hasFiles;
+
+	return hasFiles = execVars.filesToProcess.size() != 0;
 }
 
 void CommandLineParser::printHelpMessage()
