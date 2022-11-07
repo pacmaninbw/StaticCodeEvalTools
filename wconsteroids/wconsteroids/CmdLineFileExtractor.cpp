@@ -64,20 +64,6 @@ static bool isASpecifiedFileType(std::string notAFlag) noexcept
 	return expectedType != fileExtentions.end();
 }
 
-static void demo_status(const fsys::path& p, fsys::file_status s)
-{
-	std::cout << p;
-	// alternative: switch(s.type()) { case fs::file_type::regular: ...}
-	if (fsys::is_regular_file(s)) std::cout << " is a regular file\n";
-	if (fsys::is_directory(s)) std::cout << " is a directory\n";
-	if (fsys::is_block_file(s)) std::cout << " is a block device\n";
-	if (fsys::is_character_file(s)) std::cout << " is a character device\n";
-	if (fsys::is_fifo(s)) std::cout << " is a named IPC pipe\n";
-	if (fsys::is_socket(s)) std::cout << " is a named IPC socket\n";
-	if (fsys::is_symlink(s)) std::cout << " is a symlink\n";
-	if (!fsys::exists(s)) std::cout << " does not exist\n";
-}
-
 static void searchDirectorForFiles(fsys::path cwd)
 {
 	std::vector<fsys::path> subDirectories;
