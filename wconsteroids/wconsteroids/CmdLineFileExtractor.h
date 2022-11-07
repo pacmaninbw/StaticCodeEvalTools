@@ -32,7 +32,7 @@ protected:
 	void findAllInputFiles();
 	std::vector<std::string> findAllFileTypeSpecs();
 	std::vector<std::string> getFileTypes();
-
+	void addListedFilesToFileList();
 
 private:
 	bool SearchSubDirs;
