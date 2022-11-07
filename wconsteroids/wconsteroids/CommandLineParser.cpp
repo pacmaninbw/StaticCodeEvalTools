@@ -23,8 +23,6 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	version = progVersion;
 	initHelpMessage();
 	initDashMaps();
-	// Initialize all options to false;
-	// memset(&options, 0, sizeof(options));
 }
 
 void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
