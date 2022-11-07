@@ -5,7 +5,7 @@
 
 FileProcessor::FileProcessor(std::string inFileName)
 {
-	if (fileName.size() < 1)
+	if (inFileName.empty())
 	{
 		std::string eMsg(
 			"Programmer Error: File name is empty in "

@@ -3,6 +3,7 @@
 #include "Executionctrlvalues.h"
 #include "CommandLineParser.h"
 #include "FileStatistics.h"
+#include "FileProcessor.h"
 #include "ReportWriter.h"
 
 #ifdef _DEBUG
@@ -57,6 +58,35 @@ static void mainLoop(ExecutionCtrlValues& executionCtrl)
 #ifdef _DEBUG
 	debugMainLoop(executionCtrl);
 #endif
+
+	ReportWriter TotalReporter(executionCtrl);
+	TotalReporter.printColumnHedings();
+
+	std::vector<std::string> fileToProcess = executionCtrl.filesToProcess;
+	for (auto currentFile : executionCtrl.filesToProcess)
+	{
+		std::cerr << "Processing: " << currentFile << "\n";
+		try
+		{
+			FileProcessor fileProcessor(currentFile);
+			if (fileProcessor.processFile())
+			{
+				FileStatistics fileCounts(currentFile);
+				fileCounts = fileProcessor.getStatistics();
+				fileCounts.addTotals(allFiles);
+				ReportWriter rp(executionCtrl);
+				rp.printResult(fileCounts);
+			}
+		}
+		catch (std::runtime_error re)
+		{
+			std::cerr << re.what() << "\n";
+		}
+	}
+	
+	TotalReporter.printColumnHedings();
+	TotalReporter.printResult(allFiles);
+
 }
 
 int main(int argc, char* argv[])
