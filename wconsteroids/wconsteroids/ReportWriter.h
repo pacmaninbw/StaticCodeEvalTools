@@ -7,7 +7,7 @@
  */
 #include <memory>
 #include <string>	// std::vector included by string
-#include "Executionctrlvalues.h"
+#include "ProgramOptions.h"
 #include "FileStatistics.h"
 
 class ReportWriter
@@ -15,19 +15,19 @@ class ReportWriter
 public:
 	// ExecutionCrtlValues is passed in so that the report writer know what
 	// output to generate.
-	ReportWriter(ExecutionCtrlValues& executionctrl)
+	ReportWriter(ProgramOptions& progOptions)
 	{
-		executionCtrl = std::make_shared<ExecutionCtrlValues>(executionctrl);
+		options = std::make_shared<ProgramOptions>(progOptions);
 	}
 	void printResult(FileStatistics& resultsForOutput);
 	std::string getResultText(FileStatistics& resultsForOutput);
-	void printColumnHedings();
+	void printColumnHeadings();
 	// Returns 2 lines of properly formated text
 	std::vector<std::string> getColumneHeadingsText();
 
 private:
-	// The execution control variables are necessary to know what to outout.
-	std::shared_ptr <ExecutionCtrlValues> executionCtrl;
+	// The program options are necessary to know what to outout.
+	std::shared_ptr <ProgramOptions> options;
 
 };
 
