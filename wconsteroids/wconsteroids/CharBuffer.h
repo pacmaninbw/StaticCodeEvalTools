@@ -23,8 +23,7 @@
  */
 #define CB_MINBUFFERSIZE				2048	// 2 Kbytes
 #define CB_PERFORMANCE_MULTIPLIER		4
-#define CB_INPUTBUFFERSIZE	static_cast<size_t>(CB_MINBUFFERSIZE * \
-		CB_PERFORMANCE_MULTIPLIER)
+#define CB_INPUTBUFFERSIZE	static_cast<size_t>(CB_MINBUFFERSIZE *  CB_PERFORMANCE_MULTIPLIER)
 
 #include <string>
 #include <vector>
@@ -33,11 +32,6 @@ class CharBuffer
 {
 public:
 	CharBuffer(size_t bufferSize);
-	CharBuffer(CharBuffer&& other) noexcept;			// Move Constructor
-	CharBuffer& operator=(CharBuffer&& other) noexcept;	// Move Assignment
-	CharBuffer& operator=(const CharBuffer& original);	// Copy Assignment
-	CharBuffer(const CharBuffer& original);				// Copy Constructor
-	~CharBuffer();
 	std::vector<char> getCurrentLine() noexcept;
 	// The addLine function returns true if the line can be added and
 	// false if the buffer does not have the capacity to store the new line
@@ -52,6 +46,7 @@ public:
 	};
 	void inputComplete() noexcept { currentCharIdx = 0; }
 	bool endOfBuffer() noexcept { return currentCharIdx >= actualSize; }
+	void resetCurrentCharacter() { currentCharIdx = 0; }
 
 private:
 	std::vector<char> internalBuffer;

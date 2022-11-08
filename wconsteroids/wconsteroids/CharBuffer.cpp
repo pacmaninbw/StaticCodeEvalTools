@@ -4,70 +4,10 @@
 #include <vector>
 #include "CharBuffer.h"
 
-/*
- * Rule of 5 Constructor 
- */
-CharBuffer::CharBuffer(size_t bufferSize = CB_INPUTBUFFERSIZE)
+CharBuffer::CharBuffer(size_t bufferSize)
 	: capacity{ bufferSize }, actualSize{ 0 }, currentCharIdx{ 0 }
 {
 	internalBuffer.reserve(capacity);
-	internalBuffer = { 0 };
-}
-
-/*
- * Rule of 5 Implement move semantics
- */
-CharBuffer::CharBuffer(CharBuffer&& other) noexcept
-	: capacity{ other.capacity }, actualSize{ other.actualSize },
-	internalBuffer{std::move(other.internalBuffer)},
-	currentCharIdx{ 0 }
-{
-
-}
-
-/*
- * Rule of 5 Implement move operator
- */
-CharBuffer& CharBuffer::operator=(CharBuffer&& other) noexcept
-{
-	internalBuffer =  std::move(other.internalBuffer);
-	capacity = other.capacity;
-	actualSize = other.actualSize;
-	currentCharIdx = 0;
-
-	return *this;
-}
-
-/*
- * Rule of 5 Copy Constructor
- */
-CharBuffer::CharBuffer(const CharBuffer& original)
-	: capacity{ original.capacity }, actualSize{original.actualSize}
-{
-	internalBuffer = original.internalBuffer;
-	currentCharIdx = original.currentCharIdx;
-}
-/*
- * Rule of 5 Copy Operator
- */
-CharBuffer& CharBuffer::operator=(const CharBuffer& original)
-{
-	capacity = original.capacity;
-	actualSize = original.actualSize;
-	internalBuffer = original.internalBuffer;
-	currentCharIdx = original.currentCharIdx;
-
-	return *this;
-}
-
-/*
- * Rule of 5 Destructor 
- */
-CharBuffer::~CharBuffer()
-{
-	capacity = 0;
-	actualSize = 0;
-	currentCharIdx = 0;
 }
 
 /*
@@ -76,8 +16,7 @@ CharBuffer::~CharBuffer()
  */
 [[nodiscard]] bool CharBuffer::addLine(std::string& line) noexcept
 {
-	bool canAddLine = line.size() > 0 &&
-		(line.size() < capacity - actualSize);
+	bool canAddLine = (line.size() < (capacity - actualSize));
 
 	if (canAddLine)
 	{
@@ -98,19 +37,16 @@ std::vector<char> CharBuffer::getCurrentLine() noexcept
 {
 	std::vector<char> line;
 
-	std::vector<char>::iterator startOfLine =
-		internalBuffer.begin() + currentCharIdx;
-	std::vector<char>::iterator endOfLine =
-		std::find(startOfLine, internalBuffer.end(),
-		'\n');
-	if (endOfLine == internalBuffer.end())
+	for ( ; internalBuffer[currentCharIdx] != '\n' &&
+		currentCharIdx < actualSize; currentCharIdx++)
 	{
-		endOfLine = internalBuffer.begin() + actualSize;
+		line.push_back(internalBuffer[currentCharIdx]);
 	}
 
-	std::copy(startOfLine, endOfLine, line.begin());
-	currentCharIdx += line.size();
-
+	// include the newline in the return value and advance the current
+	// character index
+	line.push_back(internalBuffer[currentCharIdx]);
+	currentCharIdx++;
 
 	return line;
 }
