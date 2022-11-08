@@ -15,17 +15,20 @@ class FileReader
 {
 public:
 	FileReader(std::string inFileName);
+	FileReader();
 	~FileReader();
-	CharBuffer* readBlockOfText();
+	void readBlockOfText(CharBuffer& inputBuffer);
 	bool atEndOfFile();
 	size_t getLineCount() { return lineCount; }
 	size_t getCharCount() { return charCount; }
+	void setFileName(std::string FileName) { fileName = FileName; }
 
 private:
 	std::string fileName;
 	bool endOfFileEncountered;
 	size_t charCount;
 	size_t lineCount;
+	bool firstRead;
 };
 
 #endif // FILEREADER_H

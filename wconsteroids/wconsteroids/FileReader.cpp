@@ -6,8 +6,16 @@
 
 static std::ifstream inputFile;
 
+FileReader::FileReader()
+	:endOfFileEncountered{ false }, charCount{ 0 }, lineCount{ 0 },
+	firstRead{ true }
+{
+
+}
+
 FileReader::FileReader(std::string inFileName)
-	:endOfFileEncountered{false}, charCount{0}, lineCount{0}
+	:endOfFileEncountered{ false }, charCount{ 0 }, lineCount{ 0 },
+	firstRead{ true }
 {
 	fileName = inFileName;
 	inputFile.open(fileName);
@@ -18,6 +26,7 @@ FileReader::FileReader(std::string inFileName)
 		std::runtime_error FileInputError(eMsg);
 		throw FileInputError;
 	}
+	firstRead = false;
 }
 
 FileReader::~FileReader()
@@ -25,27 +34,38 @@ FileReader::~FileReader()
 	inputFile.close();
 }
 
-CharBuffer* FileReader::readBlockOfText()
+void FileReader::readBlockOfText(CharBuffer& inputBuffer)
 {
-	CharBuffer* inputBuffer = new CharBuffer(CB_INPUTBUFFERSIZE);
+	if (firstRead)
+	{
+		inputFile.open(fileName);
+		if (!inputFile.is_open())
+		{
+			std::string eMsg("Runtime error:  Can't open file " + fileName +
+				" for input.");
+			std::runtime_error FileInputError(eMsg);
+			throw FileInputError;
+		}
+		firstRead = false;
+	}
+
 	bool bufferFull = false;
 	std::string line;
 
 	do {
 		getline(inputFile, line);
-		if (line.size() > 0)
+		line += "\n";	// getLine strips new lines
+		bufferFull = !inputBuffer.addLine(line);
+		if (!bufferFull)
 		{
-			bufferFull = !inputBuffer->addLine(line);
 			// These statistics are collected here for performance reasons.
 			// The method of input allows for fast collection of the data.
 			lineCount++;
-			charCount += line.size();
+			charCount += (line.size() > 0) ? line.size() : 1;
 		}
 
 		endOfFileEncountered = inputFile.eof();
 	} while (!bufferFull && !endOfFileEncountered);
-
-	return inputBuffer;
 }
 
 bool FileReader::atEndOfFile()
