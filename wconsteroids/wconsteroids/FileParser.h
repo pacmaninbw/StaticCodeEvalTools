@@ -6,8 +6,16 @@
 
 class FileParser
 {
-	FileParser();
-	void ParseBuffer(CharBuffer* inputbuffer);
+public:
+	FileParser(FileStatistics& fileStats);
+	void ParseBuffer(CharBuffer& inputbuffer);
+	void addBufferStats(FileStatistics& processorStats)
+	{
+		fileStatistics.addTotals(processorStats);
+	}
+
+private:
+	FileStatistics& fileStatistics;
 };
 
 #endif // FILEPARSER_H
