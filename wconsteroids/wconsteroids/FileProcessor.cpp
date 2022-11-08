@@ -1,4 +1,5 @@
 #include <iostream>
+#include "FileParser.h"
 #include "FileProcessor.h"
 #include "FileReader.h"
 #include "FileStatistics.h"
@@ -15,13 +16,9 @@ FileProcessor::FileProcessor(std::string inFileName)
 	}
 	fileName = inFileName;
 	statistics.setFileName(fileName);
-	reader = new FileReader(fileName);
+	reader.setFileName(fileName);
 }
 
-FileProcessor::~FileProcessor()
-{
-	delete reader;
-}
 
 void FileProcessor::mergeStatistics(FileStatistics& allFileStats)
 {
@@ -36,14 +33,18 @@ FileStatistics FileProcessor::getStatistics()
 bool FileProcessor::processFile()
 {
 	bool processComplete = true;
+	FileParser fileParser(statistics);
 
 	try{
-		while (!reader->atEndOfFile())
+		do
 		{
-			CharBuffer* inputBuffer = reader->readBlockOfText();
-			statistics.addToCharCount(reader->getCharCount());
-			statistics.addToLineCount(reader->getLineCount());
-		}
+			// 8K buffer should be fine.
+			CharBuffer inputBuffer(8192);
+			reader.readBlockOfText(inputBuffer);
+			inputBuffer.resetCurrentCharacter();
+			fileParser.ParseBuffer(inputBuffer);
+			fileParser.addBufferStats(statistics);
+		} while (!reader.atEndOfFile());
 	}
 	catch(std::exception ex)
 	{

@@ -9,7 +9,7 @@ class FileProcessor
 {
 public:
 	FileProcessor(std::string inFileName);
-	~FileProcessor();
+	~FileProcessor() = default;
 	bool processFile();
 	FileStatistics getStatistics();
 	void mergeStatistics(FileStatistics& allFileStats);
@@ -17,7 +17,7 @@ public:
 private:
 	std::string fileName;
 	FileStatistics statistics;
-	FileReader* reader;
+	FileReader reader;
 };
 
 #endif // FILEPROCESSOR_H
