@@ -1,10 +1,14 @@
 #include <iostream>
+#include <memory>
+#include "CharBuffer.h"
 #include "FileParser.h"
 #include "FileProcessor.h"
 #include "FileReader.h"
 #include "FileStatistics.h"
+#include "ReportWriter.h"
 
-FileProcessor::FileProcessor(std::string inFileName)
+FileProcessor::FileProcessor(std::string inFileName, ProgramOptions& progOptions)
+	: options{ progOptions }
 {
 	if (inFileName.empty())
 	{
@@ -30,22 +34,29 @@ FileStatistics FileProcessor::getStatistics()
 	return statistics;
 }
 
+/*
+ * Processing a file includes reading the file, parsing the input to collect
+ * the statistics and then pringing the statistics.
+ */
 bool FileProcessor::processFile()
 {
+	constexpr size_t InputBufferSize = 8192;
 	bool processComplete = true;
 	FileParser fileParser(statistics);
 
 	try{
 		do
 		{
-			// 8K buffer should be fine.
-			CharBuffer inputBuffer(8192);
+			CharBuffer inputBuffer(InputBufferSize);
 			reader.readBlockOfText(inputBuffer);
-			inputBuffer.resetCurrentCharacter();
 			fileParser.ParseBuffer(inputBuffer);
 			fileParser.addBufferStats(statistics);
 		} while (!reader.atEndOfFile());
+
+		ReportWriter ReportFileStatistics(options);
+		ReportFileStatistics.printResult(statistics);
 	}
+
 	catch(std::exception ex)
 	{
 		std::cerr <<
