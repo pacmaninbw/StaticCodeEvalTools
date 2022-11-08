@@ -22,7 +22,6 @@ CharBuffer::CharBuffer(size_t bufferSize)
 	{
 		std::copy(line.begin(), line.end(),
 			std::back_inserter(internalBuffer));
-		currentCharIdx += line.size();
 		actualSize += line.size();
 	}
 
