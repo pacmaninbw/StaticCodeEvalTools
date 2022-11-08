@@ -34,8 +34,6 @@ static char** makeFakeArgs(int *FakeArgc)
 		"-R",
 		"*.cpp",
 		"*.h",
-		"notAclass.h",
-		"notAclass.cpp"
 	};
 	*FakeArgc = static_cast<int>(args.size());
 	char** fakeArgs = new char* [*FakeArgc];
@@ -65,7 +63,6 @@ static void mainLoop(ExecutionCtrlValues& executionCtrl)
 	std::vector<std::string> fileToProcess = executionCtrl.filesToProcess;
 	for (auto currentFile : executionCtrl.filesToProcess)
 	{
-		std::cerr << "Processing: " << currentFile << "\n";
 		try
 		{
 			FileProcessor fileProcessor(currentFile);
@@ -86,7 +83,6 @@ static void mainLoop(ExecutionCtrlValues& executionCtrl)
 	
 	TotalReporter.printColumnHedings();
 	TotalReporter.printResult(allFiles);
-
 }
 
 int main(int argc, char* argv[])
