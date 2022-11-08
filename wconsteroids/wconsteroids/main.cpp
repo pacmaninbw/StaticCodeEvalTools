@@ -4,6 +4,7 @@
 #include "CommandLineParser.h"
 #include "FileStatistics.h"
 #include "FileProcessor.h"
+#include "ProgramOptions.h"
 #include "ReportWriter.h"
 
 #ifdef _DEBUG
@@ -57,22 +58,20 @@ static void mainLoop(ExecutionCtrlValues& executionCtrl)
 	debugMainLoop(executionCtrl);
 #endif
 
-	ReportWriter TotalReporter(executionCtrl);
-	TotalReporter.printColumnHedings();
-
+	ProgramOptions& options = executionCtrl.options;
 	std::vector<std::string> fileToProcess = executionCtrl.filesToProcess;
-	for (auto currentFile : executionCtrl.filesToProcess)
+
+	ReportWriter TotalReporter(options);
+	TotalReporter.printColumnHeadings();
+
+	for (auto currentFile : fileToProcess)
 	{
 		try
 		{
-			FileProcessor fileProcessor(currentFile);
+			FileProcessor fileProcessor(currentFile, options);
 			if (fileProcessor.processFile())
 			{
-				FileStatistics fileCounts(currentFile);
-				fileCounts = fileProcessor.getStatistics();
-				fileCounts.addTotals(allFiles);
-				ReportWriter rp(executionCtrl);
-				rp.printResult(fileCounts);
+				fileProcessor.mergeStatistics(allFiles);
 			}
 		}
 		catch (std::runtime_error re)
@@ -81,7 +80,7 @@ static void mainLoop(ExecutionCtrlValues& executionCtrl)
 		}
 	}
 	
-	TotalReporter.printColumnHedings();
+	TotalReporter.printColumnHeadings();
 	TotalReporter.printResult(allFiles);
 }
 
