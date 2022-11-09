@@ -32,9 +32,9 @@ CharBuffer::CharBuffer(size_t bufferSize)
  * Return a copy of the current line and advance the current
  * pointer to the new line.
  */
-std::vector<char> CharBuffer::getCurrentLine() noexcept
+std::vector<unsigned char> CharBuffer::getCurrentLine() noexcept
 {
-	std::vector<char> line;
+	std::vector<unsigned char> line;
 
 	for ( ; internalBuffer[currentCharIdx] != '\n' &&
 		currentCharIdx < actualSize; currentCharIdx++)

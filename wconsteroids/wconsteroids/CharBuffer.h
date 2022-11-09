@@ -14,7 +14,7 @@ class CharBuffer
 {
 public:
 	CharBuffer(size_t bufferSize);
-	std::vector<char> getCurrentLine() noexcept;
+	std::vector<unsigned char> getCurrentLine() noexcept;
 	// The addLine function returns true if the line can be added and
 	// false if the buffer does not have the capacity to store the new line
 	[[nodiscard]] bool addLine(std::string& line) noexcept;
@@ -22,14 +22,14 @@ public:
 		return internalBuffer[currentCharIdx];
 		currentCharIdx++;
 	}
-	void addCharacter(char c) noexcept {
+	void addCharacter(unsigned char c) noexcept {
 		internalBuffer[actualSize] = c;
 		actualSize++;
 	};
 	bool endOfBuffer() noexcept { return currentCharIdx >= actualSize; }
 
 private:
-	std::vector<char> internalBuffer;
+	std::vector<unsigned char> internalBuffer;
 	size_t currentCharIdx;
 	size_t capacity;
 	size_t actualSize;
