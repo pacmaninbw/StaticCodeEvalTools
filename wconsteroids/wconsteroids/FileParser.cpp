@@ -1,9 +1,9 @@
 #include <cctype>
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include <string>
 #include <sstream>
-#include "CharBuffer.h"
 #include "FileParser.h"
 #include "FileStatistics.h"
 
@@ -14,11 +14,12 @@ FileParser::FileParser(FileStatistics& fileStats)
 {
 }
 
-void FileParser::ParseBuffer(CharBuffer& inputBuffer) noexcept
+void FileParser::ParseBuffer(std::string inputBuffer) noexcept
 {
-	while (!inputBuffer.endOfBuffer())
+	std::string::iterator currentChar = inputBuffer.begin();
+	while (currentChar != inputBuffer.end())
 	{
-		std::vector<unsigned char> line = inputBuffer.getCurrentLine();
+		std::string line = getCurrentLine(currentChar, inputBuffer.end());
 		fileStatistics.addToCharCount(line.size());
 		fileStatistics.updateWidestLine(line.size());
 		fileStatistics.incrementTotalLines();
@@ -26,14 +27,14 @@ void FileParser::ParseBuffer(CharBuffer& inputBuffer) noexcept
 	}
 }
 
-void FileParser::parseLine(std::vector<unsigned char> line) noexcept
+void FileParser::parseLine(std::string line) noexcept
 {
 	size_t whiteSpaceCount = 0;
 	std::vector<std::string> tokens = tokenize(line);
 	fileStatistics.addToWordCount(tokens.size());
 }
 
-static std::string tokenizeWord(std::vector<unsigned char>::iterator& currentChar)
+static std::string tokenizeWord(std::string::iterator& currentChar)
 {
 	std::string token;
 
@@ -45,7 +46,7 @@ static std::string tokenizeWord(std::vector<unsigned char>::iterator& currentCha
 	return token;
 }
 
-static std::string tokenizeOperator(std::vector<unsigned char>::iterator& currentChar)
+static std::string tokenizeOperator(std::string::iterator& currentChar)
 {
 	std::string token;
 
@@ -57,22 +58,23 @@ static std::string tokenizeOperator(std::vector<unsigned char>::iterator& curren
 	return token;
 }
 
-std::vector<std::string> FileParser::tokenize(std::vector<unsigned char> line) noexcept
+std::vector<std::string> FileParser::tokenize(std::string line) noexcept
 {
 	std::vector<std::string> tokens;
-	std::vector<unsigned char>::iterator currentChar;
+	std::string::iterator currentChar;
 	size_t whiteSpaceCount = 0;
-	std::string sline(line.begin(), line.end());
 
-	for (currentChar = line.begin(); *currentChar != '\n'; )
+	for (currentChar = line.begin(); *currentChar != '\n' &&
+		currentChar != line.end(); )
 	{
-		while (*currentChar != '\n' && isspace(*currentChar))
+		while (*currentChar != '\n' && currentChar != line.end() &&
+			isspace(*currentChar))
 		{
 			currentChar++;
 			whiteSpaceCount++;
 		}
 
-		if (*currentChar != '\n')
+		if (currentChar != line.end() && *currentChar != '\n')
 		{
 			std::string token = (isalnum(*currentChar)) ? tokenizeWord(currentChar):
 				tokenizeOperator(currentChar);
@@ -87,3 +89,19 @@ std::vector<std::string> FileParser::tokenize(std::vector<unsigned char> line) n
 
 	return tokens;
 }
+
+std::string FileParser::getCurrentLine(std::string::iterator& currentChar,
+	std::string::iterator end) noexcept
+{
+	std::string::iterator endOfLine = std::find(currentChar, end, '\n');
+	if (endOfLine != end)
+	{
+		endOfLine++;
+	}
+
+	std::string line(currentChar, endOfLine);
+	currentChar = endOfLine;
+
+	return line;
+}
+
