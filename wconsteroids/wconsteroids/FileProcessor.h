@@ -2,8 +2,9 @@
 #define FILEPROCESSOR_H
 
 #include <string>
+#include <fstream>
+
 #include "FileStatistics.h"
-#include "FileReader.h"
 #include "ProgramOptions.h"
 
 class FileProcessor
@@ -15,10 +16,12 @@ public:
 	FileStatistics getStatistics();
 	void mergeStatistics(FileStatistics& allFileStats);
 
+protected:
+	void processLoop(std::ifstream& inStream) noexcept;
+
 private:
 	std::string fileName;
 	FileStatistics statistics;
-	FileReader reader;
 	// The program options are necessary to know what to outout.
 	ProgramOptions& options;
 };

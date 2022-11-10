@@ -1,11 +1,12 @@
 #include <iostream>
-#include <memory>
-#include "CharBuffer.h"
+#include <fstream>
+#include <sstream>
 #include "FileParser.h"
 #include "FileProcessor.h"
-#include "FileReader.h"
 #include "FileStatistics.h"
 #include "ReportWriter.h"
+
+static constexpr size_t InputBufferSize = 8 * 1024;
 
 FileProcessor::FileProcessor(std::string inFileName, ProgramOptions& progOptions)
 	: options{ progOptions }
@@ -20,7 +21,7 @@ FileProcessor::FileProcessor(std::string inFileName, ProgramOptions& progOptions
 	}
 	fileName = inFileName;
 	statistics.setFileName(fileName);
-	reader.setFileName(fileName);
+
 }
 
 
@@ -40,18 +41,19 @@ FileStatistics FileProcessor::getStatistics()
  */
 bool FileProcessor::processFile()
 {
-	constexpr size_t InputBufferSize = 8192;
 	bool processComplete = true;
-	FileParser fileParser(statistics);
 
 	try{
-		do
+		std::ifstream inStream(fileName);
+		if (!inStream.is_open())
 		{
-			CharBuffer inputBuffer(InputBufferSize);
-			reader.readBlockOfText(inputBuffer);
-			fileParser.ParseBuffer(inputBuffer);
-			fileParser.addBufferStats(statistics);
-		} while (!reader.atEndOfFile());
+			std::string eMsg("Runtime error:  Can't open file " + fileName +
+				" for input.");
+			std::runtime_error FileInputError(eMsg);
+			throw FileInputError;
+		}
+
+		processLoop(inStream);
 
 		ReportWriter ReportFileStatistics(options);
 		ReportFileStatistics.printResult(statistics);
@@ -67,3 +69,17 @@ bool FileProcessor::processFile()
 
 	return processComplete;
 }
+
+void FileProcessor::processLoop(std::ifstream& inStream) noexcept
+{
+	FileParser fileParser(statistics);
+
+	do
+	{
+		std::stringstream inoutBuffer;
+		inoutBuffer << inStream.rdbuf();
+		fileParser.ParseBuffer(inoutBuffer.str());
+		fileParser.addBufferStats(statistics);
+	} while (!inStream.eof());
+}
+
