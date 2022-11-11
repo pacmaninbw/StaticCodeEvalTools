@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cctype>
 #include <iostream>
 #include <iterator>
@@ -16,13 +17,24 @@ FileParser::FileParser(FileStatistics& fileStats)
 
 void FileParser::ParseBuffer(std::string inputBuffer) noexcept
 {
+	fileStatistics.setCharCount(inputBuffer.size());
+
+	// Correct a bug in the tokenizer when the file isn't terminated with a new line
+	std::string::iterator lastChar = inputBuffer.end();
+	--lastChar;
+	if (*lastChar != '\n')
+	{
+		inputBuffer.push_back('\n');
+	}
+
+	size_t lineCount = std::count(inputBuffer.begin(), inputBuffer.end(), '\n');
+	fileStatistics.setToLineCount(lineCount);
+
 	std::string::iterator currentChar = inputBuffer.begin();
 	while (currentChar != inputBuffer.end())
 	{
 		std::string line = getCurrentLine(currentChar, inputBuffer.end());
-		fileStatistics.addToCharCount(line.size());
-		fileStatistics.updateWidestLine(line.size());
-		fileStatistics.incrementTotalLines();
+		fileStatistics.updateWidestLine(line.length());
 		parseLine(line);
 	}
 }
