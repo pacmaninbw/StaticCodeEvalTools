@@ -28,7 +28,7 @@ public:
 private:
 	// The program options are necessary to know what to outout.
 	std::shared_ptr <ProgramOptions> options;
-
+	std::string correctFileSpec(std::string fileSpec) noexcept;
 };
 
 #endif // REPORTWRITER_H

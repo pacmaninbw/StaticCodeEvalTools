@@ -67,7 +67,8 @@ std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
 		outString += std::to_string(resultsForOutput.getBlankLines()) + "\t";
 	}
 
-	outString += "\t\t" + resultsForOutput.getFileName();
+	std::string fileName = correctFileSpec(resultsForOutput.getFileName());
+	outString += "\t\t" + fileName;
 
 	return outString;
 }
@@ -152,5 +153,29 @@ void ReportWriter::printColumnHeadings()
 	for (auto line : headerRows)
 	{
 		std::cout << line << "\n";
+	}
+}
+
+std::string ReportWriter::correctFileSpec(std::string fileSpec) noexcept
+{
+	if (options->recurseSubDirectories)
+	{
+		return fileSpec;
+	}
+	else
+	{
+		auto newStart = fileSpec.find_last_of('/');
+		if (!newStart)
+		{
+			newStart = fileSpec.find_last_of('\\');
+			if (!newStart)
+			{
+				return fileSpec;
+			}
+		}
+		std::string fileName = fileSpec.substr(newStart + 1);
+
+		
+		return fileName;
 	}
 }
