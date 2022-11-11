@@ -40,5 +40,5 @@ void FileStatistics::addTotals(FileStatistics &allFiles)
 	allFiles.characterCount += characterCount;
 	allFiles.codeWithCommentCount += codeWithCommentCount;
 	allFiles.blankLineCount += blankLineCount;
-	allFiles.widestLine += widestLine;
+	allFiles.updateWidestLine(widestLine);
 }
