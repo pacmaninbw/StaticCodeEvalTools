@@ -131,6 +131,8 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
 		throw sv;
 	}
 
+#if 0
+	// This wc flag will not be implemented.
 	if (strncmp(currentArg, "--files0-from",
 		strlen("--files0-from")) == 0)
 	{
@@ -139,6 +141,7 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
 	}
 
 	std::cerr << "Unknown flag: " << currentArg << "\n";
+#endif
 }
 
 /*
