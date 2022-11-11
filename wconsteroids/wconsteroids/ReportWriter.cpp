@@ -32,7 +32,7 @@ std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
 
 	if (options->charCount)
 	{
-		outString += std::to_string(resultsForOutput.getCharacters()) + "\t";
+		outString += std::to_string(resultsForOutput.getCharacters()) + "\t\t";
 	}
 
 	if (options->maxLineWidth)
