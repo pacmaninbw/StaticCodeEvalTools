@@ -9,7 +9,6 @@
 #include "Executionctrlvalues.h"
 
 #ifdef _WIN32
-// File Name or File type specification
 static const size_t MinimumCommandLineCount = 1;
 #else
 // On Linux and Unix argv[0] is the program name so a minimum of 2 arguments
@@ -86,15 +85,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 void CommandLineParser::printHelpMessage()
 {
-	std::string programName =
-#ifdef _WIN32
-		"wconsteriods"
-#else
-		// On Linux and Unix argv[0] is the program name;
-		(argCount != 0) ? args[0] : "wconsteriods"
-#endif
-		;
-	std::cerr << "\n" << programName;
+	std::cerr << "\n" << messageProgramName();
 	for (auto line : helpMessage)
 	{
 		std::cerr << line;
@@ -105,16 +96,7 @@ void CommandLineParser::printHelpMessage()
 
 void CommandLineParser::printVersion()
 {
-	std::string programName =
-#ifdef _WIN32
-		"wconsteriods"
-#else
-		// On Linux and Unix argv[0] is the program name;
-		(argCount != 0) ? args[0] : "wconsteriods"
-#endif
-		;
-
-		std::cout << programName << ": version: " << version << "\n";
+		std::cout << messageProgramName() << ": version: " << version << "\n";
 		std::cout << "Packaged by Chernick Consulting\n";
 		std::cout << "License GPLv3+: GNU GPL version 3 or later"
 			" <http://gnu.org/licenses/gpl.html>.\n";
@@ -210,27 +192,26 @@ void CommandLineParser::initDashMaps()
 
 void CommandLineParser::initHelpMessage()
 {
+	std::string veryLongLine;
 	helpMessage.push_back(" file name or file type specification (*.ext)\n");
 	helpMessage.push_back("Otions:\n");
 	helpMessage.push_back("\t-c, --bytes print the byte counts\n");
 	helpMessage.push_back("\t-m, --chars print the character counts\n");
 	helpMessage.push_back("\t-l, --lines print the newline counts\n");
-	std::string veryLongLine = "\t--files0-from=F read input from the files ";
-	veryLongLine +=
-		"specified by NUL - terminated names in file F; If F is - then read ";
-	veryLongLine += "names from standard input\n";
-	helpMessage.push_back(veryLongLine);
 	helpMessage.push_back(
 		"\t-L, --max-line-length print the length of the longest line\n");
 	helpMessage.push_back("\t-w, --words print the word counts\n");
 	helpMessage.push_back("\t--help display this help and exit\n");
 	helpMessage.push_back("\t--version output version information and exit\n");
+#if 0
+	// Not currently implemented
 	helpMessage.push_back("\t--comment print comment count lines\n");
 	helpMessage.push_back("\t--code print code line counts\n");
 	helpMessage.push_back("\t--whitespace print whitespace count\n");
 	veryLongLine = "\t-p --percentage print percentages of code"
 		" per file and total\n";
 	helpMessage.push_back(veryLongLine);
+#endif
 	veryLongLine = "\t-R, --subdirectories all files in the"
 		" directory as well as sub directories\n";
 	helpMessage.push_back(veryLongLine);
@@ -239,3 +220,16 @@ void CommandLineParser::initHelpMessage()
 	helpMessage.push_back(veryLongLine);
 }
 
+std::string CommandLineParser::messageProgramName()
+{
+	std::string programName =
+#ifdef _WIN32
+		"wconsteriods"
+#else
+		// On Linux and Unix argv[0] is the program name;
+		(argCount != 0) ? args[0] : "wconsteriods"
+#endif
+		;
+
+	return programName;
+}

@@ -30,6 +30,7 @@ protected:
 	void initHelpMessage();
 	void findAllFilesToProcess(ExecutionCtrlValues& execVars);
 	unsigned int extractAllArguments();
+	std::string messageProgramName();
 
 private:
 	char** args;
