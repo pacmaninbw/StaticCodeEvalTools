@@ -21,9 +21,7 @@ FileProcessor::FileProcessor(std::string inFileName, ProgramOptions& progOptions
 	}
 	fileName = inFileName;
 	statistics.setFileName(fileName);
-
 }
-
 
 void FileProcessor::mergeStatistics(FileStatistics& allFileStats)
 {
@@ -55,6 +53,8 @@ bool FileProcessor::processFile()
 
 		processLoop(inStream);
 
+		inStream.close();
+
 		ReportWriter ReportFileStatistics(options);
 		ReportFileStatistics.printResult(statistics);
 	}
@@ -74,12 +74,9 @@ void FileProcessor::processLoop(std::ifstream& inStream) noexcept
 {
 	FileParser fileParser(statistics);
 
-	do
-	{
-		std::stringstream inoutBuffer;
-		inoutBuffer << inStream.rdbuf();
-		fileParser.ParseBuffer(inoutBuffer.str());
-		fileParser.addBufferStats(statistics);
-	} while (!inStream.eof());
+	std::stringstream inputBuffer;
+	std::streambuf* inBuf = inStream.rdbuf();
+	inputBuffer << inStream.rdbuf();
+	fileParser.ParseBuffer(inputBuffer.str());
 }
 
