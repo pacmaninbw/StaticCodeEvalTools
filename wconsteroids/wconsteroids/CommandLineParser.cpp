@@ -105,7 +105,22 @@ void CommandLineParser::printHelpMessage()
 
 void CommandLineParser::printVersion()
 {
-	std::cout << args[0] << ": version: " << version << "\n";
+	std::string programName =
+#ifdef _WIN32
+		"wconsteriods"
+#else
+		// On Linux and Unix argv[0] is the program name;
+		(argCount != 0) ? args[0] : "wconsteriods"
+#endif
+		;
+
+		std::cout << programName << ": version: " << version << "\n";
+		std::cout << "Packaged by Chernick Consulting\n";
+		std::cout << "License GPLv3+: GNU GPL version 3 or later"
+			" <http://gnu.org/licenses/gpl.html>.\n";
+		std::cout << "This is free software : you are free to change and redistribute it.\n";
+		std::cout << "\tThere is NO WARRANTY, to the extent permitted by law.\n";
+		std::cout << "\nWritten by Paul A. Chernick";
 }
 
 /*
