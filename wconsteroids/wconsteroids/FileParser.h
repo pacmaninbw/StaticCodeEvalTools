@@ -21,6 +21,7 @@ protected:
 	std::vector<std::string> tokenize(std::string line) noexcept;
 	std::string getCurrentLine(std::string::iterator& currentChar,
 		std::string::iterator end) noexcept;
+	void terminateFileWithNewLine(std::string& inputBuffer) noexcept;
 
 private:
 	FileStatistics& fileStatistics;

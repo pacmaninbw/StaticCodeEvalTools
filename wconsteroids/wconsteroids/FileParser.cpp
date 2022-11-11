@@ -17,15 +17,9 @@ FileParser::FileParser(FileStatistics& fileStats)
 
 void FileParser::ParseBuffer(std::string inputBuffer) noexcept
 {
-	fileStatistics.setCharCount(inputBuffer.size());
+	fileStatistics.setCharCount(inputBuffer.length());
 
-	// Correct a bug in the tokenizer when the file isn't terminated with a new line
-	std::string::iterator lastChar = inputBuffer.end();
-	--lastChar;
-	if (*lastChar != '\n')
-	{
-		inputBuffer.push_back('\n');
-	}
+	terminateFileWithNewLine(inputBuffer);
 
 	size_t lineCount = std::count(inputBuffer.begin(), inputBuffer.end(), '\n');
 	fileStatistics.setToLineCount(lineCount);
@@ -117,3 +111,13 @@ std::string FileParser::getCurrentLine(std::string::iterator& currentChar,
 	return line;
 }
 
+void FileParser::terminateFileWithNewLine(std::string& inputBuffer) noexcept
+{
+	// Correct a bug in the tokenizer when the file isn't terminated with a new line
+	std::string::iterator lastChar = inputBuffer.end();
+	--lastChar;
+	if (*lastChar != '\n')
+	{
+		inputBuffer.push_back('\n');
+	}
+}
