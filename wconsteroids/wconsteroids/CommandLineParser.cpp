@@ -120,7 +120,7 @@ void CommandLineParser::printVersion()
 			" <http://gnu.org/licenses/gpl.html>.\n";
 		std::cout << "This is free software : you are free to change and redistribute it.\n";
 		std::cout << "\tThere is NO WARRANTY, to the extent permitted by law.\n";
-		std::cout << "\nWritten by Paul A. Chernick";
+		std::cout << "\nWritten by Paul A. Chernick\n";
 }
 
 /*
