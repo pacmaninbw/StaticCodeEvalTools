@@ -28,7 +28,9 @@ public:
 	std::string getFileName() { return fileName; }
 	void addTotals(FileStatistics &allFiles);
 	void addToLineCount(size_t lineCount) { totalLineCount += lineCount; }
+	void setToLineCount(size_t lineCount) { totalLineCount = lineCount; }
 	void addToCharCount(size_t charCount) { characterCount += charCount; }
+	void setCharCount(size_t charCount) { characterCount = charCount; }
 	void addToWordCount(size_t wordCountUpdate) { wordCount += wordCountUpdate; }
 	void addToWhitespace(size_t wsUpdate) { whiteSpaceCount += wsUpdate; }
 	// While the inline key word is only a recommendation, hopefully the increment
