@@ -156,6 +156,7 @@
     <ClInclude Include="HelpMe.h" />
     <ClInclude Include="ProgramOptions.h" />
     <ClInclude Include="ReportWriter.h" />
+    <ClInclude Include="UtilityTimer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

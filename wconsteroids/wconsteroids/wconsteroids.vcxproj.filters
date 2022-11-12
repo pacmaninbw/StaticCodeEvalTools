@@ -71,5 +71,8 @@
     <ClInclude Include="CmdLineFileExtractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UtilityTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

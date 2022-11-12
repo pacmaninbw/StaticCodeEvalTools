@@ -1,6 +1,4 @@
 #include <algorithm>
-#include <chrono>
-#include <cstring>
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -8,6 +6,7 @@
 #include "CommandLineParser.h"
 #include "CmdLineFileExtractor.h"
 #include "Executionctrlvalues.h"
+#include "UtilityTimer.h"
 
 #ifdef _WIN32
 static const size_t MinimumCommandLineCount = 1;
@@ -64,8 +63,10 @@ unsigned int CommandLineParser::extractAllArguments()
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
-	std::chrono::time_point<std::chrono::system_clock> start, end;
-	start = std::chrono::system_clock::now();
+	UtilityTimer stopWatch;
+	// There is no way to determine if -t has been used at this point
+	// so start the timer anyway.
+	stopWatch.startTimer();
 
 	bool hasFiles = false;
 
@@ -86,14 +87,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 	if (options.enableExecutionTime)
 	{
-		end = std::chrono::system_clock::now();
-
-		std::chrono::duration<double> elapsed_seconds = end - start;
-		std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-		double ElapsedTimeForOutPut = elapsed_seconds.count();
-
-		std::cout << "finished command line parsing at " << std::ctime(&end_time)
-			<< "elapsed time: " << ElapsedTimeForOutPut << "\n" << "\n" << "\n";
+		stopWatch.stopTimerAndReport("command line parsing at ");
 	}
 
 	return hasFiles = execVars.filesToProcess.size() != 0;

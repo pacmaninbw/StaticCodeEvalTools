@@ -1,4 +1,3 @@
-#include <chrono>
 #include <iostream>
 #include <string>
 #include "Executionctrlvalues.h"
@@ -7,6 +6,7 @@
 #include "FileProcessor.h"
 #include "ProgramOptions.h"
 #include "ReportWriter.h"
+#include "UtilityTimer.h"
 
 static void mainLoop(ExecutionCtrlValues& executionCtrl)
 {
@@ -52,26 +52,17 @@ int main(int argc, char* argv[])
 		executionCtrl.initFromEnvironmentVariables();
 		if (cmdLineParser.parse(executionCtrl))
 		{
-			std::chrono::time_point<std::chrono::system_clock> start, end;
+			UtilityTimer stopWatch;
 			if (executionCtrl.options.enableExecutionTime)
 			{
-				start = std::chrono::system_clock::now();
+				stopWatch.startTimer();
 			}
 			mainLoop(executionCtrl);
-
 			if (executionCtrl.options.enableExecutionTime)
 			{
-				end = std::chrono::system_clock::now();
-
-				std::chrono::duration<double> elapsed_seconds = end - start;
-				std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-				double ElapsedTimeForOutPut = elapsed_seconds.count();
-
-				std::cout << "finished execution at " << std::ctime(&end_time)
-					<< "elapsed time: " << ElapsedTimeForOutPut <<
-					"\n" << "\n" << "\n";
+				stopWatch.stopTimerAndReport(
+					" processing and reporting input files ");
 			}
-
 		}
 	}
 
