@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <filesystem>
 #include <string>
@@ -58,10 +59,8 @@ static bool isASpecifiedFileType(std::string notAFlag) noexcept
 		return false;
 	}
 
-	auto expectedType = std::find(fileExtentions.begin(),
-		fileExtentions.end(), fileExtension);
-
-	return expectedType != fileExtentions.end();
+	return std::find(fileExtentions.begin(),
+		fileExtentions.end(), fileExtension) != fileExtentions.end();
 }
 
 static void searchDirectorForFiles(fsys::path cwd)
