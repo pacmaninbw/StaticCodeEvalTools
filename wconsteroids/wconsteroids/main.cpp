@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	catch (HelpMe helpMe)
+	catch (ShowHelpMessage sh)
 	{
 		cmdLineParser.printHelpMessage();
 	}

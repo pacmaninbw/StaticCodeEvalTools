@@ -72,7 +72,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 	if (argCount < MinimumCommandLineCount)
 	{
-		HelpMe doHelp("Call printHelpMessage");
+		ShowHelpMessage doHelp("Call printHelpMessage");
 		throw doHelp;
 	}
 
@@ -131,7 +131,7 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
 	// The following switches require alternate handling
 	if (strncmp(currentArg, "--help", strlen("--help")) == 0)
 	{
-		HelpMe doHelp("Call printHelpMessage");
+		ShowHelpMessage doHelp("Call printHelpMessage");
 		throw doHelp;
 	}
 

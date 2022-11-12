@@ -153,7 +153,7 @@
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="FileProcessor.h" />
     <ClInclude Include="FileStatistics.h" />
-    <ClInclude Include="HelpMe.h" />
+    <ClInclude Include="SpecialExceptions.h" />
     <ClInclude Include="ProgramOptions.h" />
     <ClInclude Include="ReportWriter.h" />
     <ClInclude Include="UtilityTimer.h" />
