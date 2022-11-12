@@ -18,6 +18,7 @@ public:
 	bool percentages;
 	bool whitespaceCount;
 	bool wordCount;
+	bool enableExecutionTime;
 	// input control variables
 	bool recurseSubDirectories;
 
@@ -32,6 +33,7 @@ public:
 		percentages{ false },
 		whitespaceCount{ false },
 		wordCount{ false },
+		enableExecutionTime{ false },
 		recurseSubDirectories{ false }
 	{
 

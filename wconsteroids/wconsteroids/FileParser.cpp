@@ -28,7 +28,8 @@ void FileParser::ParseBuffer(std::string inputBuffer) noexcept
 	while (currentChar != inputBuffer.end())
 	{
 		std::string line = getCurrentLine(currentChar, inputBuffer.end());
-		fileStatistics.updateWidestLine(line.length());
+		lineWidth(line);
+		// fileStatistics.updateWidestLine(line.length());
 		parseLine(line);
 	}
 }
@@ -120,4 +121,13 @@ void FileParser::terminateFileWithNewLine(std::string& inputBuffer) noexcept
 	{
 		inputBuffer.push_back('\n');
 	}
+}
+
+void FileParser::lineWidth(std::string line) noexcept
+{
+	char testWidth[1024];
+	memset(testWidth, 0, 1024);
+	strcpy(testWidth, line.c_str());
+	size_t width = strlen(testWidth);
+	fileStatistics.updateWidestLine(width);
 }

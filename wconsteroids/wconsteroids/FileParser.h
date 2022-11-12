@@ -22,6 +22,7 @@ protected:
 	std::string getCurrentLine(std::string::iterator& currentChar,
 		std::string::iterator end) noexcept;
 	void terminateFileWithNewLine(std::string& inputBuffer) noexcept;
+	void lineWidth(std::string line) noexcept;
 
 private:
 	FileStatistics& fileStatistics;

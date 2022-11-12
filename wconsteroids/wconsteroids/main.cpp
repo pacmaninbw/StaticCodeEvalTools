@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 #include <string>
 #include "Executionctrlvalues.h"
@@ -51,7 +52,26 @@ int main(int argc, char* argv[])
 		executionCtrl.initFromEnvironmentVariables();
 		if (cmdLineParser.parse(executionCtrl))
 		{
+			std::chrono::time_point<std::chrono::system_clock> start, end;
+			if (executionCtrl.options.enableExecutionTime)
+			{
+				start = std::chrono::system_clock::now();
+			}
 			mainLoop(executionCtrl);
+
+			if (executionCtrl.options.enableExecutionTime)
+			{
+				end = std::chrono::system_clock::now();
+
+				std::chrono::duration<double> elapsed_seconds = end - start;
+				std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+				double ElapsedTimeForOutPut = elapsed_seconds.count();
+
+				std::cout << "finished execution at " << std::ctime(&end_time)
+					<< "elapsed time: " << ElapsedTimeForOutPut <<
+					"\n" << "\n" << "\n";
+			}
+
 		}
 	}
 

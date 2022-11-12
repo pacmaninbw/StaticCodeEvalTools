@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <chrono>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -63,6 +64,9 @@ unsigned int CommandLineParser::extractAllArguments()
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+	start = std::chrono::system_clock::now();
+
 	bool hasFiles = false;
 
 	if (argCount < MinimumCommandLineCount)
@@ -79,6 +83,18 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 	findAllFilesToProcess(execVars);
 	execVars.options = options;
+
+	if (options.enableExecutionTime)
+	{
+		end = std::chrono::system_clock::now();
+
+		std::chrono::duration<double> elapsed_seconds = end - start;
+		std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+		double ElapsedTimeForOutPut = elapsed_seconds.count();
+
+		std::cout << "finished command line parsing at " << std::ctime(&end_time)
+			<< "elapsed time: " << ElapsedTimeForOutPut << "\n" << "\n" << "\n";
+	}
 
 	return hasFiles = execVars.filesToProcess.size() != 0;
 }
@@ -183,6 +199,7 @@ void CommandLineParser::initDashMaps()
 	doubleDashArgs.insert({ "--whitespace", options.whitespaceCount });
 	doubleDashArgs.insert({ "--percentage", options.percentages });
 	doubleDashArgs.insert({ "--subdirectories", options.recurseSubDirectories });
+	doubleDashArgs.insert({ "--time-execution", options.enableExecutionTime});
 
 	singleDashArgs.insert({ 'c', options.byteCount });
 	singleDashArgs.insert({ 'm', options.charCount });
@@ -191,6 +208,7 @@ void CommandLineParser::initDashMaps()
 	singleDashArgs.insert({ 'w', options.wordCount });
 	singleDashArgs.insert({ 'p', options.percentages });
 	singleDashArgs.insert({ 'R', options.recurseSubDirectories });
+	singleDashArgs.insert({ 't', options.enableExecutionTime });
 }
 
 void CommandLineParser::initHelpMessage()
@@ -201,6 +219,8 @@ void CommandLineParser::initHelpMessage()
 	helpMessage.push_back("\t-c, --bytes print the byte counts\n");
 	helpMessage.push_back("\t-m, --chars print the character counts\n");
 	helpMessage.push_back("\t-l, --lines print the newline counts\n");
+	helpMessage.push_back(
+		"\t-t, --time-execution print the execution time of the program");
 	helpMessage.push_back(
 		"\t-L, --max-line-length print the length of the longest line\n");
 	helpMessage.push_back("\t-w, --words print the word counts\n");

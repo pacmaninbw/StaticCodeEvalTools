@@ -21,5 +21,6 @@ void ProgramOptions::debugPrint()
 	singleLine("whitespaceCount", whitespaceCount);
 	singleLine("wordCount", wordCount);
 	singleLine("recurseSubDirectories", recurseSubDirectories);
+	singleLine("enableExecutionTime", enableExecutionTime);
 }
 #endif
