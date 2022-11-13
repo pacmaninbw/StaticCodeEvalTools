@@ -68,7 +68,7 @@ std::string ReportWriter::getResultText(FileStatistics& resultsForOutput) noexce
 	}
 
 	std::string fileName = correctFileSpec(resultsForOutput.getFileName());
-	outString += "\t\t" + fileName + "\n";
+	outString += "\t" + fileName + "\n";
 
 	return outString;
 }
