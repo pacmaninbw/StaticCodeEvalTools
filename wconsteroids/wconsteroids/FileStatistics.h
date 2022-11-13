@@ -32,6 +32,7 @@ public:
 	void addToCharCount(size_t charCount) { characterCount += charCount; }
 	void setCharCount(size_t charCount) { characterCount = charCount; }
 	void addToWordCount(size_t wordCountUpdate) { wordCount += wordCountUpdate; }
+	void setWordCount(size_t wordCountUpdate) { wordCount = wordCountUpdate; }
 	void addToWhitespace(size_t wsUpdate) { whiteSpaceCount += wsUpdate; }
 	// While the inline key word is only a recommendation, hopefully the increment
 	// functions can be inline.

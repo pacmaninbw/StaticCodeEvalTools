@@ -20,19 +20,22 @@ void FileParser::ParseBuffer(std::string inputBuffer) noexcept
 {
 	fileStatistics.setCharCount(inputBuffer.length());
 
-	terminateFileWithNewLine(inputBuffer);
+//	terminateFileWithNewLine(inputBuffer);
 
 	size_t lineCount = std::count(inputBuffer.begin(), inputBuffer.end(), '\n');
 	fileStatistics.setToLineCount(lineCount);
+	countWords(inputBuffer);
 
+#if 0
 	std::string::iterator currentChar = inputBuffer.begin();
 	while (currentChar != inputBuffer.end())
 	{
 		std::string line = getCurrentLine(currentChar, inputBuffer.end());
 		lineWidth(line);
 		// fileStatistics.updateWidestLine(line.length());
-		parseLine(line);
+//		parseLine(line);
 	}
+#endif
 }
 
 void FileParser::parseLine(std::string line) noexcept
@@ -64,6 +67,47 @@ static std::string tokenizeOperator(std::string::iterator& currentChar)
 	}
 
 	return token;
+}
+
+void FileParser::countWords(std::string& inputBuffer) noexcept
+{
+	size_t wordCount = 0;
+	size_t whiteSpaceCount = 0;
+	std::string::iterator currentChar = inputBuffer.begin();
+	std::string::iterator endOfInput = inputBuffer.end();
+	bool inWord = false;
+
+	for ( ; currentChar != endOfInput; )
+	{
+		while (isspace(*currentChar))
+		{
+			whiteSpaceCount++;
+			currentChar++;
+			if (currentChar == endOfInput)
+			{
+				break;
+			}
+		}
+		while (!(currentChar == endOfInput) && !isspace(*currentChar))
+		{
+			inWord = true;
+			currentChar++;
+			if (currentChar == endOfInput)
+			{
+				wordCount++;
+				inWord = false;
+				break;
+			}
+		}
+		if (inWord)
+		{
+			wordCount++;
+			inWord = false;
+		}
+	}
+
+	fileStatistics.addToWhitespace(whiteSpaceCount);
+	fileStatistics.setWordCount(wordCount);
 }
 
 std::vector<std::string> FileParser::tokenize(std::string line) noexcept
@@ -132,3 +176,4 @@ void FileParser::lineWidth(std::string line) noexcept
 	size_t width = strlen(testWidth);
 	fileStatistics.updateWidestLine(width);
 }
+

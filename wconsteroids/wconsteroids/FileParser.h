@@ -23,6 +23,7 @@ protected:
 		std::string::iterator end) noexcept;
 	void terminateFileWithNewLine(std::string& inputBuffer) noexcept;
 	void lineWidth(std::string line) noexcept;
+	void countWords(std::string& inputBuffer) noexcept;
 
 private:
 	FileStatistics& fileStatistics;
