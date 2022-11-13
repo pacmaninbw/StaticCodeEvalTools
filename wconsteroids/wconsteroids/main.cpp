@@ -1,42 +1,24 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "Executionctrlvalues.h"
 #include "CommandLineParser.h"
-#include "FileStatistics.h"
 #include "FileProcessor.h"
 #include "ProgramOptions.h"
-#include "ReportWriter.h"
 #include "UtilityTimer.h"
 
 static void mainLoop(ExecutionCtrlValues& executionCtrl)
 {
-	FileStatistics allFiles;
-
+	std::string resultsToDisplay;
 
 	ProgramOptions& options = executionCtrl.options;
-	std::vector<std::string> fileToProcess = executionCtrl.filesToProcess;
+	std::vector<std::string> filesToProcess = executionCtrl.filesToProcess;
 
-	ReportWriter TotalReporter(options);
-	TotalReporter.printColumnHeadings();
-
-	for (auto currentFile : fileToProcess)
-	{
-		try
-		{
-			FileProcessor fileProcessor(currentFile, options);
-			if (fileProcessor.processFile())
-			{
-				fileProcessor.mergeStatistics(allFiles);
-			}
-		}
-		catch (std::runtime_error re)
-		{
-			std::cerr << re.what() << "\n";
-		}
-	}
-	
-	TotalReporter.printColumnHeadings();
-	TotalReporter.printResult(allFiles);
+	FileProcessor fileProcessor(filesToProcess, options);
+	resultsToDisplay = fileProcessor.processAllFiles();
+	// Yes we want to flush the standard output. All possible output has been
+	// collected.
+	std::cout << resultsToDisplay << std::endl;
 }
 
 int main(int argc, char* argv[])

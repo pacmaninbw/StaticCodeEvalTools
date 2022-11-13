@@ -3,7 +3,7 @@
 #include <vector>
 #include "ReportWriter.h"
 
-void ReportWriter::printResult(FileStatistics& resultsForOutput)
+void ReportWriter::printResult(FileStatistics& resultsForOutput) noexcept
 {
 	std::cout << getResultText(resultsForOutput) << "\n";
 }
@@ -11,7 +11,7 @@ void ReportWriter::printResult(FileStatistics& resultsForOutput)
 /*
  * Maintain the order between this function and getColumneHeadingsText().  
  */
-std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
+std::string ReportWriter::getResultText(FileStatistics& resultsForOutput) noexcept
 {
 	std::string outString;
 
@@ -68,7 +68,7 @@ std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
 	}
 
 	std::string fileName = correctFileSpec(resultsForOutput.getFileName());
-	outString += "\t\t" + fileName;
+	outString += "\t\t" + fileName + "\n";
 
 	return outString;
 }
@@ -76,7 +76,7 @@ std::string ReportWriter::getResultText(FileStatistics& resultsForOutput)
 /*
  * Maintain the order between this function and getResultText().
  */
-std::vector<std::string> ReportWriter::getColumneHeadingsText()
+std::vector<std::string> ReportWriter::getColumneHeadingsText() noexcept
 {
 	std::string firstLine;
 	std::string secondline;
@@ -147,7 +147,22 @@ std::vector<std::string> ReportWriter::getColumneHeadingsText()
 	return headerRows;
 }
 
-void ReportWriter::printColumnHeadings()
+std::string ReportWriter::getColumnHeadingAsOneString() noexcept
+{
+	std::string twolines;
+	std::vector<std::string> headingLines = getColumneHeadingsText();
+	FileStatistics allFiles;
+
+	std::string twoLines;
+	for (auto headingLine : headingLines)
+	{
+		twoLines += headingLine + "\n";
+	}
+
+	return twoLines;
+}
+
+void ReportWriter::printColumnHeadings() noexcept
 {
 	std::vector<std::string> headerRows = getColumneHeadingsText();
 	for (auto line : headerRows)

@@ -2,6 +2,7 @@
 #define FILEPROCESSOR_H
 
 #include <string>
+#include <vector>
 #include <fstream>
 
 #include "FileStatistics.h"
@@ -10,18 +11,16 @@
 class FileProcessor
 {
 public:
-	FileProcessor(std::string inFileName, ProgramOptions& progOptions);
+	FileProcessor(std::vector<std::string>& filesToProcess, ProgramOptions& progOptions);
 	~FileProcessor() = default;
-	bool processFile();
-	FileStatistics getStatistics();
-	void mergeStatistics(FileStatistics& allFileStats);
+	std::string processAllFiles() noexcept;
 
 protected:
-	void processLoop(std::ifstream& inStream) noexcept;
+	void processLoop(std::ifstream& inStream, FileStatistics& statistics) noexcept;
+	std::string processFile(std::string fileName, FileStatistics& totalStats);
 
 private:
-	std::string fileName;
-	FileStatistics statistics;
+	std::vector<std::string> fileNames;
 	// The program options are necessary to know what to outout.
 	ProgramOptions& options;
 };

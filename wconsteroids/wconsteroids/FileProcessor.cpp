@@ -8,69 +8,43 @@
 
 static constexpr size_t InputBufferSize = 8 * 1024;
 
-FileProcessor::FileProcessor(std::string inFileName, ProgramOptions& progOptions)
+FileProcessor::FileProcessor(std::vector<std::string>& filesToProess, ProgramOptions& progOptions)
 	: options{ progOptions }
 {
-	if (inFileName.empty())
+	fileNames = filesToProess;
+}
+
+std::string FileProcessor::processAllFiles() noexcept
+{
+	ReportWriter TotalsReporter(options);
+	FileStatistics allFiles;
+
+	std::string resultsToDisplay(TotalsReporter.getColumnHeadingAsOneString());
+
+	for (auto currentFile : fileNames)
 	{
-		std::string eMsg(
-			"Programmer Error: File name is empty in "
-			"FileProcessor Constructor!");
-		std::runtime_error programmerError(eMsg);
-		throw programmerError;
-	}
-	fileName = inFileName;
-	statistics.setFileName(fileName);
-}
-
-void FileProcessor::mergeStatistics(FileStatistics& allFileStats)
-{
-	statistics.addTotals(allFileStats);
-}
-
-FileStatistics FileProcessor::getStatistics()
-{
-	return statistics;
-}
-
-/*
- * Processing a file includes reading the file, parsing the input to collect
- * the statistics and then pringing the statistics.
- */
-bool FileProcessor::processFile()
-{
-	bool processComplete = true;
-
-	try{
-		std::ifstream inStream(fileName);
-		if (!inStream.is_open())
+		try
 		{
-			std::string eMsg("Runtime error:  Can't open file " + fileName +
-				" for input.");
-			std::runtime_error FileInputError(eMsg);
-			throw FileInputError;
+			std::string fileResults = processFile(currentFile, allFiles);
+			if (!fileResults.empty())
+			{
+				resultsToDisplay += fileResults;
+			}
 		}
-
-		processLoop(inStream);
-
-		inStream.close();
-
-		ReportWriter ReportFileStatistics(options);
-		ReportFileStatistics.printResult(statistics);
+		catch (std::runtime_error re)
+		{
+			std::cerr << re.what() << "\n";
+		}
 	}
 
-	catch(std::exception ex)
-	{
-		std::cerr <<
-			"Error: unable to complete processing file statistics for "
-			<< fileName << " Error: " << ex.what() << std::endl;
-		processComplete = false;
-	}
+	resultsToDisplay += TotalsReporter.getColumnHeadingAsOneString();
+	resultsToDisplay += TotalsReporter.getResultText(allFiles);
 
-	return processComplete;
+	return resultsToDisplay;
 }
 
-void FileProcessor::processLoop(std::ifstream& inStream) noexcept
+void FileProcessor::processLoop(std::ifstream& inStream,
+	FileStatistics& statistics) noexcept
 {
 	FileParser fileParser(statistics);
 
@@ -80,3 +54,51 @@ void FileProcessor::processLoop(std::ifstream& inStream) noexcept
 	fileParser.ParseBuffer(inputBuffer.str());
 }
 
+/*
+ * Processing a file includes reading the file, parsing the input to collect
+ * the statistics and then pringing the statistics.
+ */
+std::string FileProcessor::processFile(std::string fileName,
+	FileStatistics& totalStats)
+{
+	std::string fileResults;
+
+	try {
+		if (fileName.empty())
+		{
+			std::string eMsg(
+				"Programmer Error: File name is empty in "
+				"FileProcessor Constructor!");
+			std::runtime_error programmerError(eMsg);
+			throw programmerError;
+		}
+
+		std::ifstream inStream(fileName);
+		if (!inStream.is_open())
+		{
+			std::string eMsg("Runtime error:  Can't open file " + fileName +
+				" for input.");
+			std::runtime_error FileInputError(eMsg);
+			throw FileInputError;
+		}
+
+		FileStatistics statistics(fileName);
+		processLoop(inStream, statistics);
+
+		inStream.close();
+
+		ReportWriter ReportFileStatistics(options);
+		fileResults = ReportFileStatistics.getResultText(statistics);
+		statistics.addTotals(totalStats);
+	}
+
+	catch (std::exception ex)
+	{
+		std::cerr <<
+			"Error: unable to complete processing file statistics for "
+			<< fileName << " Error: " << ex.what() << std::endl;
+		fileResults.clear();
+	}
+
+	return fileResults;
+}
