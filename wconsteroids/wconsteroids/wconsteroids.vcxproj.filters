@@ -30,7 +30,7 @@
     <ClCompile Include="FileProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileParser.cpp">
+    <ClCompile Include="StatisticsCollector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Executionctrlvalues.cpp">
@@ -56,7 +56,7 @@
     <ClInclude Include="FileProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileParser.h">
+    <ClInclude Include="StatisticsCollector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Executionctrlvalues.h">

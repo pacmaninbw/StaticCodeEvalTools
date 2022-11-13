@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "FileParser.h"
+#include "StatisticsCollector.h"
 #include "FileProcessor.h"
 #include "FileStatistics.h"
 #include "ReportWriter.h"
@@ -46,16 +46,16 @@ std::string FileProcessor::processAllFiles() noexcept
 void FileProcessor::processLoop(std::ifstream& inStream,
 	FileStatistics& statistics) noexcept
 {
-	FileParser fileParser(statistics);
+	StatisticsCollector fileAnalyzer(statistics);
 
 	std::stringstream inputBuffer;
 	std::streambuf* inBuf = inStream.rdbuf();
 	inputBuffer << inStream.rdbuf();
-	fileParser.ParseBuffer(inputBuffer.str());
+	fileAnalyzer.analyzeBuffer(inputBuffer.str());
 }
 
 /*
- * Processing a file includes reading the file, parsing the input to collect
+ * Processing a file includes reading the file, analyzing the input to collect
  * the statistics and then pringing the statistics.
  */
 std::string FileProcessor::processFile(std::string fileName,

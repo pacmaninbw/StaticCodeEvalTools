@@ -139,7 +139,7 @@
     <ClCompile Include="CmdLineFileExtractor.cpp" />
     <ClCompile Include="Executionctrlvalues.cpp" />
     <ClCompile Include="CommandLineParser.cpp" />
-    <ClCompile Include="FileParser.cpp" />
+    <ClCompile Include="StatisticsCollector.cpp" />
     <ClCompile Include="FileProcessor.cpp" />
     <ClCompile Include="FileStatistics.cpp" />
     <ClCompile Include="main.cpp" />
@@ -150,7 +150,7 @@
     <ClInclude Include="CmdLineFileExtractor.h" />
     <ClInclude Include="Executionctrlvalues.h" />
     <ClInclude Include="CommandLineParser.h" />
-    <ClInclude Include="FileParser.h" />
+    <ClInclude Include="StatisticsCollector.h" />
     <ClInclude Include="FileProcessor.h" />
     <ClInclude Include="FileStatistics.h" />
     <ClInclude Include="SpecialExceptions.h" />
