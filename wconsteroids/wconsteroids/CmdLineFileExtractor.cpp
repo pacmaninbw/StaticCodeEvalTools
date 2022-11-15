@@ -5,27 +5,126 @@
 #include <vector>
 #include "CmdLineFileExtractor.h"
 
+namespace fsys = std::filesystem;
+
 /*
  * The code here expands wild card file specifications such as "*.cpp" and
  * "*.h" into lists of file names to process. If the -R or --subdirectories
  * command line flag is true then it searches through the current file
  * hierarchy for matching files as well.
+ *
+ * Originally the file search was implemented as a recursive algorithm, this
+ * crashed on Windows 10 when searching for *.hpp in the boost library as a 
+ * test case. The code has been rewritten as an iterative solution, first
+ * find all the sub directories in the current directory and add them to the
+ * sub directory list. Then for each sub directory in the sub directory list
+ * search for more sub directories. When all the sub directories have been
+ * searched for sub directories find the applicable files in each sub
+ * directory.
+ * 
+ * The booleans in this class indicate the phase of processing completed.
+ * The discovered value indicates whether the sub directory has been searched
+ *		for more sub directories.
+ * The searchedFiles flag indicates if the files in the directory have been
+ *		added to the fileList vector.
  */
- 
- /*
- * Internal variables and functions so that #include <fileSystem> does
- * not occur every where. It is only needed in this implementation file.
- * Normally I put the public interface functions first, but the static
- * code needs to be defined before that.
- */
+class SubDirNode
+{
+public:
+	fsys::path fileSpec;
+	bool discovered;
+	bool searchedFiles;
+	SubDirNode(fsys::path path)
+		: discovered{ false }, searchedFiles{ false }
+	{
+		fileSpec = path;
+	}
+	bool operator==(const SubDirNode& other)
+	{
+		return fileSpec == other.fileSpec;
+	}
+	~SubDirNode() = default;
+};
 
+/*
+* Internal variables and functions so that #include <fileSystem> does
+* not occur every where. It is only needed in this implementation file.
+* Normally I put the public interface functions first, but the static
+* code needs to be defined before that.
+*/
 static bool SearchSubDirs;
 static std::vector<std::string> fileList;
 static std::vector<std::string> fileExtentions;
 static std::vector<std::string> nonFlagArgs;
-static std::vector<std::string> subDirectories;
+static std::vector<SubDirNode> subDirectories;
 
-namespace fsys = std::filesystem;
+/*
+ * Search the current directory for sub directories.
+ */
+static std::vector<SubDirNode> findSubDirs(SubDirNode currentDir)
+{
+	bool hasSubDirs = false;
+	std::vector<SubDirNode> newSubDirs;
+
+	fsys::path cwd = currentDir.fileSpec;
+
+	for (auto it = fsys::directory_iterator(cwd);
+		it != fsys::directory_iterator(); ++it)
+	{
+		if (it->is_directory())
+		{
+			SubDirNode branch(it->path());
+			auto found = std::find(subDirectories.begin(), subDirectories.end(), branch);
+			if (found == subDirectories.end())
+			{
+				// Possible nasty side affects here by adding additional
+				// contents to subDirectories
+				newSubDirs.push_back(branch);
+			}
+		}
+	}
+
+	return newSubDirs;
+}
+
+/*
+ * A recursive algorithm can apparently cause a stack overflow on Windows 10 
+ * so this is an iterative solution.
+ */
+static bool discoverSubDirs()
+{
+	bool discoveredPhaseCompleted = true;
+	std::vector<SubDirNode> newSubDirs;
+
+	for (size_t i = 0; i < subDirectories.size(); i++)
+	{
+		if (!subDirectories[i].discovered)
+		{
+			std::vector<SubDirNode> tempNewDirs = findSubDirs(subDirectories[i]);
+			if (tempNewDirs.size())
+			{
+				discoveredPhaseCompleted = false;
+				newSubDirs.insert(newSubDirs.end(), tempNewDirs.begin(),
+					tempNewDirs.end());
+			}
+			subDirectories[i].discovered = true;
+		}
+	}
+
+	// We are done searching the current level, append the new sub directories
+	// to the old.
+	subDirectories.insert(subDirectories.end(), newSubDirs.begin(), newSubDirs.end());
+	return discoveredPhaseCompleted;
+}
+
+static void discoverAllSubDirs()
+{
+	bool discoveryPhaseCompleted = false;
+	while (!discoveryPhaseCompleted)
+	{
+		discoveryPhaseCompleted = discoverSubDirs();
+	}
+}
 
 
 static bool containsWildCard(std::string fileSpec)
@@ -35,14 +134,15 @@ static bool containsWildCard(std::string fileSpec)
 
 static std::string getFileExtention(std::string fname)
 {
+	std::string fileExtention = "";
+
 	size_t lastDotLocation = fname.find_last_of('.');
 	if (lastDotLocation != std::string::npos)
 	{
-		return fname.substr(lastDotLocation);
+		fileExtention = fname.substr(lastDotLocation);
 	}
 
-	std::string emptyReturn = "";
-	return emptyReturn;
+	return fileExtention;
 }
 
 static bool isASpecifiedFileType(std::string notAFlag) noexcept
@@ -63,34 +163,31 @@ static bool isASpecifiedFileType(std::string notAFlag) noexcept
 		fileExtentions.end(), fileExtension) != fileExtentions.end();
 }
 
-static void searchDirectorForFiles(fsys::path cwd)
+static void searchDirectoryForFiles(SubDirNode currentDir)
 {
-	std::vector<fsys::path> subDirectories;
-	for (auto it = fsys::directory_iterator(cwd);
+
+	for (auto it = fsys::directory_iterator(currentDir.fileSpec);
 		it != fsys::directory_iterator(); ++it)
 	{
-		if (it->is_directory())
+		if (it->is_regular_file() || it->is_character_file())
 		{
-			subDirectories.push_back(it->path());
-		}
-		else
-		{
-			if (it->is_regular_file() || it->is_character_file())
+			std::string fileName{ it->path().generic_string() };
+			if (isASpecifiedFileType(fileName))
 			{
-				std::string fileName{ it->path().generic_string() };
-				if (isASpecifiedFileType(fileName))
-				{
-					fileList.push_back(fileName);
-				}
+				fileList.push_back(fileName);
 			}
 		}
 	}
+}
 
-	if (SearchSubDirs)
+static void searchAllDirectoriesForFiles()
+{
+	for (auto currentDir : subDirectories)
 	{
-		for (auto SubDir : subDirectories)
+		if (currentDir.discovered && !currentDir.searchedFiles)
 		{
-			searchDirectorForFiles(SubDir);
+			searchDirectoryForFiles(currentDir);
+			currentDir.searchedFiles = true;
 		}
 	}
 }
@@ -150,7 +247,18 @@ static void findAllInputFiles()
 
 	// Start in the current working directory  (cwd for non Linux users).
 	std::filesystem::path cwd = fsys::current_path();
-	searchDirectorForFiles(cwd);
+	if (subDirectories.empty())
+	{
+		SubDirNode root(cwd);
+		root.discovered = (SearchSubDirs) ? false: true;
+		subDirectories.push_back(root);
+	}
+
+	if (SearchSubDirs)
+	{
+		discoverAllSubDirs();
+	}
+	searchAllDirectoriesForFiles();
 }
 
 /*
@@ -184,4 +292,3 @@ std::vector<std::string> CmdLineFileExtractor::getFileTypeList() const noexcept
 {
 	return fileExtentions;
 }
-
