@@ -41,6 +41,7 @@ private:
 	std::unordered_map<char, bool&> singleDashArgs;
 	std::vector<std::string> helpMessage;
 	std::vector<std::string> NotFlagsArgs;
+	bool useDefaultFlags;
 };
 
 #endif // COMMANDlINEPARSER_H

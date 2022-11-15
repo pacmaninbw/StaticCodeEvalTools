@@ -51,6 +51,7 @@ int main(int argc, char* argv[])
 	catch (ShowHelpMessage sh)
 	{
 		cmdLineParser.printHelpMessage();
+		cmdLineParser.printVersion();
 	}
 	catch (showVersions sv)
 	{
