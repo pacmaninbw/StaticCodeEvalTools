@@ -1,5 +1,5 @@
-#ifndef FILEPROCESSOR_H
-#define FILEPROCESSOR_H
+#ifndef FILE_PROCESSOR_H
+#define FILE_PROCESSOR_H
 
 #include <string>
 #include <vector>
@@ -25,4 +25,4 @@ private:
 	ProgramOptions& options;
 };
 
-#endif // FILEPROCESSOR_H
+#endif // FILE_PROCESSOR_H

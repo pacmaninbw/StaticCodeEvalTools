@@ -1,5 +1,5 @@
-#ifndef REPORTWRITER_H
-#define REPORTWRITER_H
+#ifndef REPORT_WRITER_H
+#define REPORT_WRITER_H
 
 /*
  * This class prints the output about the file statistics. It can also
@@ -32,4 +32,4 @@ private:
 	std::string correctFileSpec(std::string fileSpec) noexcept;
 };
 
-#endif // REPORTWRITER_H
+#endif // REPORT_WRITER_H

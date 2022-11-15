@@ -1,5 +1,5 @@
-#ifndef EXECUTIONCONTROLVARIABLES_
-#define EXECUTIONCONTROLVARIABLES_
+#ifndef EXECUTION_CONTROL_VARIABLES_H
+#define EXECUTION_CONTROL_VARIABLES_H
 
 /*
  * Storage for environment and commandline argument variables, also stores
@@ -24,4 +24,4 @@ public:
 	std::vector<std::string> filesToProcess;
 };
 
-#endif // EXECUTIONCONTROLVARIABLES_
+#endif // EXECUTION_CONTROL_VARIABLES_H

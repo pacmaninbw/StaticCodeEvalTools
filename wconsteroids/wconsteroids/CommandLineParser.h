@@ -1,5 +1,5 @@
-#ifndef COMMANDlINEPARSER_H
-#define COMMANDlINEPARSER_H
+#ifndef COMMAND_lINE_PARSER_H
+#define COMMAND_lINE_PARSER_H
 
 /*
  * Generic class to parse command lines. The public interface should not
@@ -44,4 +44,4 @@ private:
 	bool useDefaultFlags;
 };
 
-#endif // COMMANDlINEPARSER_H
+#endif // COMMAND_lINE_PARSER_H

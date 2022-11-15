@@ -1,5 +1,5 @@
-#ifndef	FILESTATISTICS_H
-#define FILESTATISTICS_H
+#ifndef	FILE_STATISTICS_H
+#define FILE_STATISTICS_H
 
 /*
  * Class to collect all the statistics about the code in a file.
@@ -61,4 +61,4 @@ public:
 	}
 };
 
-#endif // FILESTATISTICS_H
+#endif // FILE_STATISTICS_H
