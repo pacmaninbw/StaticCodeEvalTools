@@ -21,7 +21,6 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	: argCount{ argc }, args{ argv }, useDefaultFlags{ true }
 {
 	version = progVersion;
-	initHelpMessage();
 	initDashMaps();
 }
 
@@ -34,10 +33,8 @@ void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 	execVars.fileSpecTypes = fileExtractor.getFileTypeList();
 }
 
-unsigned int CommandLineParser::extractAllArguments()
+void CommandLineParser::extractAllArguments()
 {
-	unsigned int flagCount = 0;
-
 	for (size_t i = 0; i < argCount; i++)
 	{
 		if (args[i][0] == '-')
@@ -45,12 +42,10 @@ unsigned int CommandLineParser::extractAllArguments()
 			if (args[i][1] == '-')
 			{
 				processDoubleDashOptions(args[i]);
-				flagCount++;
 			}
 			else
 			{
 				processSingleDashOptions(args[i]);
-				flagCount++;
 			}
 		}
 		else
@@ -58,8 +53,6 @@ unsigned int CommandLineParser::extractAllArguments()
 			NotFlagsArgs.push_back(args[i]);
 		}
 	}
-
-	return flagCount;
 }
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
@@ -77,7 +70,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 		throw doHelp;
 	}
 
-	unsigned int flagCount = extractAllArguments();
+	extractAllArguments();
 	if (useDefaultFlags)
 	{
 		SetDefaultOptionsWhenNoFlags();
@@ -96,24 +89,34 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 void CommandLineParser::printHelpMessage()
 {
-	std::cerr << "\n" << messageProgramName();
-	for (auto line : helpMessage)
-	{
-		std::cerr << line;
-	}
+	std::cerr << "\n" << messageProgramName() <<
+		" file name or file type specification (*.ext)\n"
+		"Otions:\n"
+		"\t-c, --bytes print the byte counts\n"
+		"\t-m, --chars print the character counts\n"
+		"\t-l, --lines print the newline counts\n"
+		"\t-t, --time-execution print the execution time of the program\n"
+		"\t-L, --max-line-length print the length of the longest line\n"
+		"\t-w, --words print the word counts\n"
+		"\t--help display this help and exit\n"
+		"\t--version output version information and exit\n"
+		"\t-R, --subdirectories all files in the"
+		" directory as well as sub directories\n"
+		"\tBy default the -c -l and -w flags are set, setting any"
+		" flag requires all flags you want to be set.\n";
 	// flush the buffer to make sure the entire message is visible
-	std::cerr << std::endl;
+	std::cerr << std::flush;
 }
 
 void CommandLineParser::printVersion()
 {
-		std::cout << messageProgramName() << ": version: " << version << "\n";
-		std::cout << "Packaged by Chernick Consulting\n";
-		std::cout << "License GPLv3+: GNU GPL version 3 or later"
-			" <http://gnu.org/licenses/gpl.html>.\n";
-		std::cout << "This is free software : you are free to change and redistribute it.\n";
-		std::cout << "\tThere is NO WARRANTY, to the extent permitted by law.\n";
-		std::cout << "\nWritten by Paul A. Chernick\n";
+	std::cout << messageProgramName() << ": version: " << version << "\n"
+		"Packaged by Chernick Consulting\n"
+		"License GPLv3+: GNU GPL version 3 or later"
+		" <http://gnu.org/licenses/gpl.html>.\n"
+		"This is free software : you are free to change and redistribute it.\n"
+		"\tThere is NO WARRANTY, to the extent permitted by law.\n"
+		"\nWritten by Paul A. Chernick\n";
 }
 
 /*
@@ -216,29 +219,6 @@ void CommandLineParser::initDashMaps()
 	singleDashArgs.insert({ 'l', options.lineCount });
 	singleDashArgs.insert({ 'L', options.maxLineWidth });
 	singleDashArgs.insert({ 'w', options.wordCount });
-}
-
-void CommandLineParser::initHelpMessage()
-{
-	std::string veryLongLine;
-	helpMessage.push_back(" file name or file type specification (*.ext)\n");
-	helpMessage.push_back("Otions:\n");
-	helpMessage.push_back("\t-c, --bytes print the byte counts\n");
-	helpMessage.push_back("\t-m, --chars print the character counts\n");
-	helpMessage.push_back("\t-l, --lines print the newline counts\n");
-	helpMessage.push_back(
-		"\t-t, --time-execution print the execution time of the program\n");
-	helpMessage.push_back(
-		"\t-L, --max-line-length print the length of the longest line\n");
-	helpMessage.push_back("\t-w, --words print the word counts\n");
-	helpMessage.push_back("\t--help display this help and exit\n");
-	helpMessage.push_back("\t--version output version information and exit\n");
-	veryLongLine = "\t-R, --subdirectories all files in the"
-		" directory as well as sub directories\n";
-	helpMessage.push_back(veryLongLine);
-	veryLongLine = "\tBy default the -c -l and -w flags are set, setting any"
-		" flag requires all flags you want to be set.\n";
-	helpMessage.push_back(veryLongLine);
 }
 
 std::string CommandLineParser::messageProgramName()

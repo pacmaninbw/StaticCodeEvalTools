@@ -27,9 +27,8 @@ protected:
 	void processDoubleDashOptions(char* currentArg);
 	void SetDefaultOptionsWhenNoFlags();
 	void initDashMaps();
-	void initHelpMessage();
 	void findAllFilesToProcess(ExecutionCtrlValues& execVars);
-	unsigned int extractAllArguments();
+	void extractAllArguments();
 	std::string messageProgramName();
 
 private:
@@ -39,7 +38,6 @@ private:
 	ProgramOptions options;
 	std::unordered_map<std::string, bool&> doubleDashArgs;
 	std::unordered_map<char, bool&> singleDashArgs;
-	std::vector<std::string> helpMessage;
 	std::vector<std::string> NotFlagsArgs;
 	bool useDefaultFlags;
 };
