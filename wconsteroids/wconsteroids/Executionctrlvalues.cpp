@@ -3,6 +3,9 @@
 #include "Executionctrlvalues.h"
 
 ExecutionCtrlValues::ExecutionCtrlValues()
+	:options{ ProgramOptions() },
+	fileSpecTypes{ {} },
+	filesToProcess{ {} }
 {
 }
 

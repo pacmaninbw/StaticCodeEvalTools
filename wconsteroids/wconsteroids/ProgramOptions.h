@@ -8,33 +8,21 @@
 class ProgramOptions {
 public:
 	// Output control variables
-	bool blankLineCount;
-	bool byteCount;
-	bool charCount;
-	bool codeCount;
-	bool commentCount;
-	bool lineCount;
-	bool maxLineWidth;
-	bool percentages;
-	bool whitespaceCount;
-	bool wordCount;
-	bool enableExecutionTime;
+	bool blankLineCount = false;
+	bool byteCount = false;
+	bool charCount = false;
+	bool codeCount = false;
+	bool commentCount = false;
+	bool lineCount = false;
+	bool maxLineWidth = false;
+	bool percentages = false;
+	bool whitespaceCount = false;
+	bool wordCount = false;
+	bool enableExecutionTime = false;
 	// input control variables
-	bool recurseSubDirectories;
+	bool recurseSubDirectories = false;
 
 	ProgramOptions()
-		: blankLineCount{ false },
-		byteCount{ false },
-		charCount{ false },
-		codeCount{ false },
-		commentCount{ false },
-		lineCount{ false },
-		maxLineWidth{ false },
-		percentages{ false },
-		whitespaceCount{ false },
-		wordCount{ false },
-		enableExecutionTime{ false },
-		recurseSubDirectories{ false }
 	{
 
 	}

@@ -38,7 +38,9 @@ std::string CommandLineParser::messageProgramName()
  */
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
-	: version{ std::move(progVersion) },
+	: args{ {} },
+	version{ std::move(progVersion) },
+	options{ ProgramOptions() },
 	doubleDashArgs{
 		{ "--bytes", options.byteCount },
 		{ "--chars", options.charCount },
@@ -53,6 +55,7 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 		{ 'L', options.maxLineWidth },
 		{ 'w', options.wordCount }
 	},
+	NotFlagsArgs{ {} },
 	useDefaultFlags{ true }
 {
 	// Start at one to remove the program name

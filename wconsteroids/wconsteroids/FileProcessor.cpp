@@ -8,10 +8,10 @@
 
 static constexpr std::size_t InputBufferSize = 8 * 1024;
 
-FileProcessor::FileProcessor(std::vector<std::string>& filesToProess, ProgramOptions& progOptions)
-	: options{ progOptions }
+FileProcessor::FileProcessor(std::vector<std::string>& filesToProcess, ProgramOptions& progOptions)
+	: fileNames { filesToProcess },
+	options{ progOptions }
 {
-	fileNames = filesToProess;
 }
 
 std::string FileProcessor::processAllFiles() noexcept
