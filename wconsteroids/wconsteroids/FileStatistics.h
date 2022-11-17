@@ -10,15 +10,15 @@
 class FileStatistics
 {
 private:
-	std::size_t totalLineCount;
-	std::size_t codeLineCount;
-	std::size_t commentLineCount;
-	std::size_t whiteSpaceCount;
-	std::size_t characterCount;
-	std::size_t wordCount;
-	std::size_t codeWithCommentCount;
-	std::size_t widestLine;
-	std::size_t blankLineCount;
+	std::size_t totalLineCount = 0;
+	std::size_t codeLineCount = 0;
+	std::size_t commentLineCount = 0;
+	std::size_t whiteSpaceCount = 0;
+	std::size_t characterCount = 0;
+	std::size_t wordCount = 0;
+	std::size_t codeWithCommentCount = 0;
+	std::size_t widestLine = 0;
+	std::size_t blankLineCount = 0;
 	std::string fileName; 
 
 public:
