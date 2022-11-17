@@ -91,7 +91,7 @@ std::string FileProcessor::processFile(std::string fileName,
 		statistics.addTotals(totalStats);
 	}
 
-	catch (std::exception ex)
+	catch (std::exception& ex)
 	{
 		std::cerr <<
 			"Error: unable to complete processing file statistics for "
