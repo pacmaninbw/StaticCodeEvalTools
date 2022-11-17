@@ -49,7 +49,6 @@ void FileProcessor::processLoop(std::ifstream& inStream,
 	StatisticsCollector fileAnalyzer(statistics);
 
 	std::stringstream inputBuffer;
-	std::streambuf* inBuf = inStream.rdbuf();
 	inputBuffer << inStream.rdbuf();
 	fileAnalyzer.analyzeBuffer(inputBuffer.str());
 }
