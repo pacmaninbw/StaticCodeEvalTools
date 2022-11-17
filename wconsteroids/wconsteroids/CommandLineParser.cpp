@@ -10,15 +10,17 @@
 #include "UtilityTimer.h"
 
 #ifdef _WIN32
-static const size_t MinimumCommandLineCount = 1;
+static const std::size_t MinimumCommandLineCount = 1;
 #else
 // On Linux and Unix argv[0] is the program name so a minimum of 2 arguments
-static const size_t MinimumCommandLineCount = 2;
+static const std::size_t MinimumCommandLineCount = 2;
 #endif
 
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
-	: argCount{ argc }, args{ argv }, useDefaultFlags{ true }
+	: argCount{ argc },
+	args{ argv },
+	useDefaultFlags{ true }
 {
 	version = progVersion;
 	initDashMaps();
@@ -35,7 +37,7 @@ void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 
 void CommandLineParser::extractAllArguments()
 {
-	for (size_t i = 0; i < argCount; i++)
+	for (std::size_t i = 0; i < argCount; i++)
 	{
 		if (args[i][0] == '-')
 		{
@@ -168,7 +170,7 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
  */
 void CommandLineParser::processSingleDashOptions(char* currentArg)
 {
-	for (size_t i = 1; i < std::strlen(currentArg); i++)
+	for (std::size_t i = 1; i < std::strlen(currentArg); i++)
 	{
 		auto thisOption = singleDashArgs.find(currentArg[i]);
 		if (thisOption != singleDashArgs.end())

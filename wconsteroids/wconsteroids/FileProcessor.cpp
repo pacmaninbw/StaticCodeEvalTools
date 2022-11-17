@@ -6,7 +6,7 @@
 #include "FileStatistics.h"
 #include "ReportWriter.h"
 
-static constexpr size_t InputBufferSize = 8 * 1024;
+static constexpr std::size_t InputBufferSize = 8 * 1024;
 
 FileProcessor::FileProcessor(std::vector<std::string>& filesToProess, ProgramOptions& progOptions)
 	: options{ progOptions }

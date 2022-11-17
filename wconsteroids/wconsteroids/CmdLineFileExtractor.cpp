@@ -96,7 +96,7 @@ static bool discoverSubDirs()
 	bool discoveredPhaseCompleted = true;
 	std::vector<SubDirNode> newSubDirs;
 
-	for (size_t i = 0; i < subDirectories.size(); i++)
+	for (std::size_t i = 0; i < subDirectories.size(); i++)
 	{
 		if (!subDirectories[i].discovered)
 		{
@@ -136,7 +136,7 @@ static std::string getFileExtention(std::string fname)
 {
 	std::string fileExtention = "";
 
-	size_t lastDotLocation = fname.find_last_of('.');
+	std::size_t lastDotLocation = fname.find_last_of('.');
 	if (lastDotLocation != std::string::npos)
 	{
 		fileExtention = fname.substr(lastDotLocation);
