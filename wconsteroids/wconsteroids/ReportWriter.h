@@ -16,8 +16,9 @@ public:
 	// ExecutionCrtlValues is passed in so that the report writer know what
 	// output to generate.
 	ReportWriter(ProgramOptions& progOptions)
+		: options { std::make_shared<ProgramOptions>(progOptions) }
 	{
-		options = std::make_shared<ProgramOptions>(progOptions);
+		
 	}
 	void printResult(FileStatistics& resultsForOutput) noexcept;
 	std::string getResultText(FileStatistics& resultsForOutput) noexcept;
