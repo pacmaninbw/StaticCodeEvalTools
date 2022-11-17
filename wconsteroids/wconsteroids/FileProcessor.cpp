@@ -31,7 +31,7 @@ std::string FileProcessor::processAllFiles() noexcept
 				resultsToDisplay += fileResults;
 			}
 		}
-		catch (std::runtime_error re)
+		catch (std::runtime_error& re)
 		{
 			std::cerr << re.what() << "\n";
 		}

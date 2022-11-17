@@ -48,12 +48,12 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	catch (ShowHelpMessage)
+	catch (ShowHelpMessage&)
 	{
 		cmdLineParser.printHelpMessage();
 		cmdLineParser.printVersion();
 	}
-	catch (showVersions)
+	catch (showVersions&)
 	{
 		cmdLineParser.printVersion();
 	}
