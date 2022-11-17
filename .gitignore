@@ -359,3 +359,5 @@ MigrationBackup/
 
 # Make dependency files
 *.d
+/wconsteroids/wconsteroids/Makefile
+/wconsteroids/wconsteroids/makeout.txt
