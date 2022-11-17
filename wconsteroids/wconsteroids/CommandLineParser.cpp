@@ -9,12 +9,29 @@
 #include "Executionctrlvalues.h"
 #include "UtilityTimer.h"
 
+// All operating sustem conditional code is at the top so that it can be easily
+// found. The public interfaces immediately follow.
+
 #ifdef _WIN32
 static const std::size_t MinimumCommandLineCount = 1;
 #else
 // On Linux and Unix argv[0] is the program name so a minimum of 2 arguments
 static const std::size_t MinimumCommandLineCount = 2;
 #endif
+
+std::string CommandLineParser::messageProgramName()
+{
+	std::string programName =
+#ifdef _WIN32
+		"wconsteriods"
+#else
+		// On Linux and Unix argv[0] is the program name;
+		(argCount != 0) ? args[0] : "wconsteriods"
+#endif
+		;
+
+	return programName;
+}
 
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
@@ -223,16 +240,3 @@ void CommandLineParser::initDashMaps()
 	singleDashArgs.insert({ 'w', options.wordCount });
 }
 
-std::string CommandLineParser::messageProgramName()
-{
-	std::string programName =
-#ifdef _WIN32
-		"wconsteriods"
-#else
-		// On Linux and Unix argv[0] is the program name;
-		(argCount != 0) ? args[0] : "wconsteriods"
-#endif
-		;
-
-	return programName;
-}
