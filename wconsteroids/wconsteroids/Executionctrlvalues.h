@@ -11,6 +11,7 @@
  */
 #include <vector>
 #include <string>
+#include <string_view>
 #include "ProgramOptions.h"
 
 class ExecutionCtrlValues
@@ -20,7 +21,7 @@ public:
 	~ExecutionCtrlValues() = default;
 	void initFromEnvironmentVariables();
 	ProgramOptions options;
-	std::vector<std::string> fileSpecTypes;
+	std::vector<std::string_view> fileSpecTypes;
 	std::vector<std::string> filesToProcess;
 };
 

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include <string_view>
 #include <vector>
 #include "CmdLineFileExtractor.h"
 
@@ -32,12 +33,11 @@ class SubDirNode
 {
 public:
 	fsys::path fileSpec;
-	bool discovered;
-	bool searchedFiles;
+	bool discovered = false;
+	bool searchedFiles = false;
 	SubDirNode(fsys::path path)
-		: discovered{ false }, searchedFiles{ false }
+		: fileSpec{ std::move(path) }
 	{
-		fileSpec = path;
 	}
 	bool operator==(const SubDirNode& other)
 	{
@@ -54,8 +54,8 @@ public:
 */
 static bool SearchSubDirs;
 static std::vector<std::string> fileList;
-static std::vector<std::string> fileExtentions;
-static std::vector<std::string> nonFlagArgs;
+static std::vector<std::string_view> fileExtentions;
+static std::vector<std::string_view> nonFlagArgs;
 static std::vector<SubDirNode> subDirectories;
 
 /*
@@ -63,7 +63,6 @@ static std::vector<SubDirNode> subDirectories;
  */
 static std::vector<SubDirNode> findSubDirs(SubDirNode currentDir)
 {
-	bool hasSubDirs = false;
 	std::vector<SubDirNode> newSubDirs;
 
 	fsys::path cwd = currentDir.fileSpec;
@@ -127,12 +126,12 @@ static void discoverAllSubDirs()
 }
 
 
-static bool containsWildCard(std::string fileSpec)
+static bool containsWildCard(std::string_view fileSpec)
 {
 	return fileSpec.find('*') != std::string::npos;
 }
 
-static std::string getFileExtention(std::string fname)
+static std::string getFileExtention(std::string_view fname)
 {
 	std::string fileExtention = "";
 
@@ -192,9 +191,9 @@ static void searchAllDirectoriesForFiles()
 	}
 }
 
-static std::vector<std::string> findAllFileTypeSpecs()
+static std::vector<std::string_view> findAllFileTypeSpecs()
 {
-	std::vector<std::string> fileSpecTypes;
+	std::vector<std::string_view> fileSpecTypes;
 	// Get all the file specifications and store them in the
 	// vector of file specifications. Remove the file specification
 	// so that it isn't added to the list of files.
@@ -209,10 +208,10 @@ static std::vector<std::string> findAllFileTypeSpecs()
 	return fileSpecTypes;
 }
 
-static std::vector<std::string> getFileTypes()
+static std::vector<std::string_view> getFileTypes()
 {
-	std::vector<std::string> fileTypes;
-	std::vector<std::string> fileSpecTypes = findAllFileTypeSpecs();
+	std::vector<std::string_view> fileTypes;
+	std::vector<std::string_view> fileSpecTypes = findAllFileTypeSpecs();
 
 	for (auto fileTypeSpec : fileSpecTypes)
 	{
@@ -230,7 +229,8 @@ static void addListedFilesToFileList()
 {
 	for (auto fileSpec : nonFlagArgs)
 	{
-		fileList.push_back(fileSpec);
+		std::string fSpec(fileSpec);
+		fileList.push_back(fSpec);
 	}
 }
 
@@ -263,7 +263,7 @@ static void findAllInputFiles()
  */
 
 CmdLineFileExtractor::CmdLineFileExtractor(
-	std::vector<std::string> NonFlagArgs,
+	std::vector<std::string_view> NonFlagArgs,
 	bool searchSubDirs)
 {
 	// copy is ok, we are not worried about performance here.
@@ -285,7 +285,7 @@ std::vector<std::string> CmdLineFileExtractor::getFileList() const noexcept
 	return fileList;
 }
 
-std::vector<std::string> CmdLineFileExtractor::getFileTypeList() const noexcept
+std::vector<std::string_view> CmdLineFileExtractor::getFileTypeList() const noexcept
 {
 	return fileExtentions;
 }

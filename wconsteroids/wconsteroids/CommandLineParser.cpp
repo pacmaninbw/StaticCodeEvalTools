@@ -38,12 +38,29 @@ std::string CommandLineParser::messageProgramName()
  */
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
-	: argCount{ argc },
-	args{ argv },
+	: version{ std::move(progVersion) },
+	doubleDashArgs{
+		{ "--bytes", options.byteCount },
+		{ "--chars", options.charCount },
+		{ "--lines", options.lineCount },
+		{ "--max-line-length", options.maxLineWidth },
+		{ "--words", options.wordCount }
+	},
+	singleDashArgs{
+		{ 'c', options.byteCount },
+		{ 'm', options.charCount },
+		{ 'l', options.lineCount },
+		{ 'L', options.maxLineWidth },
+		{ 'w', options.wordCount }
+	},
 	useDefaultFlags{ true }
 {
-	version = progVersion;
-	initDashMaps();
+	// Start at one to remove the program name
+	for (int i = 1; i < argc; i++)
+	{
+		std::string_view arg(argv[i]);
+		args.push_back(arg);
+	}
 }
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
@@ -55,7 +72,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 
 	bool hasFiles = false;
 
-	if (argCount < MinimumCommandLineCount)
+	if (args.size() + 1 < MinimumCommandLineCount)
 	{
 		ShowHelpMessage doHelp("Call printHelpMessage");
 		throw doHelp;
@@ -122,7 +139,7 @@ void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 void CommandLineParser::extractAllArguments()
 {
 	// start after the program name.
-	for (std::size_t i = 1; i < argCount; i++)
+	for (std::size_t i = 1; i < args.size(); i++)
 	{
 		if (args[i][0] == '-')
 		{
@@ -137,7 +154,7 @@ void CommandLineParser::extractAllArguments()
 		}
 		else
 		{
-			NotFlagsArgs.push_back(args[i]);
+			NotFlagsArgs.push_back(std::move(args[i]));
 		}
 	}
 }
@@ -146,7 +163,7 @@ void CommandLineParser::extractAllArguments()
  * Flags starting with -- are full strings that need to be processed
  * as strings.
  */
-void CommandLineParser::processDoubleDashOptions(char* currentArg)
+void CommandLineParser::processDoubleDashOptions(std::string_view currentArg)
 {
 	auto flag = doubleDashArgs.find(currentArg);
 	if (flag != doubleDashArgs.end())
@@ -157,27 +174,27 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
 	}
 
 	// The following switches require alternate handling
-	if (strncmp(currentArg, "--subdirectories", strlen("--subdirectories")) == 0)
+	if (currentArg == "--subdirectories")
 	{
 		// Since this is not a column switch it does not affect the default 
 		options.recurseSubDirectories = true;
 		return;
 	}
 
-	if (strncmp(currentArg, "--time-execution", strlen("--time-execution")) == 0)
+	if (currentArg == "--time-execution")
 	{
 		// Since this is not a column switch it does not affect the default 
 		options.enableExecutionTime = true;
 		return;
 	}
 
-	if (strncmp(currentArg, "--help", strlen("--help")) == 0)
+	if (currentArg == "--help")
 	{
 		ShowHelpMessage doHelp("Call printHelpMessage");
 		throw doHelp;
 	}
 
-	if (strncmp(currentArg, "--version", strlen("--version")) == 0)
+	if (currentArg == "--version")
 	{
 		showVersions sv("Call printVersion");
 		throw sv;
@@ -189,9 +206,9 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
 /*
  * Each character needs to be processed independently.
  */
-void CommandLineParser::processSingleDashOptions(char* currentArg)
+void CommandLineParser::processSingleDashOptions(std::string_view currentArg)
 {
-	for (std::size_t i = 1; i < std::strlen(currentArg); i++)
+	for (std::size_t i = 1; i < currentArg.size(); i++)
 	{
 		auto thisOption = singleDashArgs.find(currentArg[i]);
 		if (thisOption != singleDashArgs.end())

@@ -10,6 +10,9 @@
  * This class should be portable to Windows, Linux and Unix operating
  * systems. There are ifdefs in the implementation for this purpose.
  */
+#include <string>
+#include <string_view>
+#include <vector>
 #include <unordered_map>
 #include "Executionctrlvalues.h"
 #include "SpecialExceptions.h"
@@ -23,8 +26,8 @@ public:
 	void printVersion();
 
 protected:
-	void processSingleDashOptions(char *currentArg);
-	void processDoubleDashOptions(char* currentArg);
+	void processSingleDashOptions(std::string_view currentArg);
+	void processDoubleDashOptions(std::string_view currentArg);
 	void SetDefaultOptionsWhenNoFlags();
 	void initDashMaps();
 	void findAllFilesToProcess(ExecutionCtrlValues& execVars);
@@ -32,13 +35,12 @@ protected:
 	std::string messageProgramName();
 
 private:
-	char** args;
-	int argCount;
+	std::vector<std::string_view> args;
 	std::string version;
 	ProgramOptions options;
-	std::unordered_map<std::string, bool&> doubleDashArgs;
+	std::unordered_map<std::string_view, bool&> doubleDashArgs;
 	std::unordered_map<char, bool&> singleDashArgs;
-	std::vector<std::string> NotFlagsArgs;
+	std::vector<std::string_view> NotFlagsArgs;
 	bool useDefaultFlags;
 };
 

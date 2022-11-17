@@ -17,15 +17,16 @@
  */
 
 #include <string>
+#include <string_view>
 #include <vector>
 
 class CmdLineFileExtractor
 {
 public:
-	CmdLineFileExtractor(std::vector<std::string> NonFlagArgs, bool searchSubDirs);
+	CmdLineFileExtractor(std::vector<std::string_view> NonFlagArgs, bool searchSubDirs);
 	void findAllRequiredFiles() noexcept;
 	std::vector<std::string> getFileList() const noexcept;
-	std::vector<std::string> getFileTypeList() const noexcept;
+	std::vector<std::string_view> getFileTypeList() const noexcept;
 };
 
 #endif // COMMAND_LINE_FILE_EXTRACTOR_H
