@@ -10,17 +10,17 @@
 #include "UtilityTimer.h"
 
 #ifdef _WIN32
-static const size_t MinimumCommandLineCount = 1;
+static const int MinimumCommandLineCount = 1;
 #else
 // On Linux and Unix argv[0] is the program name so a minimum of 2 arguments
-static const size_t MinimumCommandLineCount = 2;
+static const int MinimumCommandLineCount = 2;
 #endif
 
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
-	: argCount{ argc }, args{ argv }, useDefaultFlags{ true }
+	: args{ argv }, argCount{ argc },
+          version{ std::move(progVersion) }
 {
-	version = progVersion;
 	initHelpMessage();
 	initDashMaps();
 }
@@ -38,7 +38,7 @@ unsigned int CommandLineParser::extractAllArguments()
 {
 	unsigned int flagCount = 0;
 
-	for (size_t i = 0; i < argCount; i++)
+	for (int i = 0; i < argCount; i++)
 	{
 		if (args[i][0] == '-')
 		{
@@ -77,7 +77,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 		throw doHelp;
 	}
 
-	unsigned int flagCount = extractAllArguments();
+	extractAllArguments();
 	if (useDefaultFlags)
 	{
 		SetDefaultOptionsWhenNoFlags();
@@ -165,7 +165,7 @@ void CommandLineParser::processDoubleDashOptions(char* currentArg)
  */
 void CommandLineParser::processSingleDashOptions(char* currentArg)
 {
-	for (size_t i = 1; i < std::strlen(currentArg); i++)
+	for (std::size_t i = 1; i < std::strlen(currentArg); i++)
 	{
 		auto thisOption = singleDashArgs.find(currentArg[i]);
 		if (thisOption != singleDashArgs.end())

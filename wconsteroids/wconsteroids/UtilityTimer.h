@@ -32,7 +32,8 @@ public:
 	}
 
 private:
-	std::chrono::time_point<std::chrono::system_clock> start, end;
+	std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
+	std::chrono::time_point<std::chrono::system_clock> end = start;
 };
 
 #endif // CC_UTITLTY_TIMER_H

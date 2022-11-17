@@ -32,14 +32,13 @@ class SubDirNode
 {
 public:
 	fsys::path fileSpec;
-	bool discovered;
-	bool searchedFiles;
+	bool discovered = false;
+	bool searchedFiles = false;
 	SubDirNode(fsys::path path)
-		: discovered{ false }, searchedFiles{ false }
+		: fileSpec{ std::move(path) }
 	{
-		fileSpec = path;
 	}
-	bool operator==(const SubDirNode& other)
+	bool operator==(const SubDirNode& other) const
 	{
 		return fileSpec == other.fileSpec;
 	}
@@ -63,7 +62,6 @@ static std::vector<SubDirNode> subDirectories;
  */
 static std::vector<SubDirNode> findSubDirs(SubDirNode currentDir)
 {
-	bool hasSubDirs = false;
 	std::vector<SubDirNode> newSubDirs;
 
 	fsys::path cwd = currentDir.fileSpec;
@@ -96,7 +94,7 @@ static bool discoverSubDirs()
 	bool discoveredPhaseCompleted = true;
 	std::vector<SubDirNode> newSubDirs;
 
-	for (size_t i = 0; i < subDirectories.size(); i++)
+	for (std::size_t i = 0; i < subDirectories.size(); i++)
 	{
 		if (!subDirectories[i].discovered)
 		{
@@ -136,7 +134,7 @@ static std::string getFileExtention(std::string fname)
 {
 	std::string fileExtention = "";
 
-	size_t lastDotLocation = fname.find_last_of('.');
+	std::size_t lastDotLocation = fname.find_last_of('.');
 	if (lastDotLocation != std::string::npos)
 	{
 		fileExtention = fname.substr(lastDotLocation);

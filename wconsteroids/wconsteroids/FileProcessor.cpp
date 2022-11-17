@@ -6,12 +6,13 @@
 #include "FileStatistics.h"
 #include "ReportWriter.h"
 
-static constexpr size_t InputBufferSize = 8 * 1024;
+static constexpr std::size_t InputBufferSize = 8 * 1024;
 
-FileProcessor::FileProcessor(std::vector<std::string>& filesToProess, ProgramOptions& progOptions)
-	: options{ progOptions }
+FileProcessor::FileProcessor(std::vector<std::string> filesToProcess,
+                             ProgramOptions& progOptions)
+	: fileNames { std::move(filesToProcess) },
+	  options{ progOptions }
 {
-	fileNames = filesToProess;
 }
 
 std::string FileProcessor::processAllFiles() noexcept
@@ -31,7 +32,7 @@ std::string FileProcessor::processAllFiles() noexcept
 				resultsToDisplay += fileResults;
 			}
 		}
-		catch (std::runtime_error re)
+		catch (const std::runtime_error& re)
 		{
 			std::cerr << re.what() << "\n";
 		}
@@ -49,7 +50,6 @@ void FileProcessor::processLoop(std::ifstream& inStream,
 	StatisticsCollector fileAnalyzer(statistics);
 
 	std::stringstream inputBuffer;
-	std::streambuf* inBuf = inStream.rdbuf();
 	inputBuffer << inStream.rdbuf();
 	fileAnalyzer.analyzeBuffer(inputBuffer.str());
 }
@@ -92,7 +92,7 @@ std::string FileProcessor::processFile(std::string fileName,
 		statistics.addTotals(totalStats);
 	}
 
-	catch (std::exception ex)
+	catch (const std::exception& ex)
 	{
 		std::cerr <<
 			"Error: unable to complete processing file statistics for "

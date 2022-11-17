@@ -8,7 +8,7 @@
 #include "StatisticsCollector.h"
 #include "FileStatistics.h"
 
-static constexpr size_t tabSize = 8;
+static constexpr std::size_t tabSize = 8;
 
 StatisticsCollector::StatisticsCollector(FileStatistics& fileStats)
 	: fileStatistics{ fileStats }
@@ -23,7 +23,7 @@ void StatisticsCollector::analyzeBuffer(std::string inputBuffer) noexcept
 	std::uintmax_t bufferSize = std::filesystem::file_size(fileStatistics.getFileName());
 	fileStatistics.setCharCount(bufferSize);
 
-	size_t lineCount = std::count(startBuffer, endBuffer, '\n');
+	std::size_t lineCount = std::count(startBuffer, endBuffer, '\n');
 	fileStatistics.setToLineCount(lineCount);
 	countWordsAndWhiteSpace(inputBuffer);
 
@@ -36,8 +36,8 @@ void StatisticsCollector::analyzeBuffer(std::string inputBuffer) noexcept
 
 void StatisticsCollector::countWordsAndWhiteSpace(std::string& inputBuffer) noexcept
 {
-	size_t wordCount = 0;
-	size_t whiteSpaceCount = 0;
+	std::size_t wordCount = 0;
+	std::size_t whiteSpaceCount = 0;
 	std::string::iterator currentChar = inputBuffer.begin();
 	std::string::iterator endOfInput = inputBuffer.end();
 	bool inWord = false;
@@ -85,11 +85,11 @@ void StatisticsCollector::updateWidestLine(std::string::iterator& currentChar,
 	{
 		endOfLine++;
 	}
-	size_t lineWidth = endOfLine - currentChar;
+	std::size_t lineWidth = endOfLine - currentChar;
 
 	// See https://github.com/coreutils/coreutils/blob/master/src/wc.c to
 	// observe how tabs are counted.
-	size_t tabCount = std::count(currentChar, endOfLine, '\t');
+	std::size_t tabCount = std::count(currentChar, endOfLine, '\t');
 	lineWidth += tabCount * tabSize;
 
 

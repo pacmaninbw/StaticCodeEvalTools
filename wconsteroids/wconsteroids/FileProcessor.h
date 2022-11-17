@@ -11,7 +11,7 @@
 class FileProcessor
 {
 public:
-	FileProcessor(std::vector<std::string>& filesToProcess, ProgramOptions& progOptions);
+	FileProcessor(std::vector<std::string> filesToProcess, ProgramOptions& progOptions);
 	~FileProcessor() = default;
 	std::string processAllFiles() noexcept;
 

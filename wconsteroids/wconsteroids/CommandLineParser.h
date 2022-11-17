@@ -18,6 +18,9 @@ class CommandLineParser
 {
 public:
 	CommandLineParser(int argc, char* argv[], std::string progVersion);
+	CommandLineParser(const CommandLineParser&) = delete;
+	void operator=(const CommandLineParser&) = delete;
+
 	bool parse(ExecutionCtrlValues& execVars);
 	void printHelpMessage();
 	void printVersion();
@@ -36,12 +39,12 @@ private:
 	char** args;
 	int argCount;
 	std::string version;
-	ProgramOptions options;
-	std::unordered_map<std::string, bool&> doubleDashArgs;
-	std::unordered_map<char, bool&> singleDashArgs;
-	std::vector<std::string> helpMessage;
-	std::vector<std::string> NotFlagsArgs;
-	bool useDefaultFlags;
+	ProgramOptions options = {};
+	std::unordered_map<std::string, bool&> doubleDashArgs = {};
+	std::unordered_map<char, bool&> singleDashArgs = {};
+	std::vector<std::string> helpMessage = {};
+	std::vector<std::string> NotFlagsArgs = {};
+	bool useDefaultFlags = true;
 };
 
 #endif // COMMAND_lINE_PARSER_H

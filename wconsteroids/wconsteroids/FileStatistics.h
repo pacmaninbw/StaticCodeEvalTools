@@ -10,16 +10,16 @@
 class FileStatistics
 {
 private:
-	size_t totalLineCount;
-	size_t codeLineCount;
-	size_t commentLineCount;
-	size_t whiteSpaceCount;
-	size_t characterCount;
-	size_t wordCount;
-	size_t codeWithCommentCount;
-	size_t widestLine;
-	size_t blankLineCount;
-	std::string fileName; 
+	std::size_t totalLineCount = 0;
+	std::size_t codeLineCount = 0;
+	std::size_t commentLineCount = 0;
+	std::size_t whiteSpaceCount = 0;
+	std::size_t characterCount = 0;
+	std::size_t wordCount = 0;
+	std::size_t codeWithCommentCount = 0;
+	std::size_t widestLine = 0;
+	std::size_t blankLineCount = 0;
+	std::string fileName = {};
 
 public:
 	FileStatistics();
@@ -27,35 +27,35 @@ public:
 	void setFileName(std::string inFileName) { fileName = inFileName; }
 	std::string getFileName() { return fileName; }
 	void addTotals(FileStatistics &allFiles);
-	void addToLineCount(size_t lineCount) { totalLineCount += lineCount; }
-	void setToLineCount(size_t lineCount) { totalLineCount = lineCount; }
-	void addToCharCount(size_t charCount) { characterCount += charCount; }
-	void setCharCount(size_t charCount) { characterCount = charCount; }
-	void addToWordCount(size_t wordCountUpdate) { wordCount += wordCountUpdate; }
-	void setWordCount(size_t wordCountUpdate) { wordCount = wordCountUpdate; }
-	void addToWhitespace(size_t wsUpdate) { whiteSpaceCount += wsUpdate; }
+	void addToLineCount(std::size_t lineCount) { totalLineCount += lineCount; }
+	void setToLineCount(std::size_t lineCount) { totalLineCount = lineCount; }
+	void addToCharCount(std::size_t charCount) { characterCount += charCount; }
+	void setCharCount(std::size_t charCount) { characterCount = charCount; }
+	void addToWordCount(std::size_t wordCountUpdate) { wordCount += wordCountUpdate; }
+	void setWordCount(std::size_t wordCountUpdate) { wordCount = wordCountUpdate; }
+	void addToWhitespace(std::size_t wsUpdate) { whiteSpaceCount += wsUpdate; }
 	// While the inline key word is only a recommendation, hopefully the increment
 	// functions can be inline.
 	inline void incrementTotalLines() { totalLineCount++; }
-	size_t getTotalLines() const { return totalLineCount; }
+	std::size_t getTotalLines() const { return totalLineCount; }
 	inline void incrementCodeLines() { codeLineCount++; }
-	size_t getCodeLines() const { return codeLineCount; }
+	std::size_t getCodeLines() const { return codeLineCount; }
 	inline void incrementCommentsLines() { commentLineCount++; }
-	size_t getCommentLines() const { return commentLineCount; }
+	std::size_t getCommentLines() const { return commentLineCount; }
 	inline void incrementWhitespace() { whiteSpaceCount++; }
-	size_t getWhitespace() const { return whiteSpaceCount; }
+	std::size_t getWhitespace() const { return whiteSpaceCount; }
 	inline void incrementCharacter() { characterCount++; }
-	size_t getCharacters() const { return characterCount; }
+	std::size_t getCharacters() const { return characterCount; }
 	inline void incrementWords() { wordCount++; }
-	size_t getWords() const { return wordCount; }
+	std::size_t getWords() const { return wordCount; }
 	inline void incrementCodeWithComment() { codeWithCommentCount++; }
-	size_t getCodeWithComment() const { return codeWithCommentCount; }
+	std::size_t getCodeWithComment() const { return codeWithCommentCount; }
 	inline void incrementBlankLines() { blankLineCount++; }
-	size_t getBlankLines() { return blankLineCount; }
-	void updateWidestLine(size_t width) {
+	std::size_t getBlankLines() { return blankLineCount; }
+	void updateWidestLine(std::size_t width) {
 		widestLine = (width > widestLine)? width : widestLine;
 	}
-	size_t getWidestLine() { return widestLine; }
+	std::size_t getWidestLine() { return widestLine; }
 	float getPerecentageOfCode() {
 		return static_cast<float>(codeLineCount / totalLineCount);
 	}
