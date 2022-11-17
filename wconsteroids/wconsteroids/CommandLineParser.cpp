@@ -33,6 +33,9 @@ std::string CommandLineParser::messageProgramName()
 	return programName;
 }
 
+/*
+ * Begin public interface.
+ */
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
 	: argCount{ argc },
@@ -41,37 +44,6 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 {
 	version = progVersion;
 	initDashMaps();
-}
-
-void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
-{
-	bool searchSubDirs = options.recurseSubDirectories;
-	CmdLineFileExtractor fileExtractor(NotFlagsArgs, searchSubDirs);
-	fileExtractor.findAllRequiredFiles();
-	execVars.filesToProcess = fileExtractor.getFileList();
-	execVars.fileSpecTypes = fileExtractor.getFileTypeList();
-}
-
-void CommandLineParser::extractAllArguments()
-{
-	for (std::size_t i = 0; i < argCount; i++)
-	{
-		if (args[i][0] == '-')
-		{
-			if (args[i][1] == '-')
-			{
-				processDoubleDashOptions(args[i]);
-			}
-			else
-			{
-				processSingleDashOptions(args[i]);
-			}
-		}
-		else
-		{
-			NotFlagsArgs.push_back(args[i]);
-		}
-	}
 }
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
@@ -136,6 +108,38 @@ void CommandLineParser::printVersion()
 		"This is free software : you are free to change and redistribute it.\n"
 		"\tThere is NO WARRANTY, to the extent permitted by law.\n"
 		"\nWritten by Paul A. Chernick\n";
+}
+
+void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
+{
+	bool searchSubDirs = options.recurseSubDirectories;
+	CmdLineFileExtractor fileExtractor(NotFlagsArgs, searchSubDirs);
+	fileExtractor.findAllRequiredFiles();
+	execVars.filesToProcess = fileExtractor.getFileList();
+	execVars.fileSpecTypes = fileExtractor.getFileTypeList();
+}
+
+void CommandLineParser::extractAllArguments()
+{
+	// start after the program name.
+	for (std::size_t i = 1; i < argCount; i++)
+	{
+		if (args[i][0] == '-')
+		{
+			if (args[i][1] == '-')
+			{
+				processDoubleDashOptions(args[i]);
+			}
+			else
+			{
+				processSingleDashOptions(args[i]);
+			}
+		}
+		else
+		{
+			NotFlagsArgs.push_back(args[i]);
+		}
+	}
 }
 
 /*

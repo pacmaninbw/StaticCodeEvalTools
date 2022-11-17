@@ -230,10 +230,7 @@ static void addListedFilesToFileList()
 {
 	for (auto fileSpec : nonFlagArgs)
 	{
-		if (isASpecifiedFileType(fileSpec))
-		{
-			fileList.push_back(fileSpec);
-		}
+		fileList.push_back(fileSpec);
 	}
 }
 
