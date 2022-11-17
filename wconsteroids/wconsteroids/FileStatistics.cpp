@@ -2,6 +2,7 @@
 #include <string>
 
 FileStatistics::FileStatistics()
+	: fileName { "" }
 {
 
 }
