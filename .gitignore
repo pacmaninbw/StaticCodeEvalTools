@@ -356,3 +356,6 @@ MigrationBackup/
 .ionide/
 /wconsteroids/wconsteroids/testout.txt
 /wconsteroids/wconsteroids/wcout.txt
+
+# Make dependency files
+*.d
