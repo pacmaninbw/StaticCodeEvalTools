@@ -239,4 +239,3 @@ void CommandLineParser::initDashMaps()
 	singleDashArgs.insert({ 'L', options.maxLineWidth });
 	singleDashArgs.insert({ 'w', options.wordCount });
 }
-
