@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <filesystem>
+#include <iterator>
 #include <ranges>
 #include <string>
 #include <string_view>
@@ -63,7 +64,7 @@ static std::vector<SubDirNode> subDirectories;
 /*
  * Search the current directory for sub directories.
  */
-static auto findSubDirs(SubDirNode currentDir)
+static auto findSubDirs(const SubDirNode& currentDir)
 {
     auto is_missing = [](const SubDirNode& branch){
         return std::ranges::find(subDirectories, branch) == subDirectories.end();
@@ -76,9 +77,7 @@ static auto findSubDirs(SubDirNode currentDir)
 
     // TODO (C++23?) return std::vector(subdirs);
     auto newSubDirs = std::vector<SubDirNode>{};
-    for (auto d: subdirs) {
-        newSubDirs.emplace_back(d);
-    }
+    std::ranges::copy(subdirs, std::back_inserter(newSubDirs));
     return newSubDirs;
 }
 
