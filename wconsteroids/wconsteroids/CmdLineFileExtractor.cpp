@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <filesystem>
+#include <ranges>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -62,29 +63,23 @@ static std::vector<SubDirNode> subDirectories;
 /*
  * Search the current directory for sub directories.
  */
-static std::vector<SubDirNode> findSubDirs(SubDirNode currentDir)
+static auto findSubDirs(SubDirNode currentDir)
 {
-	std::vector<SubDirNode> newSubDirs;
+    auto is_missing = [](const SubDirNode& branch){
+        return std::ranges::find(subDirectories, branch) == subDirectories.end();
+    };
 
-	fsys::path cwd = currentDir.fileSpec;
+    auto subdirs = fsys::directory_iterator{currentDir.fileSpec}
+        | std::views::filter([](auto& f){ return f.is_directory(); })
+        | std::views::transform([](auto& f)->SubDirNode { return f.path(); })
+        | std::views::filter(is_missing);
 
-	for (auto it = fsys::directory_iterator(cwd);
-		it != fsys::directory_iterator(); ++it)
-	{
-		if (it->is_directory())
-		{
-			SubDirNode branch(it->path());
-			auto found = std::find(subDirectories.begin(), subDirectories.end(), branch);
-			if (found == subDirectories.end())
-			{
-				// Possible nasty side affects here by adding additional
-				// contents to subDirectories
-				newSubDirs.push_back(branch);
-			}
-		}
-	}
-
-	return newSubDirs;
+    // TODO (C++23?) return std::vector(subdirs);
+    auto newSubDirs = std::vector<SubDirNode>{};
+    for (auto d: subdirs) {
+        newSubDirs.emplace_back(d);
+    }
+    return newSubDirs;
 }
 
 /*
