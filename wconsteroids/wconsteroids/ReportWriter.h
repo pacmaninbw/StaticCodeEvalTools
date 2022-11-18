@@ -3,7 +3,7 @@
 
 /*
  * This class prints the output about the file statistics. It can also
- * return a formated string of the output.
+ * return a formatted string of the output.
  */
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@ public:
 	std::ostream& printResult(FileStatistics& resultsForOutput, std::ostream& os);
 	std::string getResultText(FileStatistics& resultsForOutput) noexcept;
 	std::ostream& printColumnHeadings(std::ostream& os) noexcept;
-	// Returns 2 lines of properly formated text
+	// Returns 2 lines of properly formatted text
 	std::vector<std::string> getColumneHeadingsText() noexcept;
 	std::string getColumnHeadingAsOneString() noexcept;
 

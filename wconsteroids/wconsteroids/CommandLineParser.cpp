@@ -76,7 +76,7 @@ void CommandLineParser::printHelpMessage() const
 {
 	std::cout << "\n" << programName <<
 		" file name or file type specification (*.ext)\n"
-		"Otions:\n"
+		"Options:\n"
 		"\t-c, --bytes print the byte counts\n"
 		"\t-m, --chars print the character counts\n"
 		"\t-l, --lines print the newline counts\n"
