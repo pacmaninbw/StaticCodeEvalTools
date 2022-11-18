@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <filesystem>
 #include <iomanip>
 #include <ostream>
 #include <sstream>
@@ -106,24 +107,5 @@ std::ostream& ReportWriter::printColumnHeadings(std::ostream& os) noexcept
 
 std::string ReportWriter::correctFileSpec(std::string fileSpec) noexcept
 {
-	if (options.recurseSubDirectories)
-	{
-		return fileSpec;
-	}
-	else
-	{
-		auto newStart = fileSpec.find_last_of('/');
-		if (!newStart)
-		{
-			newStart = fileSpec.find_last_of('\\');
-			if (!newStart)
-			{
-				return fileSpec;
-			}
-		}
-		std::string fileName = fileSpec.substr(newStart + 1);
-
-		
-		return fileName;
-	}
+	return std::filesystem::path{fileSpec}.filename().string();
 }
