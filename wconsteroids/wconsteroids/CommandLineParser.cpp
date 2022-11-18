@@ -49,10 +49,6 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
 	UtilityTimer stopWatch;
-	// There is no way to determine if -t has been used at this point
-	// so start the timer anyway.
-	stopWatch.startTimer();
-
 	bool hasFiles = false;
 
 	extractAllArguments();

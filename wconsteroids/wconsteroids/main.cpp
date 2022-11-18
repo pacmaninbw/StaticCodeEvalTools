@@ -38,10 +38,6 @@ int main(int argc, char* argv[])
 		if (cmdLineParser.parse(executionCtrl))
 		{
 			UtilityTimer stopWatch;
-			if (executionCtrl.options.enableExecutionTime)
-			{
-				stopWatch.startTimer();
-			}
 			mainLoop(executionCtrl);
 			if (executionCtrl.options.enableExecutionTime)
 			{
