@@ -1,5 +1,5 @@
-#ifndef CC_UTITLTY_TIMER_H
-#define CC_UTITLTY_TIMER_H
+#ifndef CC_UTILITY_TIMER_H
+#define CC_UTILITY_TIMER_H
 
 /*
  * Chernick Consulting Utility timer class.
@@ -38,4 +38,4 @@ private:
 	clock::time_point start = clock::now();
 };
 
-#endif // CC_UTITLTY_TIMER_H
+#endif // CC_UTILITY_TIMER_H

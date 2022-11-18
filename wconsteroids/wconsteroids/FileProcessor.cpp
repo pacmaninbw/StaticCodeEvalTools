@@ -20,7 +20,7 @@ static void processLoop(std::ifstream& inStream,
 
 /*
  * Processing a file includes reading the file, analyzing the input to collect
- * the statistics and then pringing the statistics.
+ * the statistics and then printing the statistics.
  */
 static std::string processFile(const ProgramOptions& options, std::string fileName,
 	FileStatistics& totalStats)
