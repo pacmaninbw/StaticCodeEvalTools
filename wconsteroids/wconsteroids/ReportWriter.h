@@ -6,7 +6,8 @@
  * return a formated string of the output.
  */
 #include <memory>
-#include <string>	// std::vector included by string
+#include <string>
+#include <vector>
 #include "ProgramOptions.h"
 #include "FileStatistics.h"
 
