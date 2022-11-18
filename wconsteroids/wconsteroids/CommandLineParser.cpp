@@ -10,10 +10,9 @@
 #include "Executionctrlvalues.h"
 #include "UtilityTimer.h"
 
-static auto simplify_name(char *path)
+static std::string_view simplify_name(char *path)
 {
-	return std::move(std::filesystem::path{path ? path : "wconsteroids"}
-		.filename().string());
+	return std::filesystem::path{path ? path : "wconsteroids"}.filename().string();
 }
 
 /*
