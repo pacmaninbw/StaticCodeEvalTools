@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -10,33 +11,6 @@
 #include "SpecialExceptions.h"
 #include "UtilityTimer.h"
 
-// All operating sustem conditional code is at the top so that it can be easily
-// found. The public interfaces immediately follow.
-
-#ifdef _WIN32
-static const std::size_t MinimumCommandLineCount = 1;
-#else
-// On Linux and Unix argv[0] is the program name so a minimum of 2 arguments
-static const std::size_t MinimumCommandLineCount = 2;
-#endif
-
-std::string_view CommandLineParser::messageProgramName() const
-{
-	return program_name;
-}
-
-static const char* find_prog_name(char* s)
-{
-	auto const default_name = "wconsteriods";
-#ifdef _WIN32
-	(void)s;
-	return default_name;
-#else
-	return s ? s : default_name;
-#endif
-}
-
-
 /*
  * Begin public interface.
  */
@@ -45,6 +19,7 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	: program_name{ find_prog_name(argv[0]) },
 	args(argv + 1, argv + argc),
 	version{ std::move(progVersion) },
+	programName{ argv[0] },
 	options{ ProgramOptions() },
 	doubleDashArgs{
 		{ "--bytes", options.byteCount },
@@ -63,6 +38,9 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	NotFlagsArgs{ {} },
 	useDefaultFlags{ true }
 {
+	std::filesystem::path programPath(argv[0]);
+	programName = std::move(programPath.filename().string());
+
 }
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
@@ -73,12 +51,6 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 	stopWatch.startTimer();
 
 	bool hasFiles = false;
-
-	if (args.size() + 1 < MinimumCommandLineCount)
-	{
-		ShowHelpMessage doHelp("Call printHelpMessage");
-		throw doHelp;
-	}
 
 	extractAllArguments();
 	if (useDefaultFlags)
@@ -97,9 +69,9 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 	return hasFiles = execVars.filesToProcess.size() != 0;
 }
 
-void CommandLineParser::printHelpMessage()
+void CommandLineParser::printHelpMessage() const
 {
-	std::cerr << "\n" << messageProgramName() <<
+	std::cout << "\n" << programName <<
 		" file name or file type specification (*.ext)\n"
 		"Otions:\n"
 		"\t-c, --bytes print the byte counts\n"
@@ -114,19 +86,21 @@ void CommandLineParser::printHelpMessage()
 		" directory as well as sub directories\n"
 		"\tBy default the -c -l and -w flags are set, setting any"
 		" flag requires all flags you want to be set.\n";
-	// flush the buffer to make sure the entire message is visible
-	std::cerr << std::flush;
+	printVersion();
 }
 
-void CommandLineParser::printVersion()
+void CommandLineParser::printVersion() const noexcept
 {
-	std::cout << messageProgramName() << ": version: " << version << "\n"
+	std::cout << programName << ": version: " << version << "\n"
 		"Packaged by Chernick Consulting\n"
 		"License GPLv3+: GNU GPL version 3 or later"
 		" <http://gnu.org/licenses/gpl.html>.\n"
 		"This is free software : you are free to change and redistribute it.\n"
 		"\tThere is NO WARRANTY, to the extent permitted by law.\n"
 		"\nWritten by Paul A. Chernick\n";
+	// flush the buffer to make sure the entire message is visible
+	std::cout << std::flush;
+	exit(EXIT_SUCCESS);
 }
 
 void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
@@ -192,14 +166,14 @@ void CommandLineParser::processDoubleDashOptions(std::string_view currentArg)
 
 	if (currentArg == "--help")
 	{
-		ShowHelpMessage doHelp("Call printHelpMessage");
-		throw doHelp;
+		// calls printVersion.
+		printHelpMessage();
 	}
 
 	if (currentArg == "--version")
 	{
-		showVersions sv("Call printVersion");
-		throw sv;
+		// calls exit after printing version
+		printVersion();
 	}
 
 	std::cerr << "Unknown flag: " << currentArg << "\n";

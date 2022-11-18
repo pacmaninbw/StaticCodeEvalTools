@@ -5,7 +5,6 @@
 #include "Executionctrlvalues.h"
 #include "CommandLineParser.h"
 #include "FileProcessor.h"
-#include "SpecialExceptions.h"
 #include "ProgramOptions.h"
 #include "UtilityTimer.h"
 
@@ -52,17 +51,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	catch (const ShowHelpMessage& sh)
-	{
-		cmdLineParser.printHelpMessage();
-		cmdLineParser.printVersion();
-		return EXIT_FAILURE;
-	}
-	catch (const showVersions& sv)
-	{
-		cmdLineParser.printVersion();
-	}
-	catch (const std::exception& ex)
+	catch (const std::exception &ex)
 	{
 		std::cerr << "Error: " << ex.what() << "\n";
 		return EXIT_FAILURE;

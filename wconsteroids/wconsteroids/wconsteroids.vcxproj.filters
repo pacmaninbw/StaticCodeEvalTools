@@ -62,9 +62,6 @@
     <ClInclude Include="Executionctrlvalues.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpecialExceptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ProgramOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
