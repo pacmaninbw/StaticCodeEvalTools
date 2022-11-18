@@ -19,26 +19,30 @@ static const std::size_t MinimumCommandLineCount = 1;
 static const std::size_t MinimumCommandLineCount = 2;
 #endif
 
-std::string CommandLineParser::messageProgramName()
+std::string_view CommandLineParser::messageProgramName() const
 {
-	std::string programName =
-#ifdef _WIN32
-		"wconsteriods"
-#else
-		// On Linux and Unix argv[0] is the program name;
-		(argCount != 0) ? args[0] : "wconsteriods"
-#endif
-		;
-
-	return programName;
+	return program_name;
 }
+
+static const char* find_prog_name(char* s)
+{
+	auto const default_name = "wconsteriods";
+#ifdef _WIN32
+	(void)s;
+	return default_name;
+#else
+	return s ? s : default_name;
+#endif
+}
+
 
 /*
  * Begin public interface.
  */
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
-	: args{ {} },
+	: program_name{ find_prog_name(argv[0]) },
+	args(argv + 1, argv + argc),
 	version{ std::move(progVersion) },
 	options{ ProgramOptions() },
 	doubleDashArgs{
@@ -58,12 +62,6 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	NotFlagsArgs{ {} },
 	useDefaultFlags{ true }
 {
-	// Start at one to remove the program name
-	for (int i = 1; i < argc; i++)
-	{
-		std::string_view arg(argv[i]);
-		args.push_back(arg);
-	}
 }
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
