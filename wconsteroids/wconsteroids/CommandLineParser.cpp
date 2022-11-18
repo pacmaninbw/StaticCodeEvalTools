@@ -23,24 +23,7 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	: program_name{ simplify_name(argv[0]) },
 	args(argv + 1, argv + argc),
 	version{ std::move(progVersion) },
-	programName{ argv[0] },
-	options{ ProgramOptions() },
-	doubleDashArgs{
-		{ "--bytes", options.byteCount },
-		{ "--chars", options.charCount },
-		{ "--lines", options.lineCount },
-		{ "--max-line-length", options.maxLineWidth },
-		{ "--words", options.wordCount }
-	},
-	singleDashArgs{
-		{ 'c', options.byteCount },
-		{ 'm', options.charCount },
-		{ 'l', options.lineCount },
-		{ 'L', options.maxLineWidth },
-		{ 'w', options.wordCount }
-	},
-	NotFlagsArgs{ {} },
-	useDefaultFlags{ true }
+	programName{ argv[0] }
 {
 
 }
@@ -48,7 +31,6 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
 	UtilityTimer stopWatch;
-	bool hasFiles = false;
 
 	extractAllArguments();
 	if (useDefaultFlags)
@@ -64,7 +46,7 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 		stopWatch.stopTimerAndReport("command line parsing at ");
 	}
 
-	return hasFiles = execVars.filesToProcess.size() != 0;
+	return execVars.filesToProcess.size() != 0;
 }
 
 void CommandLineParser::printHelpMessage() const
