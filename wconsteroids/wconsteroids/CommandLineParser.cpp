@@ -10,12 +10,19 @@
 #include "Executionctrlvalues.h"
 #include "UtilityTimer.h"
 
+static auto simplify_name(char *path)
+{
+	return std::filesystem::path{path ? path : "wconsteroids"}
+		.filename().string();
+}
+
 /*
  * Begin public interface.
  */
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
-	: args{ {} },
+	: program_name{ simplify_name(argv[0]) },
+	args(argv + 1, argv + argc),
 	version{ std::move(progVersion) },
 	programName{ argv[0] },
 	options{ ProgramOptions() },
@@ -36,16 +43,7 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	NotFlagsArgs{ {} },
 	useDefaultFlags{ true }
 {
-	std::filesystem::path programPath(argv[0]);
-	programName = std::move(programPath.filename().string());
 
-	// Start at one to remove the program name
-	args.clear(); // bug in initialization
-	for (int i = 1; i < argc; i++)
-	{
-		std::string_view arg(argv[i]);
-		args.push_back(arg);
-	}
 }
 
 bool CommandLineParser::parse(ExecutionCtrlValues& execVars)

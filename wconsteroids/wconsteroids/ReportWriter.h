@@ -5,31 +5,31 @@
  * This class prints the output about the file statistics. It can also
  * return a formated string of the output.
  */
-#include <memory>
-#include <string>	// std::vector included by string
-#include "ProgramOptions.h"
-#include "FileStatistics.h"
+#include <string>
+#include <vector>
+
+class ProgramOptions;
+class FileStatistics;
 
 class ReportWriter
 {
 public:
 	// ExecutionCrtlValues is passed in so that the report writer know what
 	// output to generate.
-	ReportWriter(ProgramOptions& progOptions)
-		: options { std::make_shared<ProgramOptions>(progOptions) }
+	ReportWriter(const ProgramOptions& progOptions)
+		: options { progOptions }
 	{
-		
 	}
-	void printResult(FileStatistics& resultsForOutput) noexcept;
+	std::ostream& printResult(FileStatistics& resultsForOutput, std::ostream& os);
 	std::string getResultText(FileStatistics& resultsForOutput) noexcept;
-	void printColumnHeadings() noexcept;
+	std::ostream& printColumnHeadings(std::ostream& os) noexcept;
 	// Returns 2 lines of properly formated text
 	std::vector<std::string> getColumneHeadingsText() noexcept;
 	std::string getColumnHeadingAsOneString() noexcept;
 
 private:
-	// The program options are necessary to know what to outout.
-	std::shared_ptr <ProgramOptions> options;
+	// The program options are necessary to know what to output.
+	const ProgramOptions& options;
 	std::string correctFileSpec(std::string fileSpec) noexcept;
 };
 

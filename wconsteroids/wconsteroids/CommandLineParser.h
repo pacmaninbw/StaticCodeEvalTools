@@ -20,6 +20,7 @@ class CommandLineParser
 {
 public:
 	CommandLineParser(int argc, char* argv[], std::string progVersion);
+
 	bool parse(ExecutionCtrlValues& execVars);
 	void printHelpMessage() const;
 	void printVersion() const noexcept;
@@ -33,6 +34,7 @@ protected:
 	void extractAllArguments();
 
 private:
+        std::string_view program_name;
 	std::vector<std::string_view> args;
 	std::string_view version;
 	std::string_view programName;

@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,9 +24,11 @@ static void mainLoop(ExecutionCtrlValues& executionCtrl)
 
 int main(int argc, char* argv[])
 {
-	int exit_status = EXIT_SUCCESS;
 	ExecutionCtrlValues executionCtrl;
 	std::string versionString("1.0.0");
+
+	std::locale::global(std::locale{""});
+	std::clog.imbue(std::locale{});
 
 	CommandLineParser cmdLineParser(argc, argv, versionString);
 
@@ -48,11 +51,11 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	catch (std::exception &ex)
+	catch (const std::exception &ex)
 	{
 		std::cerr << "Error: " << ex.what() << "\n";
-		exit_status = EXIT_FAILURE;
+		return EXIT_FAILURE;
 	}
 
-	return exit_status;
+	return EXIT_SUCCESS;
 }

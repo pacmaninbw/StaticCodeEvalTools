@@ -15,10 +15,10 @@ StatisticsCollector::StatisticsCollector(FileStatistics& fileStats)
 {
 }
 
-void StatisticsCollector::analyzeBuffer(std::string inputBuffer) noexcept
+void StatisticsCollector::analyzeBuffer(std::string_view inputBuffer) noexcept
 {
-	std::string::iterator endBuffer = inputBuffer.end();
-	std::string::iterator startBuffer = inputBuffer.begin();
+	auto endBuffer = inputBuffer.end();
+	auto startBuffer = inputBuffer.begin();
 
 	std::uintmax_t bufferSize = std::filesystem::file_size(fileStatistics.getFileName());
 	fileStatistics.setCharCount(bufferSize);
@@ -27,49 +27,28 @@ void StatisticsCollector::analyzeBuffer(std::string inputBuffer) noexcept
 	fileStatistics.setToLineCount(lineCount);
 	countWordsAndWhiteSpace(inputBuffer);
 
-	std::string::iterator currentChar = startBuffer;
+	auto currentChar = startBuffer;
 	while (currentChar != endBuffer)
 	{
 		updateWidestLine(currentChar, endBuffer);
 	}
 }
 
-void StatisticsCollector::countWordsAndWhiteSpace(std::string& inputBuffer) noexcept
+void StatisticsCollector::countWordsAndWhiteSpace(std::string_view inputBuffer) noexcept
 {
 	std::size_t wordCount = 0;
 	std::size_t whiteSpaceCount = 0;
-	std::string::iterator currentChar = inputBuffer.begin();
-	std::string::iterator endOfInput = inputBuffer.end();
 	bool inWord = false;
 
-	for ( ; currentChar != endOfInput; )
-	{
-		while (isspace(*currentChar))
-		{
-			whiteSpaceCount++;
-			currentChar++;
-			if (currentChar == endOfInput)
-			{
-				break;
-			}
-		}
-
-		while (!(currentChar == endOfInput) && !isspace(*currentChar))
-		{
-			inWord = true;
-			currentChar++;
-			if (currentChar == endOfInput)
-			{
-				wordCount++;
-				inWord = false;
-				break;
-			}
-		}
-
-		if (inWord)
-		{
-			wordCount++;
+	for (unsigned char c: inputBuffer) {
+		if (std::isspace(c)) {
+			++whiteSpaceCount;
 			inWord = false;
+		} else {
+			if (!inWord) {
+				++wordCount;
+				inWord = true;
+			}
 		}
 	}
 
@@ -77,10 +56,10 @@ void StatisticsCollector::countWordsAndWhiteSpace(std::string& inputBuffer) noex
 	fileStatistics.setWordCount(wordCount);
 }
 
-void StatisticsCollector::updateWidestLine(std::string::iterator& currentChar,
-	std::string::iterator end) noexcept
+void StatisticsCollector::updateWidestLine(std::string_view::const_iterator& currentChar,
+                                           std::string_view::const_iterator end) noexcept
 {
-	std::string::iterator endOfLine = std::find(currentChar, end, '\n');
+	auto endOfLine = std::find(currentChar, end, '\n');
 	if (endOfLine != end)
 	{
 		endOfLine++;

@@ -7,33 +7,35 @@
  */
 
 #include <chrono>
+#include <ctime>
+#include <iomanip>
 #include <iostream>
-#include <string>
+#include <string_view>
 
 class UtilityTimer
 {
 public:
-	UtilityTimer() = default;
-	~UtilityTimer() = default;
+	using clock = std::chrono::steady_clock;
+
 	void startTimer() noexcept
 	{
-		start = std::chrono::system_clock::now();
+		start = clock::now();
 	}
-	void stopTimerAndReport(std::string whatIsBeingTimed) noexcept
+	void stopTimerAndReport(std::string_view whatIsBeingTimed) noexcept
 	{
-		end = std::chrono::system_clock::now();
+		clock::time_point end = clock::now();
 
 		std::chrono::duration<double> elapsed_seconds = end - start;
-		std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 		double ElapsedTimeForOutPut = elapsed_seconds.count();
 
-		std::cout << "finished " << whatIsBeingTimed << std::ctime(&end_time)
-			<< "elapsed time in seconds: " << ElapsedTimeForOutPut << "\n" << "\n" << "\n";
+		using std::chrono::system_clock;
+		auto const now = system_clock::to_time_t(system_clock::now());
+		std::clog << "finished " << whatIsBeingTimed << std::put_time(std::localtime(&now), "%c")
+			  << "\nelapsed time in seconds: " << ElapsedTimeForOutPut << "\n\n\n";
 	}
 
 private:
-	std::chrono::time_point<std::chrono::system_clock> start{};
-	std::chrono::time_point<std::chrono::system_clock> end{};
+	clock::time_point start = clock::now();
 };
 
 #endif // CC_UTITLTY_TIMER_H

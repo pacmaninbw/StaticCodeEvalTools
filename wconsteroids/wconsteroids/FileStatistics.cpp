@@ -1,14 +1,10 @@
 #include "FileStatistics.h"
 #include <string>
 
-FileStatistics::FileStatistics()
-	: fileName { "" }
-{
-
-}
+FileStatistics::FileStatistics() = default;
 
 FileStatistics::FileStatistics(std::string inFileName)
-	: fileName{ inFileName }
+	: fileName{ std::move(inFileName) }
 {
 
 }

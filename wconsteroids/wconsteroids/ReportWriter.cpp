@@ -1,196 +1,111 @@
-#include <iostream>
+#include <algorithm>
+#include <filesystem>
+#include <iomanip>
+#include <ostream>
+#include <sstream>
 #include <string>
 #include <vector>
+#include "FileStatistics.h"
+#include "ProgramOptions.h"
 #include "ReportWriter.h"
 
-void ReportWriter::printResult(FileStatistics& resultsForOutput) noexcept
+struct Column {
+	bool ProgramOptions::* flag;
+	std::size_t (FileStatistics::*count)() const;
+	std::string header[2];
+	int width;
+
+	Column(bool ProgramOptions::* flag,
+	       std::size_t (FileStatistics::* count)() const,
+	       std::string first, std::string second, std::size_t width = 0)
+		: flag { flag },
+		  count { count },
+		  header { std::move(first), std::move(second) },
+		  width { static_cast<int>(std::max({header[0].size(), header[1].size(), width})) }
+	{}
+};
+
+static const Column columns[] =
 {
-	std::cout << getResultText(resultsForOutput) << "\n";
+	{ &ProgramOptions::lineCount,
+	  &FileStatistics::getTotalLines,
+	  "Lines", "of Text", 6 },
+	{ &ProgramOptions::wordCount,
+	  &FileStatistics::getWords,
+	  "Words", "", 7 },
+	{ &ProgramOptions::byteCount,
+	  &FileStatistics::getCharacters,
+	  "Bytes", "", 8 },
+	{ &ProgramOptions::charCount,
+	  &FileStatistics::getCharacters,
+	  "Characters", "", 8 },
+	{ &ProgramOptions::maxLineWidth,
+	  &FileStatistics::getWidestLine,
+	  "Length of", "Longest Line", 5 },
+	{ &ProgramOptions::codeCount,
+	  &FileStatistics::getCodeLines,
+	  "Lines", "of Code", 6 },
+	{ &ProgramOptions::commentCount,
+	  &FileStatistics::getCommentLines,
+	  "Lines of", "Comments", 6 },
+	{ &ProgramOptions::percentages,
+	  &FileStatistics::getPerecentageOfCode,
+	  "Percentage of", "Lines of Code", 2 },
+	{ &ProgramOptions::whitespaceCount,
+	  &FileStatistics::getWhitespace,
+	  "Whitespace", "Characters", 8 },
+	{ &ProgramOptions::blankLineCount,
+	  &FileStatistics::getBlankLines,
+	  "Blank", "Lines", 6 },
+};
+
+
+std::ostream& ReportWriter::printResult(FileStatistics& resultsForOutput, std::ostream& os)
+{
+	for (auto const& col: columns) {
+		if (options.*(col.flag)) {
+			os << std::setw(col.width)
+			   << (resultsForOutput.*col.count)()
+			   << '\t';
+		}
+	}
+
+	os << correctFileSpec(resultsForOutput.getFileName())
+	   << '\n';
+
+	return os;
 }
 
-/*
- * Maintain the order between this function and getColumneHeadingsText().  
- */
 std::string ReportWriter::getResultText(FileStatistics& resultsForOutput) noexcept
 {
-	std::string outString;
-
-	if (options->lineCount)
-	{
-		outString += std::to_string(resultsForOutput.getTotalLines()) + "\t";
-	}
-
-	if (options->wordCount)
-	{
-		outString += std::to_string(resultsForOutput.getWords()) + "\t";
-	}
-
-	if (options->byteCount)
-	{
-		outString += std::to_string(resultsForOutput.getCharacters()) + "\t";
-	}
-
-	if (options->charCount)
-	{
-		outString += std::to_string(resultsForOutput.getCharacters()) + "\t\t";
-	}
-
-	if (options->maxLineWidth)
-	{
-		outString += std::to_string(resultsForOutput.getWidestLine()) + "\t";
-	}
-
-	// End of backwards compatability with wc utility.
-
-	if (options->codeCount)
-	{
-		outString += std::to_string(resultsForOutput.getCodeLines()) + "\t";
-	}
-
-	if (options->commentCount)
-	{
-		outString += std::to_string(resultsForOutput.getCommentLines()) + "\t";
-	}
-
-	if (options->percentages)
-	{
-		outString +=
-			std::to_string(resultsForOutput.getPerecentageOfCode()) + "\t";
-	}
-
-	if (options->whitespaceCount)
-	{
-		outString += std::to_string(resultsForOutput.getWhitespace()) + "\t";
-	}
-	if (options->blankLineCount)
-	{
-		outString += std::to_string(resultsForOutput.getBlankLines()) + "\t";
-	}
-
-	std::string fileName = correctFileSpec(resultsForOutput.getFileName());
-	outString += "\t" + fileName + "\n";
-
-	return outString;
-}
-
-/*
- * Maintain the order between this function and getResultText().
- */
-std::vector<std::string> ReportWriter::getColumneHeadingsText() noexcept
-{
-	std::string firstLine;
-	std::string secondline;
-
-	if (options->lineCount)
-	{
-		firstLine += "Lines\t";
-		secondline += "of Text\t";
-	}
-
-	if (options->wordCount)
-	{
-		firstLine += "Words\t";
-		secondline += "\t";
-	}
-
-	if (options->byteCount)
-	{
-		firstLine += "Bytes\t";
-		secondline += "\t";
-	}
-
-	if (options->charCount)
-	{
-		firstLine += "Characters\t";
-		secondline += "\t\t";
-	}
-
-	if (options->maxLineWidth)
-	{
-		firstLine += "Length of\t";
-		secondline += "Longest Line\t";
-	}
-
-	// End of backwards compatability with wc utility.
-
-	if (options->codeCount)
-	{
-		firstLine += "Lines\t";
-		secondline += "of Code\t";
-	}
-
-	if (options->commentCount)
-	{
-		firstLine += "Lines of\t";
-		secondline += "Comments\t";
-	}
-
-	if (options->percentages)
-	{
-		firstLine += "Percentage of\t";
-		secondline += "Lines of Code\t";
-	}
-
-	if (options->whitespaceCount)
-	{
-		firstLine += "Whitespace\t";
-		secondline += "Characters\t";
-	}
-	if (options->blankLineCount)
-	{
-		firstLine += "Blank\t";
-		secondline += "Lines\t";
-	}
-
-
-	std::vector<std::string> headerRows = { firstLine, secondline };
-	return headerRows;
+	std::ostringstream os;
+	printResult(resultsForOutput, os);
+	return os.str();
 }
 
 std::string ReportWriter::getColumnHeadingAsOneString() noexcept
 {
-	std::string twolines;
-	std::vector<std::string> headingLines = getColumneHeadingsText();
-	FileStatistics allFiles;
-
-	std::string twoLines;
-	for (auto headingLine : headingLines)
-	{
-		twoLines += headingLine + "\n";
-	}
-
-	return twoLines;
+	std::ostringstream os;
+	printColumnHeadings(os);
+	return os.str();
 }
-
-void ReportWriter::printColumnHeadings() noexcept
+std::ostream& ReportWriter::printColumnHeadings(std::ostream& os) noexcept
 {
-	std::vector<std::string> headerRows = getColumneHeadingsText();
-	for (auto line : headerRows)
-	{
-		std::cout << line << "\n";
+	for (int i = 0;  i <= 1;  ++i) {
+		for (auto const& col: columns) {
+			if (options.*(col.flag)) {
+				os << std::setw(col.width)
+				   << (col.header[i])
+				   << '\t';
+			}
+		}
+		os << '\n';
 	}
+
+	return os;
 }
 
 std::string ReportWriter::correctFileSpec(std::string fileSpec) noexcept
 {
-	if (options->recurseSubDirectories)
-	{
-		return fileSpec;
-	}
-	else
-	{
-		auto newStart = fileSpec.find_last_of('/');
-		if (!newStart)
-		{
-			newStart = fileSpec.find_last_of('\\');
-			if (!newStart)
-			{
-				return fileSpec;
-			}
-		}
-		std::string fileName = fileSpec.substr(newStart + 1);
-
-		
-		return fileName;
-	}
+	return std::filesystem::path{fileSpec}.filename().string();
 }

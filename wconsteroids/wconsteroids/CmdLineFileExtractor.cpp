@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <iostream>
 #include <filesystem>
+#include <iterator>
+#include <ranges>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -29,21 +31,22 @@ namespace fsys = std::filesystem;
  * The searchedFiles flag indicates if the files in the directory have been
  *		added to the fileList vector.
  */
-class SubDirNode
+struct SubDirNode
 {
-public:
 	fsys::path fileSpec;
 	bool discovered = false;
 	bool searchedFiles = false;
+
 	SubDirNode(fsys::path path)
 		: fileSpec{ std::move(path) }
 	{
 	}
-	bool operator==(const SubDirNode& other)
+
+	bool operator==(const SubDirNode& other) const
 	{
 		return fileSpec == other.fileSpec;
 	}
-	~SubDirNode() = default;
+	bool operator!=(const SubDirNode& other) const = default;
 };
 
 /*
@@ -61,29 +64,21 @@ static std::vector<SubDirNode> subDirectories;
 /*
  * Search the current directory for sub directories.
  */
-static std::vector<SubDirNode> findSubDirs(SubDirNode currentDir)
+static auto findSubDirs(const SubDirNode& currentDir)
 {
-	std::vector<SubDirNode> newSubDirs;
+    auto is_missing = [](const SubDirNode& branch){
+        return std::ranges::find(subDirectories, branch) == subDirectories.end();
+    };
 
-	fsys::path cwd = currentDir.fileSpec;
+    auto subdirs = fsys::directory_iterator{currentDir.fileSpec}
+        | std::views::filter([](auto& f){ return f.is_directory(); })
+        | std::views::transform([](auto& f)->SubDirNode { return f.path(); })
+        | std::views::filter(is_missing);
 
-	for (auto it = fsys::directory_iterator(cwd);
-		it != fsys::directory_iterator(); ++it)
-	{
-		if (it->is_directory())
-		{
-			SubDirNode branch(it->path());
-			auto found = std::find(subDirectories.begin(), subDirectories.end(), branch);
-			if (found == subDirectories.end())
-			{
-				// Possible nasty side affects here by adding additional
-				// contents to subDirectories
-				newSubDirs.push_back(branch);
-			}
-		}
-	}
-
-	return newSubDirs;
+    // TODO (C++23?) return std::vector(subdirs);
+    auto newSubDirs = std::vector<SubDirNode>{};
+    std::ranges::copy(subdirs, std::back_inserter(newSubDirs));
+    return newSubDirs;
 }
 
 /*
