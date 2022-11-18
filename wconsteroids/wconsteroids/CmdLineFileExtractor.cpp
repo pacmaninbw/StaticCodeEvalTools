@@ -29,21 +29,22 @@ namespace fsys = std::filesystem;
  * The searchedFiles flag indicates if the files in the directory have been
  *		added to the fileList vector.
  */
-class SubDirNode
+struct SubDirNode
 {
-public:
 	fsys::path fileSpec;
 	bool discovered = false;
 	bool searchedFiles = false;
+
 	SubDirNode(fsys::path path)
 		: fileSpec{ std::move(path) }
 	{
 	}
+
 	bool operator==(const SubDirNode& other) const
 	{
 		return fileSpec == other.fileSpec;
 	}
-	~SubDirNode() = default;
+	bool operator!=(const SubDirNode& other) const = default;
 };
 
 /*
