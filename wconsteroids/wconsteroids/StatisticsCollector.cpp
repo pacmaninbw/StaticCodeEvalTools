@@ -38,37 +38,17 @@ void StatisticsCollector::countWordsAndWhiteSpace(std::string_view inputBuffer) 
 {
 	std::size_t wordCount = 0;
 	std::size_t whiteSpaceCount = 0;
-	auto currentChar = inputBuffer.begin();
-	auto endOfInput = inputBuffer.end();
 	bool inWord = false;
-	for ( ; currentChar != endOfInput; )
-	{
-            while (std::isspace(static_cast<unsigned char>(*currentChar)))
-		{
-			whiteSpaceCount++;
-			currentChar++;
-			if (currentChar == endOfInput)
-			{
-				break;
-			}
-		}
 
-		while (!(currentChar == endOfInput) && !isspace(*currentChar))
-		{
-			inWord = true;
-			currentChar++;
-			if (currentChar == endOfInput)
-			{
-				wordCount++;
-				inWord = false;
-				break;
-			}
-		}
-
-		if (inWord)
-		{
-			wordCount++;
+	for (unsigned char c: inputBuffer) {
+		if (std::isspace(c)) {
+			++whiteSpaceCount;
 			inWord = false;
+		} else {
+			if (!inWord) {
+				++wordCount;
+				inWord = true;
+			}
 		}
 	}
 
