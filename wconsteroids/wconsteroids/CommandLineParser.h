@@ -38,11 +38,23 @@ private:
 	std::vector<std::string_view> args;
 	std::string_view version;
 	std::string_view programName;
-	ProgramOptions options;
-	std::unordered_map<std::string_view, bool&> doubleDashArgs;
-	std::unordered_map<char, bool&> singleDashArgs;
-	std::vector<std::string_view> NotFlagsArgs;
-	bool useDefaultFlags;
+	ProgramOptions options{};
+	const std::unordered_map<std::string_view, bool&> doubleDashArgs{
+		{ "--bytes", options.byteCount },
+		{ "--chars", options.charCount },
+		{ "--lines", options.lineCount },
+		{ "--max-line-length", options.maxLineWidth },
+		{ "--words", options.wordCount }
+	};
+	const std::unordered_map<char, bool&> singleDashArgs{
+		{ 'c', options.byteCount },
+		{ 'm', options.charCount },
+		{ 'l', options.lineCount },
+		{ 'L', options.maxLineWidth },
+		{ 'w', options.wordCount }
+	};
+	std::vector<std::string_view> NotFlagsArgs{};
+	bool useDefaultFlags = true;
 };
 
 #endif // COMMAND_LINE_PARSER_H
