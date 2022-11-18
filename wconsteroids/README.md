@@ -19,7 +19,9 @@ Execution time is calculated separately for command line parsing with file name 
 
 The code compiles on Windows 10 and Linux in either Visual Studio or g++. The code was developed using C++20 but will also compile in C++17. Portability was enabled primarily by using the C++ std::filesystem library for directory access and manipulation. There are very limited conditional compilation statements.  
 
-A Makefile has not been written yet for Linux.
+This has become an Open Source project. Contributions have been added by users tms13 and beroset.
+
+A Linux Makefile has been added by tms13. 
 
 
  
