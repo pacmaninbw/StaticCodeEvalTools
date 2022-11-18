@@ -31,7 +31,7 @@ std::string FileProcessor::processAllFiles() noexcept
 				resultsToDisplay += fileResults;
 			}
 		}
-		catch (std::runtime_error& re)
+		catch (const std::runtime_error& re)
 		{
 			std::cerr << re.what() << "\n";
 		}
@@ -91,7 +91,7 @@ std::string FileProcessor::processFile(std::string fileName,
 		statistics.addTotals(totalStats);
 	}
 
-	catch (std::exception& ex)
+	catch (const std::exception& ex)
 	{
 		std::cerr <<
 			"Error: unable to complete processing file statistics for "

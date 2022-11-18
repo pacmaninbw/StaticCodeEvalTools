@@ -48,16 +48,16 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	catch (ShowHelpMessage&)
+	catch (const ShowHelpMessage& sh)
 	{
 		cmdLineParser.printHelpMessage();
 		cmdLineParser.printVersion();
 	}
-	catch (showVersions&)
+	catch (const showVersions& sv)
 	{
 		cmdLineParser.printVersion();
 	}
-	catch (std::exception &ex)
+	catch (const std::exception& ex)
 	{
 		std::cerr << "Error: " << ex.what() << "\n";
 		exit_status = EXIT_FAILURE;
