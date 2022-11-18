@@ -19,7 +19,7 @@ private:
 	std::size_t codeWithCommentCount = 0;
 	std::size_t widestLine = 0;
 	std::size_t blankLineCount = 0;
-	std::string fileName; 
+	std::string fileName = {};
 
 public:
 	FileStatistics();
