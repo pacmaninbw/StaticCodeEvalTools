@@ -3,7 +3,7 @@
 
 /*
  * This class is not generic except for the public functions. It is used
- * to contain the the values of the switches/flags on the command line.
+ * to contain the values of the switches/flags on the command line.
  */
 class ProgramOptions {
 public:
@@ -37,5 +37,5 @@ public:
 #endif // _DEBUG
 };
 
-#endif // PROGRAM_oPTIONS_STRUCT_H
+#endif // PROGRAM_OPTIONS_STRUCT_H
 

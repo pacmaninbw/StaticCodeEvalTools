@@ -21,7 +21,7 @@ protected:
 
 private:
 	std::vector<std::string> fileNames;
-	// The program options are necessary to know what to outout.
+	// The program options are necessary to know what to output.
 	const ProgramOptions& options;
 };
 
