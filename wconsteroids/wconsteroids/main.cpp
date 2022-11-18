@@ -5,6 +5,7 @@
 #include "Executionctrlvalues.h"
 #include "CommandLineParser.h"
 #include "FileProcessor.h"
+#include "SpecialExceptions.h"
 #include "ProgramOptions.h"
 #include "UtilityTimer.h"
 

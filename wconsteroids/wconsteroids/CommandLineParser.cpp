@@ -7,6 +7,7 @@
 #include "CommandLineParser.h"
 #include "CmdLineFileExtractor.h"
 #include "Executionctrlvalues.h"
+#include "SpecialExceptions.h"
 #include "UtilityTimer.h"
 
 // All operating sustem conditional code is at the top so that it can be easily

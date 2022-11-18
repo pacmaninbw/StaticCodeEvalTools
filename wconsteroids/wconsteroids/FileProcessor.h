@@ -5,8 +5,8 @@
 #include <vector>
 #include <fstream>
 
-#include "FileStatistics.h"
-#include "ProgramOptions.h"
+class FileStatistics;
+class ProgramOptions;
 
 class FileProcessor
 {

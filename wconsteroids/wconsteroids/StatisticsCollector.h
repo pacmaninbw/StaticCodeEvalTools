@@ -2,8 +2,9 @@
 #define STATISTICS_COLLECTOR_H
 
 #include <iterator>
-#include "FileStatistics.h"
 #include <string_view>
+
+class FileStatistics;
 
 class StatisticsCollector
 {

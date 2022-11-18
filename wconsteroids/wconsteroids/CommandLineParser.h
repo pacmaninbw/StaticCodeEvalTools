@@ -15,7 +15,6 @@
 #include <vector>
 #include <unordered_map>
 #include "Executionctrlvalues.h"
-#include "SpecialExceptions.h"
 
 class CommandLineParser
 {
