@@ -11,7 +11,7 @@
 class FileProcessor
 {
 public:
-	FileProcessor(std::vector<std::string>& filesToProcess, ProgramOptions& progOptions);
+	FileProcessor(std::vector<std::string> filesToProcess, const ProgramOptions& progOptions);
 	~FileProcessor() = default;
 	std::string processAllFiles() noexcept;
 
@@ -22,7 +22,7 @@ protected:
 private:
 	std::vector<std::string> fileNames;
 	// The program options are necessary to know what to outout.
-	ProgramOptions& options;
+	const ProgramOptions& options;
 };
 
 #endif // FILE_PROCESSOR_H
