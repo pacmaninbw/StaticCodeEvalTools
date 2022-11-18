@@ -39,7 +39,7 @@ public:
 		: fileSpec{ std::move(path) }
 	{
 	}
-	bool operator==(const SubDirNode& other)
+	bool operator==(const SubDirNode& other) const
 	{
 		return fileSpec == other.fileSpec;
 	}
