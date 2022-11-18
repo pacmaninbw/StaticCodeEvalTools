@@ -8,43 +8,7 @@
 
 static constexpr std::size_t InputBufferSize = 8 * 1024;
 
-FileProcessor::FileProcessor(std::vector<std::string> filesToProcess,
-                             const ProgramOptions& progOptions)
-    : fileNames { std::move(filesToProcess) },
-      options{ progOptions }
-{
-}
-
-std::string FileProcessor::processAllFiles() noexcept
-{
-	ReportWriter TotalsReporter(options);
-	FileStatistics allFiles;
-
-	std::string resultsToDisplay(TotalsReporter.getColumnHeadingAsOneString());
-
-	for (auto currentFile : fileNames)
-	{
-		try
-		{
-			std::string fileResults = processFile(currentFile, allFiles);
-			if (!fileResults.empty())
-			{
-				resultsToDisplay += fileResults;
-			}
-		}
-		catch (const std::runtime_error& re)
-		{
-			std::cerr << re.what() << "\n";
-		}
-	}
-
-	resultsToDisplay += TotalsReporter.getColumnHeadingAsOneString();
-	resultsToDisplay += TotalsReporter.getResultText(allFiles);
-
-	return resultsToDisplay;
-}
-
-void FileProcessor::processLoop(std::ifstream& inStream,
+static void processLoop(std::ifstream& inStream,
 	FileStatistics& statistics) noexcept
 {
 	StatisticsCollector fileAnalyzer(statistics);
@@ -58,7 +22,7 @@ void FileProcessor::processLoop(std::ifstream& inStream,
  * Processing a file includes reading the file, analyzing the input to collect
  * the statistics and then printing the statistics.
  */
-std::string FileProcessor::processFile(std::string fileName,
+static std::string processFile(const ProgramOptions& options, std::string fileName,
 	FileStatistics& totalStats)
 {
 	std::string fileResults;
@@ -101,4 +65,34 @@ std::string FileProcessor::processFile(std::string fileName,
 	}
 
 	return fileResults;
+}
+
+std::string processAllFiles(const std::vector<std::string>& fileNames,
+                             const ProgramOptions& progOptions)
+{
+	ReportWriter TotalsReporter(progOptions);
+	FileStatistics allFiles;
+
+	std::string resultsToDisplay(TotalsReporter.getColumnHeadingAsOneString());
+
+	for (const auto& currentFile : fileNames)
+	{
+		try
+		{
+			std::string fileResults = processFile(progOptions, currentFile, allFiles);
+			if (!fileResults.empty())
+			{
+				resultsToDisplay += fileResults;
+			}
+		}
+		catch (const std::runtime_error& re)
+		{
+			std::cerr << re.what() << "\n";
+		}
+	}
+
+	resultsToDisplay += TotalsReporter.getColumnHeadingAsOneString();
+	resultsToDisplay += TotalsReporter.getResultText(allFiles);
+
+	return resultsToDisplay;
 }

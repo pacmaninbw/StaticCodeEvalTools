@@ -8,20 +8,6 @@
 #include "ProgramOptions.h"
 #include "UtilityTimer.h"
 
-static void mainLoop(ExecutionCtrlValues& executionCtrl)
-{
-	std::string resultsToDisplay;
-
-	ProgramOptions& options = executionCtrl.options;
-	std::vector<std::string> filesToProcess = executionCtrl.filesToProcess;
-
-	FileProcessor fileProcessor(filesToProcess, options);
-	resultsToDisplay = fileProcessor.processAllFiles();
-	// Yes we want to flush the standard output. All possible output has been
-	// collected.
-	std::cout << resultsToDisplay << std::endl;
-}
-
 int main(int argc, char* argv[])
 {
 	ExecutionCtrlValues executionCtrl;
@@ -38,7 +24,7 @@ int main(int argc, char* argv[])
 		if (cmdLineParser.parse(executionCtrl))
 		{
 			UtilityTimer stopWatch;
-			mainLoop(executionCtrl);
+                        std::cout << processAllFiles(executionCtrl.filesToProcess, executionCtrl.options) << std::endl;
 			if (executionCtrl.options.enableExecutionTime)
 			{
 				stopWatch.stopTimerAndReport(
