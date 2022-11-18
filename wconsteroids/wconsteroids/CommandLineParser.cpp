@@ -142,7 +142,7 @@ void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 void CommandLineParser::extractAllArguments()
 {
 	// start after the program name.
-	for (std::size_t i = 1; i < args.size(); i++)
+	for (std::size_t i = 0; i < args.size(); i++)
 	{
 		if (args[i][0] == '-')
 		{
@@ -249,17 +249,3 @@ void CommandLineParser::SetDefaultOptionsWhenNoFlags()
 	options.lineCount = true;
 }
 
-void CommandLineParser::initDashMaps()
-{
-	doubleDashArgs.insert({ "--bytes", options.byteCount });
-	doubleDashArgs.insert({ "--chars", options.charCount });
-	doubleDashArgs.insert({ "--lines", options.lineCount });
-	doubleDashArgs.insert({ "--max-line-length", options.maxLineWidth });
-	doubleDashArgs.insert({ "--words", options.wordCount });
-
-	singleDashArgs.insert({ 'c', options.byteCount });
-	singleDashArgs.insert({ 'm', options.charCount });
-	singleDashArgs.insert({ 'l', options.lineCount });
-	singleDashArgs.insert({ 'L', options.maxLineWidth });
-	singleDashArgs.insert({ 'w', options.wordCount });
-}

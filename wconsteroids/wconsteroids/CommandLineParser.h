@@ -29,7 +29,6 @@ protected:
 	void processSingleDashOptions(std::string_view currentArg);
 	void processDoubleDashOptions(std::string_view currentArg);
 	void SetDefaultOptionsWhenNoFlags();
-	void initDashMaps();
 	void findAllFilesToProcess(ExecutionCtrlValues& execVars);
 	void extractAllArguments();
 	std::string messageProgramName();
