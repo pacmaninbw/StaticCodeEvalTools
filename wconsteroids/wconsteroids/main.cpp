@@ -48,15 +48,6 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	catch (ShowHelpMessage&)
-	{
-		cmdLineParser.printHelpMessage();
-		cmdLineParser.printVersion();
-	}
-	catch (showVersions&)
-	{
-		cmdLineParser.printVersion();
-	}
 	catch (std::exception &ex)
 	{
 		std::cerr << "Error: " << ex.what() << "\n";

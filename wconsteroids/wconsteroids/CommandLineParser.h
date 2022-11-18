@@ -15,15 +15,15 @@
 #include <vector>
 #include <unordered_map>
 #include "Executionctrlvalues.h"
-#include "SpecialExceptions.h"
 
 class CommandLineParser
 {
 public:
 	CommandLineParser(int argc, char* argv[], std::string progVersion);
 	bool parse(ExecutionCtrlValues& execVars);
-	void printHelpMessage();
-	void printVersion();
+	void printHelpMessage() const;
+	void printVersion() const noexcept;
+	std::string_view getProgName() const noexcept { return programName; };
 
 protected:
 	void processSingleDashOptions(std::string_view currentArg);
@@ -31,11 +31,11 @@ protected:
 	void SetDefaultOptionsWhenNoFlags();
 	void findAllFilesToProcess(ExecutionCtrlValues& execVars);
 	void extractAllArguments();
-	std::string messageProgramName();
 
 private:
 	std::vector<std::string_view> args;
-	std::string version;
+	std::string_view version;
+	std::string_view programName;
 	ProgramOptions options;
 	std::unordered_map<std::string_view, bool&> doubleDashArgs;
 	std::unordered_map<char, bool&> singleDashArgs;
