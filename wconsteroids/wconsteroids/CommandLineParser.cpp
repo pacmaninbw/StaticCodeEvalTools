@@ -8,15 +8,20 @@
 #include "CommandLineParser.h"
 #include "CmdLineFileExtractor.h"
 #include "Executionctrlvalues.h"
-#include "SpecialExceptions.h"
 #include "UtilityTimer.h"
+
+static auto simplify_name(char *path)
+{
+	return std::filesystem::path{path ? path : "wconsteroids"}
+		.filename().string();
+}
 
 /*
  * Begin public interface.
  */
 CommandLineParser::CommandLineParser(int argc, char* argv[],
 	std::string progVersion)
-	: program_name{ find_prog_name(argv[0]) },
+	: program_name{ simplify_name(argv[0]) },
 	args(argv + 1, argv + argc),
 	version{ std::move(progVersion) },
 	programName{ argv[0] },
@@ -38,8 +43,6 @@ CommandLineParser::CommandLineParser(int argc, char* argv[],
 	NotFlagsArgs{ {} },
 	useDefaultFlags{ true }
 {
-	std::filesystem::path programPath(argv[0]);
-	programName = std::move(programPath.filename().string());
 
 }
 
