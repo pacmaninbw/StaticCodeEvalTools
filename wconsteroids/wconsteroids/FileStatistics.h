@@ -51,13 +51,14 @@ public:
 	inline void incrementCodeWithComment() { codeWithCommentCount++; }
 	std::size_t getCodeWithComment() const { return codeWithCommentCount; }
 	inline void incrementBlankLines() { blankLineCount++; }
-	std::size_t getBlankLines() { return blankLineCount; }
+	std::size_t getBlankLines() const { return blankLineCount; }
 	void updateWidestLine(std::size_t width) {
 		widestLine = (width > widestLine)? width : widestLine;
 	}
-	std::size_t getWidestLine() { return widestLine; }
-	float getPerecentageOfCode() {
-		return static_cast<float>(codeLineCount / totalLineCount);
+	std::size_t getWidestLine() const { return widestLine; }
+	std::size_t getPerecentageOfCode() const {
+		// 100 * codeLineCount / totalLineCount, plus ½ to round to nearest
+		return (codeLineCount * 200 + totalLineCount) / totalLineCount / 2;
 	}
 };
 

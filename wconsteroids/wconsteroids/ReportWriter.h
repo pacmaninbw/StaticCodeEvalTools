@@ -20,9 +20,9 @@ public:
 		: options { progOptions }
 	{
 	}
-	void printResult(FileStatistics& resultsForOutput) noexcept;
+	std::ostream& printResult(FileStatistics& resultsForOutput, std::ostream& os);
 	std::string getResultText(FileStatistics& resultsForOutput) noexcept;
-	void printColumnHeadings() noexcept;
+	std::ostream& printColumnHeadings(std::ostream& os) noexcept;
 	// Returns 2 lines of properly formated text
 	std::vector<std::string> getColumneHeadingsText() noexcept;
 	std::string getColumnHeadingAsOneString() noexcept;
