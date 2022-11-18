@@ -6,7 +6,7 @@
  * list of files to process. This class contains all the information to
  * execute the program after the command line has been processed.
  *
- * This class is fairly generic and can be reused by multiple programs that
+ * This struct is fairly generic and can be reused by multiple programs that
  * process command line arguments.
  */
 #include <vector>
