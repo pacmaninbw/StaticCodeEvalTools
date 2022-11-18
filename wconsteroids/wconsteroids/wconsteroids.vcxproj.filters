@@ -33,9 +33,6 @@
     <ClCompile Include="StatisticsCollector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Executionctrlvalues.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ProgramOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

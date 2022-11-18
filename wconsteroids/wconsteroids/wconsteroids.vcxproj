@@ -137,7 +137,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CmdLineFileExtractor.cpp" />
-    <ClCompile Include="Executionctrlvalues.cpp" />
     <ClCompile Include="CommandLineParser.cpp" />
     <ClCompile Include="StatisticsCollector.cpp" />
     <ClCompile Include="FileProcessor.cpp" />

@@ -12,8 +12,8 @@
 
 static auto simplify_name(char *path)
 {
-	return std::filesystem::path{path ? path : "wconsteroids"}
-		.filename().string();
+	return std::move(std::filesystem::path{path ? path : "wconsteroids"}
+		.filename().string());
 }
 
 /*

@@ -107,5 +107,8 @@ std::ostream& ReportWriter::printColumnHeadings(std::ostream& os) noexcept
 
 std::string ReportWriter::correctFileSpec(std::string fileSpec) noexcept
 {
-	return std::filesystem::path{fileSpec}.filename().string();
+	// When using the -R switch there may be multiple files in the tree with
+	// the same name, so use the full file spec in that case.
+	return (options.recurseSubDirectories)? fileSpec:
+		std::filesystem::path{fileSpec}.filename().string();
 }
