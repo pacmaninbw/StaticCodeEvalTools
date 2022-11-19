@@ -25,7 +25,7 @@ namespace fsys = std::filesystem;
  * searched for sub directories find the applicable files in each sub
  * directory.
  * 
- * The booleans in this class indicate the phase of processing completed.
+ * The booleans in the SubDirNode struct indicate the phase of processing completed.
  * The discovered value indicates whether the sub directory has been searched
  *		for more sub directories.
  * The searchedFiles flag indicates if the files in the directory have been
@@ -57,6 +57,8 @@ struct SubDirNode
 */
 static bool SearchSubDirs;
 static std::vector<std::string> fileList;
+// fileExtentions needs to be a vector string, there are bugs introduced
+// when it is a string_view, at least in MSVC++ 2022.
 static std::vector<std::string> fileExtensions;
 static std::vector<std::string_view> nonFlagArgs;
 static std::vector<SubDirNode> subDirectories;
@@ -271,9 +273,4 @@ void CmdLineFileExtractor::findAllRequiredFiles() noexcept
 std::vector<std::string> CmdLineFileExtractor::getFileList() const noexcept
 {
 	return fileList;
-}
-
-std::vector<std::string> CmdLineFileExtractor::getFileTypeList() const noexcept
-{
-	return fileExtensions;
 }

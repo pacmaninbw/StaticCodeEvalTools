@@ -90,7 +90,6 @@ void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 	CmdLineFileExtractor fileExtractor(NotFlagsArgs, searchSubDirs);
 	fileExtractor.findAllRequiredFiles();
 	execVars.filesToProcess = fileExtractor.getFileList();
-	execVars.fileSpecTypes = fileExtractor.getFileTypeList();
 }
 
 void CommandLineParser::extractAllArguments()
