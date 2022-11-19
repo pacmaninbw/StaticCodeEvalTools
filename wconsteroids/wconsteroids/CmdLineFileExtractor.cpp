@@ -214,7 +214,10 @@ static void addListedFilesToFileList()
 	for (auto fileSpec : nonFlagArgs)
 	{
 		std::string fSpec(fileSpec);
-		fileList.push_back(fSpec);
+		if (!containsWildCard(fileSpec))
+		{
+			fileList.push_back(fSpec);
+		}
 	}
 }
 
