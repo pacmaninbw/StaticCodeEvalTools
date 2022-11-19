@@ -59,7 +59,6 @@ static const Column columns[] =
 	  "Blank", "Lines", 6 },
 };
 
-
 std::ostream& ReportWriter::printResult(FileStatistics& resultsForOutput, std::ostream& os)
 {
 	for (auto const& col: columns) {
@@ -89,6 +88,7 @@ std::string ReportWriter::getColumnHeadingAsOneString() noexcept
 	printColumnHeadings(os);
 	return os.str();
 }
+
 std::ostream& ReportWriter::printColumnHeadings(std::ostream& os) noexcept
 {
 	for (int i = 0;  i <= 1;  ++i) {
