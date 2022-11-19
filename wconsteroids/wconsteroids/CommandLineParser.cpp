@@ -94,23 +94,24 @@ void CommandLineParser::findAllFilesToProcess(ExecutionCtrlValues& execVars)
 
 void CommandLineParser::extractAllArguments()
 {
-	// start after the program name.
-	for (std::size_t i = 0; i < args.size(); i++)
+	// Since argv[0] is removed in the constructor we
+	// can perform a ranged for loop.
+	for (auto arg: args)
 	{
-		if (args[i][0] == '-')
+		if (arg[0] == '-')
 		{
-			if (args[i][1] == '-')
+			if (arg[1] == '-')
 			{
-				processDoubleDashOptions(args[i]);
+				processDoubleDashOptions(arg);
 			}
 			else
 			{
-				processSingleDashOptions(args[i]);
+				processSingleDashOptions(arg);
 			}
 		}
 		else
 		{
-			NotFlagsArgs.push_back(std::move(args[i]));
+			NotFlagsArgs.push_back(std::move(arg));
 		}
 	}
 }
