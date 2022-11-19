@@ -32,11 +32,12 @@ cmake -DCMAKE_BUILD_TYPE=Release -B build
 cmake --build build -j -t install
 ```
 
-The code compiles on Windows 10 and Linux in either Visual Studio or g++. The code was developed using C++20 but will also compile in C++17. Portability was enabled primarily by using the C++ std::filesystem library for directory access and manipulation. There are very limited conditional compilation statements.  
+The code compiles on Windows 10 and Linux in either Visual Studio or g++. The code was developed using C++20. Portability was enabled primarily by using the C++ std::filesystem library for directory access and manipulation. There are very limited conditional compilation statements.  
 
 This has become an Open Source project. Contributions have been added by users tms13 and beroset.
 
 A Linux Makefile has been added by tms13. 
+A CMake solution has been added by beroset.
 
 
  

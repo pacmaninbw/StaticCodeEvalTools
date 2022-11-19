@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     # warning level 4 and all warnings as errors
     target_compile_options(wconsteroids PRIVATE /W4 /WX)
-elsef(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # lots of warnings and all warnings as errors
     target_compile_options(wconsteroids PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
