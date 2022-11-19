@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -77,7 +78,7 @@ void CommandLineParser::printVersion() const noexcept
 		" <http://gnu.org/licenses/gpl.html>.\n"
 		"This is free software : you are free to change and redistribute it.\n"
 		"\tThere is NO WARRANTY, to the extent permitted by law.\n"
-		"\nWritten by Paul A. Chernick\n";
+		"\nWritten by Paul A. Chernick, Toby Speight and Edward Beroset\n";
 	// flush the buffer to make sure the entire message is visible
 	std::cout << std::flush;
 	exit(EXIT_SUCCESS);
