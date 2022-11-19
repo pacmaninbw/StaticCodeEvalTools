@@ -67,13 +67,13 @@ void StatisticsCollector::updateWidestLine(std::string_view::const_iterator& cur
 	std::size_t lineWidth = endOfLine - currentChar;
 
 	// See https://github.com/coreutils/coreutils/blob/master/src/wc.c to
-	// observe how tabs are counted.
+	// observe how tabs are counted. Lines with tabs report a ssome what
+	// greater value here than from wc.
 	std::size_t tabCount = std::count(currentChar, endOfLine, '\t');
 	lineWidth += tabCount * tabSize;
 
 
 	fileStatistics.updateWidestLine(lineWidth);
 
-	std::string line(currentChar, endOfLine);
 	currentChar = endOfLine;
 }
