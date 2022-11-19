@@ -11,12 +11,11 @@
 int main(int argc, char* argv[])
 {
 	ExecutionCtrlValues executionCtrl;
-	std::string versionString("1.0.0");
 
 	std::locale::global(std::locale{""});
 	std::clog.imbue(std::locale{});
 
-	CommandLineParser cmdLineParser(argc, argv, versionString);
+	CommandLineParser cmdLineParser(argc, argv);
 
 	try
 	{

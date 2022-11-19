@@ -1,12 +1,40 @@
 #ifndef PROGRAM_OPTIONS_STRUCT_H
 #define PROGRAM_OPTIONS_STRUCT_H
 
+#include <string>
+#include <string_view>
+#include <unordered_map>
+
 /*
  * This class is not generic except for the public functions. It is used
  * to contain the values of the switches/flags on the command line.
  */
 class ProgramOptions {
 public:
+	ProgramOptions();
+	void initFromEnvironmentVars();
+	void SetDefaultOptionsWhenNoFlags() noexcept;
+	void processArgument(std::string_view arg) noexcept;
+	ProgramOptions& operator=(const ProgramOptions& original)
+	{
+		blankLineCount = original.blankLineCount;
+		byteCount = original.byteCount;
+		charCount = original.charCount;
+		codeCount = original.codeCount;
+		commentCount = original.commentCount;
+		lineCount = original.lineCount;
+		maxLineWidth = original.maxLineWidth;
+		percentages = original.percentages;
+		whitespaceCount = original.whitespaceCount;
+		wordCount = original.wordCount;
+		enableExecutionTime = original.enableExecutionTime;
+		recurseSubDirectories = original.recurseSubDirectories;
+		version = original.version;
+		programName = original.programName;
+
+		return *this;
+	}
+
 	// Output control variables
 	bool blankLineCount = false;
 	bool byteCount = false;
@@ -22,16 +50,34 @@ public:
 	// input control variables
 	bool recurseSubDirectories = false;
 
-	ProgramOptions()
-	{
+	const std::unordered_map<std::string_view, bool&> doubleDashArgs{
+		{ "--bytes", byteCount },
+		{ "--chars", charCount },
+		{ "--lines", lineCount },
+		{ "--max-line-length", maxLineWidth },
+		{ "--words", wordCount }
+	};
+	const std::unordered_map<char, bool&> singleDashArgs{
+		{ 'c', byteCount },
+		{ 'm', charCount },
+		{ 'l', lineCount },
+		{ 'L', maxLineWidth },
+		{ 'w', wordCount }
+	};
+	std::string_view version = "1.0.0";
+	std::string programName = {};
 
-	}
-	void initFromEnvironmentVars()
-	{
+protected:
+	void printHelpMessage() const;
+	void printVersion() const noexcept;
+	void processSingleDashOptions(std::string_view currentArg);
+	void processDoubleDashOptions(std::string_view currentArg);
 
-	}
+private:
+	bool useDefaultFlags = true;
 
 #ifdef _DEBUG
+public:
 	void singleLine(std::string flag, bool flagValue);
 	void debugPrint();
 #endif // _DEBUG
