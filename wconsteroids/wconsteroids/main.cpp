@@ -24,7 +24,8 @@ int main(int argc, char* argv[])
 		if (cmdLineParser.parse(executionCtrl))
 		{
 			UtilityTimer stopWatch;
-                        std::cout << processAllFiles(executionCtrl.filesToProcess, executionCtrl.options) << std::endl;
+            std::cout << processAllFiles(executionCtrl.filesToProcess, executionCtrl.options)
+				<< std::endl;
 			if (executionCtrl.options.enableExecutionTime)
 			{
 				stopWatch.stopTimerAndReport(

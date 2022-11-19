@@ -17,7 +17,7 @@
 struct ExecutionCtrlValues
 {
 	ProgramOptions options = {};
-	std::vector<std::string_view> fileSpecTypes = {};
+	std::vector<std::string> fileSpecTypes = {};
 	std::vector<std::string> filesToProcess = {};
 
 	void initFromEnvironmentVariables()

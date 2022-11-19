@@ -57,7 +57,7 @@ struct SubDirNode
 */
 static bool SearchSubDirs;
 static std::vector<std::string> fileList;
-static std::vector<std::string_view> fileExtentions;
+static std::vector<std::string> fileExtensions;
 static std::vector<std::string_view> nonFlagArgs;
 static std::vector<SubDirNode> subDirectories;
 
@@ -126,19 +126,6 @@ static bool containsWildCard(std::string_view fileSpec)
 	return fileSpec.find('*') != std::string::npos;
 }
 
-static std::string getFileExtention(std::string_view fname)
-{
-	std::string fileExtention = "";
-
-	std::size_t lastDotLocation = fname.find_last_of('.');
-	if (lastDotLocation != std::string::npos)
-	{
-		fileExtention = fname.substr(lastDotLocation);
-	}
-
-	return fileExtention;
-}
-
 static bool isASpecifiedFileType(std::string notAFlag) noexcept
 {
 	// Exclude file type specifications since they are not actual file names
@@ -147,14 +134,15 @@ static bool isASpecifiedFileType(std::string notAFlag) noexcept
 		return false;
 	}
 
-	std::string fileExtension = getFileExtention(notAFlag);
+	fsys::path tempPath(notAFlag);
+	std::string fileExtension = tempPath.extension().string();
 	if (fileExtension.empty())
 	{
 		return false;
 	}
 
-	return std::find(fileExtentions.begin(),
-		fileExtentions.end(), fileExtension) != fileExtentions.end();
+	return std::find(fileExtensions.begin(),
+		fileExtensions.end(), fileExtension) != fileExtensions.end();
 }
 
 static void searchDirectoryForFiles(SubDirNode currentDir)
@@ -203,17 +191,18 @@ static std::vector<std::string_view> findAllFileTypeSpecs()
 	return fileSpecTypes;
 }
 
-static std::vector<std::string_view> getFileTypes()
+static std::vector<std::string> getFileTypes()
 {
-	std::vector<std::string_view> fileTypes;
+	std::vector<std::string> fileTypes;
 	std::vector<std::string_view> fileSpecTypes = findAllFileTypeSpecs();
 
 	for (auto fileTypeSpec : fileSpecTypes)
 	{
-		std::string fileExtention = getFileExtention(fileTypeSpec);
-		if (!fileExtention.empty())
+		fsys::path tempPath(fileTypeSpec);
+		std::string fileExtension = tempPath.extension().string();
+		if (!fileExtension.empty())
 		{
-			fileTypes.push_back(fileExtention);
+			fileTypes.push_back(fileExtension);
 		}
 	}
 
@@ -232,7 +221,7 @@ static void addListedFilesToFileList()
 static void findAllInputFiles()
 {
 	// if there is nothing to search for quit.
-	if (!SearchSubDirs && fileExtentions.size() == 0)
+	if (!SearchSubDirs && fileExtensions.size() == 0)
 	{
 		return;
 	}
@@ -270,7 +259,8 @@ CmdLineFileExtractor::CmdLineFileExtractor(
 
 void CmdLineFileExtractor::findAllRequiredFiles() noexcept
 {
-	fileExtentions = getFileTypes();
+	fileExtensions.clear();
+	fileExtensions = getFileTypes();
 	addListedFilesToFileList();
 	findAllInputFiles();
 }
@@ -280,7 +270,7 @@ std::vector<std::string> CmdLineFileExtractor::getFileList() const noexcept
 	return fileList;
 }
 
-std::vector<std::string_view> CmdLineFileExtractor::getFileTypeList() const noexcept
+std::vector<std::string> CmdLineFileExtractor::getFileTypeList() const noexcept
 {
-	return fileExtentions;
+	return fileExtensions;
 }
