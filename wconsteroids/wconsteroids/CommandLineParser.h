@@ -22,7 +22,14 @@ public:
 	bool parse(ExecutionCtrlValues& execVars);
 
 protected:
+	/*
+	 * Gets any file names listed in the command line. May perform a find
+	 * file operation for file names with wildcard characters.
+	 */
 	void findAllFilesToProcess(ExecutionCtrlValues& execVars);
+	/*
+	 * Get all the command line arguments and update the ProgramOptions.
+	 */
 	void extractAllArguments();
 
 private:
