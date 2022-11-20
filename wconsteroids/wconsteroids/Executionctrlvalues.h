@@ -8,6 +8,9 @@
  *
  * This struct is fairly generic and can be reused by multiple programs that
  * process command line arguments.
+ * 
+ * The ProgramOptions class contains all information that is dependent on 
+ * program implementation.
  */
 #include <vector>
 #include <string>
