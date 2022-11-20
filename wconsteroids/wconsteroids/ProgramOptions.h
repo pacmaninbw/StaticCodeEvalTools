@@ -12,8 +12,21 @@
 class ProgramOptions {
 public:
 	ProgramOptions();
+	/*
+	 * Get any environment values and set them, this is an alternate to
+	 * using the command line. Not currently used in this program.
+	 */
 	void initFromEnvironmentVars();
+	/*
+	 * SetDefaultOptionsWhenNoFlags(), make sure default values are set
+	 * when necessary.
+	 */
 	void SetDefaultOptionsWhenNoFlags() noexcept;
+	/*
+	 * processArgument() is called by the command line parser to update 
+	 * fields in this class. This hides the implementation from the
+	 * command line parser.
+	 */
 	void processArgument(std::string_view arg) noexcept;
 	ProgramOptions& operator=(const ProgramOptions& original)
 	{
