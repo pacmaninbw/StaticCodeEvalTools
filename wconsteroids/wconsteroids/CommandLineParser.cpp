@@ -15,6 +15,12 @@ static std::string simplify_name(char *path)
 /*
  * Begin public interface.
  */
+
+/*
+ * Turns all command line arguments into a vector of string_view
+ * to make additional processing easier and more C++ like rather
+ * than old style C code. Removes any dependency on cstring (string.h).
+ */
 CommandLineParser::CommandLineParser(int argc, char* argv[])
 	: args(argv + 1, argv + argc)
 {
