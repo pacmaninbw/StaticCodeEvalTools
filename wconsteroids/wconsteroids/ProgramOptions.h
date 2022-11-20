@@ -77,6 +77,9 @@ public:
 		{ 'L', maxLineWidth },
 		{ 'w', wordCount }
 	};
+	/*
+	 * Program name and program version should be included in any implementation.
+	 */
 	std::string_view version = "1.0.0";
 	std::string programName = {};
 
