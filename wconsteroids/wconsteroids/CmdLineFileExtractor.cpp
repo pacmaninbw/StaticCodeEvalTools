@@ -8,6 +8,7 @@
 #include <vector>
 #include "CmdLineFileExtractor.h"
 
+// std::filesystem can make lines very long.
 namespace fsys = std::filesystem;
 
 /*
