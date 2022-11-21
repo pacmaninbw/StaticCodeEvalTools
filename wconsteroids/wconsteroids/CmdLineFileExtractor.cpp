@@ -148,20 +148,36 @@ static bool isASpecifiedFileType(std::string notAFlag) noexcept
 		fileExtensions.end(), fileExtension) != fileExtensions.end();
 }
 
+static auto searchDirectoryForFilesByType(SubDirNode currentDir, std::string type)
+{
+	auto is_missing = [](const std::string& branch) {
+		return std::ranges::find(fileList, branch) == fileList.end();
+	};
+
+	auto is_type = [&type](auto& f) { return f.path().extension().string() == type; };
+
+	auto files = fsys::directory_iterator{ currentDir.fileSpec }
+	| std::views::filter([](auto& f) { return f.is_regular_file() ||
+		f.is_character_file(); })
+		| std::views::filter(is_type)
+		| std::views::transform([](auto& f) { return f.path().string(); })
+		| std::views::filter(is_missing);
+
+	auto newFiles = std::vector<std::string>{};
+	std::ranges::copy(files, std::back_inserter(newFiles));
+
+	return newFiles;
+}
+
 static void searchDirectoryForFiles(SubDirNode currentDir)
 {
-
-	for (auto it = fsys::directory_iterator(currentDir.fileSpec);
-		it != fsys::directory_iterator(); ++it)
+	// In the case of wildcard specification add the files to the file list in
+	// the order they were specified.
+	for (auto fileType : fileExtensions)
 	{
-		if (it->is_regular_file() || it->is_character_file())
-		{
-			std::string fileName{ it->path().generic_string() };
-			if (isASpecifiedFileType(fileName))
-			{
-				fileList.push_back(fileName);
-			}
-		}
+		std::vector<std::string> newFiles =
+			searchDirectoryForFilesByType(currentDir, fileType);
+		std::copy(newFiles.begin(), newFiles.end(), std::back_inserter(fileList));
 	}
 }
 
