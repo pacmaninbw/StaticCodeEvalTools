@@ -123,29 +123,9 @@ static void discoverAllSubDirs()
 	}
 }
 
-
 static bool containsWildCard(std::string_view fileSpec)
 {
 	return fileSpec.find('*') != std::string::npos;
-}
-
-static bool isASpecifiedFileType(std::string notAFlag) noexcept
-{
-	// Exclude file type specifications since they are not actual file names
-	if (containsWildCard(notAFlag))
-	{
-		return false;
-	}
-
-	fsys::path tempPath(notAFlag);
-	std::string fileExtension = tempPath.extension().string();
-	if (fileExtension.empty())
-	{
-		return false;
-	}
-
-	return std::find(fileExtensions.begin(),
-		fileExtensions.end(), fileExtension) != fileExtensions.end();
 }
 
 static auto searchDirectoryForFilesByType(SubDirNode currentDir, std::string type)
