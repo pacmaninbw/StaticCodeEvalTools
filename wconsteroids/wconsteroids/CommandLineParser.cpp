@@ -32,6 +32,8 @@ bool CommandLineParser::parse(ExecutionCtrlValues& execVars)
 {
 	UtilityTimer stopWatch;
 
+	execVars.initFromEnvironmentVariables();
+
 	extractAllArguments();
 
 	findAllFilesToProcess(execVars);

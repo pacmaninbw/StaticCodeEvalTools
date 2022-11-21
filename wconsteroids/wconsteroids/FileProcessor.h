@@ -5,8 +5,8 @@
 #include <vector>
 
 class ProgramOptions;
+struct ExecutionCtrlValues;
 
-std::string processAllFiles(const std::vector<std::string>& fileNames,
-                             const ProgramOptions& progOptions);
+std::string processAllFiles(const ExecutionCtrlValues& excutionControl);
 
 #endif // FILE_PROCESSOR_H

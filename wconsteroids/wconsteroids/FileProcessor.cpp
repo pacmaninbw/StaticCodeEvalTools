@@ -1,12 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "StatisticsCollector.h"
+#include "Executionctrlvalues.h"
 #include "FileProcessor.h"
 #include "FileStatistics.h"
+#include "ProgramOptions.h"
 #include "ReportWriter.h"
-
-static constexpr std::size_t InputBufferSize = 8 * 1024;
+#include "StatisticsCollector.h"
 
 static void processLoop(std::ifstream& inStream,
 	FileStatistics& statistics) noexcept
@@ -67,19 +67,19 @@ static std::string processFile(const ProgramOptions& options, std::string fileNa
 	return fileResults;
 }
 
-std::string processAllFiles(const std::vector<std::string>& fileNames,
-                             const ProgramOptions& progOptions)
+std::string processAllFiles(const ExecutionCtrlValues& executionControl)
 {
-	ReportWriter TotalsReporter(progOptions);
+	ReportWriter TotalsReporter(executionControl.options);
 	FileStatistics allFiles;
 
 	std::string resultsToDisplay(TotalsReporter.getColumnHeadingAsOneString());
 
-	for (const auto& currentFile : fileNames)
+	for (const auto& currentFile : executionControl.filesToProcess)
 	{
 		try
 		{
-			std::string fileResults = processFile(progOptions, currentFile, allFiles);
+			std::string fileResults = processFile(executionControl.options,
+				currentFile, allFiles);
 			if (!fileResults.empty())
 			{
 				resultsToDisplay += fileResults;

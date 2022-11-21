@@ -1,30 +1,24 @@
 #include <cstdlib>
 #include <iostream>
-#include <string>
-#include <vector>
 #include "Executionctrlvalues.h"
 #include "CommandLineParser.h"
 #include "FileProcessor.h"
-#include "ProgramOptions.h"
 #include "UtilityTimer.h"
 
 int main(int argc, char* argv[])
 {
-	ExecutionCtrlValues executionCtrl;
-
 	std::locale::global(std::locale{""});
 	std::clog.imbue(std::locale{});
 
-	CommandLineParser cmdLineParser(argc, argv);
-
 	try
 	{
-		executionCtrl.initFromEnvironmentVariables();
+		ExecutionCtrlValues executionCtrl;
+		CommandLineParser cmdLineParser(argc, argv);
+
 		if (cmdLineParser.parse(executionCtrl))
 		{
 			UtilityTimer stopWatch;
-            std::cout << processAllFiles(executionCtrl.filesToProcess, executionCtrl.options)
-				<< std::endl;
+            std::cout << processAllFiles(executionCtrl) << std::endl;
 			if (executionCtrl.options.enableExecutionTime)
 			{
 				stopWatch.stopTimerAndReport(
