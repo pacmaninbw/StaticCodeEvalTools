@@ -14,8 +14,7 @@ public:
 
 protected:
 	void updateWidestLine(std::string_view::const_iterator& currentChar,
-                              std::string_view::const_iterator end) noexcept;
-	void lineWidth(std::string_view line) noexcept;
+		std::string_view::const_iterator end) noexcept;
 	void countWordsAndWhiteSpace(std::string_view inputBuffer) noexcept;
 
 private:
