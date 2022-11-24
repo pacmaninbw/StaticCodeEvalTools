@@ -1,3 +1,6 @@
+#include "../doctest/doctest/doctest.h"
+
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <algorithm>
 #include <filesystem>
 #include <iomanip>
@@ -8,6 +11,7 @@
 #include "FileStatistics.h"
 #include "ProgramOptions.h"
 #include "ReportWriter.h"
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 struct Column {
 	bool ProgramOptions::* flag;

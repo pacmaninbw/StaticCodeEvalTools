@@ -1,5 +1,9 @@
+#include "../doctest/doctest/doctest.h"
+
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include "FileStatistics.h"
 #include <string>
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 FileStatistics::FileStatistics() = default;
 

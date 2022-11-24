@@ -1,3 +1,6 @@
+#include "../doctest/doctest/doctest.h"
+
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -7,6 +10,7 @@
 #include "ProgramOptions.h"
 #include "ReportWriter.h"
 #include "StatisticsCollector.h"
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 static void processLoop(std::ifstream& inStream,
 	FileStatistics& statistics) noexcept

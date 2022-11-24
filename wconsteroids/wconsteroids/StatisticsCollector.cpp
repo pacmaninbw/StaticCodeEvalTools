@@ -1,3 +1,6 @@
+#include "../doctest/doctest/doctest.h"
+
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <algorithm>
 #include <cctype>
 #include <filesystem>
@@ -7,6 +10,7 @@
 #include <string>
 #include "StatisticsCollector.h"
 #include "FileStatistics.h"
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 static constexpr std::size_t tabSize = 8;
 

@@ -1,3 +1,6 @@
+#include "../doctest/doctest/doctest.h"
+
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <filesystem>
 #include <string>
 #include <string_view>
@@ -6,6 +9,7 @@
 #include "CmdLineFileExtractor.h"
 #include "Executionctrlvalues.h"
 #include "UtilityTimer.h"
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 static std::string simplify_name(char *path)
 {

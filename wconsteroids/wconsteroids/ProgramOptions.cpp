@@ -1,9 +1,13 @@
+#include "../doctest/doctest/doctest.h"
+
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 #include "ProgramOptions.h"
+DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 /*
  * Public interfaces.
