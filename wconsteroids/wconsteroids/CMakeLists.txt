@@ -23,5 +23,6 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(wconsteroids PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
 
-# TODO: Add tests and install targets if needed.
+install(TARGETS wconsteroids CONFIGURATIONS Release RUNTIME)
+
 
