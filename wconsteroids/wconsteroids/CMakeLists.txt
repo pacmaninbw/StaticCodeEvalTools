@@ -1,8 +1,5 @@
-﻿# CMakeList.txt : CMake project for wccmake, include source and define
-# project specific logic here.
-#
+﻿cmake_minimum_required(VERSION 3.15)
 
-# Add source to this project's executable.
 add_executable (wconsteroids
                 main.cpp
                 CmdLineFileExtractor.cpp
@@ -14,16 +11,16 @@ add_executable (wconsteroids
                 StatisticsCollector.cpp
 )
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET wconsteroids PROPERTY CXX_STANDARD 20)
-endif()
+target_include_directories(wconsteroids PUBLIC ../doctest)
+target_compile_features(wconsteroids PUBLIC cxx_std_20)
+target_compile_definitions(wconsteroids PRIVATE DOCTEST_CONFIG_DISABLE)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     # warning level 4 and all warnings as errors
-    target_compile_options(wconsteroids PRIVATE /W4 /WX -DDOCTEST_CONFIG_DISABLE -D_CRT_SECURE_NO_WARNINGS)
+    target_compile_options(wconsteroids PRIVATE /W4 /WX -D_CRT_SECURE_NO_WARNINGS)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # lots of warnings and all warnings as errors
-    target_compile_options(wconsteroids PRIVATE -DDOCTEST_CONFIG_DISABLE -Wall -Wextra -pedantic -Werror)
+    target_compile_options(wconsteroids PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
 
 # TODO: Add tests and install targets if needed.
