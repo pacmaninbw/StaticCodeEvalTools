@@ -39,7 +39,13 @@
     <ClCompile Include="..\wconsteroids\ReportWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testFileStatistics.cpp">
+    <ClCompile Include="FileStatisticsTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReportWriterTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdLineFileExtractorTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

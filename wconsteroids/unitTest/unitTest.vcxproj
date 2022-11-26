@@ -138,7 +138,9 @@
     <ClCompile Include="..\wconsteroids\FileStatistics.cpp" />
     <ClCompile Include="..\wconsteroids\ProgramOptions.cpp" />
     <ClCompile Include="..\wconsteroids\ReportWriter.cpp" />
-    <ClCompile Include="testFileStatistics.cpp" />
+    <ClCompile Include="CmdLineFileExtractorTest.cpp" />
+    <ClCompile Include="FileStatisticsTest.cpp" />
+    <ClCompile Include="ReportWriterTest.cpp" />
     <ClCompile Include="unitTest.cpp" />
   </ItemGroup>
   <ItemGroup>

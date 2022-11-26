@@ -4,7 +4,6 @@ DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include "FileStatistics.h"
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
-
 // Guess estimates of the ratio of code to comments and blank lines
 // Also guess estimates of word count and characters per line
 static constexpr std::size_t totalLineCount = 617;
