@@ -12,6 +12,13 @@ add_executable (unitTest unitTest.cpp
     ../wconsteroids/ProgramOptions.cpp
     ../wconsteroids/ReportWriter.cpp
     ../wconsteroids/StatisticsCollector.cpp
+    CmdLineFileExtractorTest.cpp
+    CommandLineParserTest.cpp
+    FileProcessorTest.cpp
+    FileStatisticsTest.cpp
+    ProgramOptionsTest.cpp
+    ReportWriterTest.cpp
+    StatisticsCollectorTest.cpp
 )
 target_include_directories(unitTest PUBLIC ../doctest ../wconsteroids)
 target_compile_features(unitTest PUBLIC cxx_std_20)
