@@ -1,6 +1,7 @@
 #include <doctest/doctest.h>
 
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
+#include <vector>
 #include "FileStatistics.h"
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
@@ -120,4 +121,79 @@ TEST_CASE("Test FileStatistics Increment Functions")
 	CHECK(testIncrement.getWhitespace() == whiteSpaceCount);
 	CHECK(testIncrement.getCharacters() == characterCount);
 	CHECK(testIncrement.getWords() == wordCount);
+}
+
+TEST_CASE("Test Widest Line")
+{
+	constexpr std::size_t widestLine = 85;
+	std::vector<std::size_t> widths = {33, 32, 64, 73, widestLine, 21, 53, 42, 67, 33};
+
+	FileStatistics WidestLine("widestLine");
+
+	for (auto width : widths)
+	{
+		WidestLine.updateWidestLine(width);
+	}
+
+	CHECK(WidestLine.getWidestLine() == widestLine);
+}
+
+TEST_CASE("Test Code Percentage and Add Totals")
+{
+	FileStatistics testData("Percentage");
+	testData.setCharCount(characterCount);
+	testData.setToLineCount(totalLineCount);
+	testData.addToWordCount(wordCount);
+	for (int i = 0; i < commentLineCount; i++)
+	{
+		testData.incrementCommentsLines();
+	}
+	for (int i = 0; i < codeWithCommentCount; i++)
+	{
+		testData.incrementCodeWithComment();
+	}
+	for (int i = 0; i < blankLineCount; i++)
+	{
+		testData.incrementBlankLines();
+	}
+	for (int i = 0; i < codeLineCount; i++)
+	{
+		testData.incrementCodeLines();
+	}
+	for (int i = 0; i < whiteSpaceCount; i++)
+	{
+		testData.incrementWhitespace();
+	}
+
+	double percentage = static_cast<double>(
+		static_cast<double>(codeLineCount) / static_cast<double>(totalLineCount));
+
+	SUBCASE("Code Percentage")
+	{
+		CHECK(testData.getPerecentageOfCode() >= (percentage * 100) - 1);
+		CHECK(testData.getPerecentageOfCode() <= (percentage * 100) + 1);
+	}
+
+	SUBCASE("Add Totals")
+	{
+		constexpr std::size_t multiplier = 6;
+		FileStatistics totals("totals");
+
+		for (int i = 0; i < multiplier; i++)
+		{
+			testData.addTotals(totals);
+		}
+		CHECK(totals.getTotalLines() == totalLineCount * multiplier);
+		CHECK(totals.getCommentLines() == commentLineCount * multiplier);
+		CHECK(totals.getCodeWithComment() == codeWithCommentCount * multiplier);
+		CHECK(totals.getBlankLines() == blankLineCount * multiplier);
+		CHECK(totals.getCodeLines() == codeLineCount * multiplier);
+		CHECK(totals.getWhitespace() == whiteSpaceCount * multiplier);
+		CHECK(totals.getCharacters() == characterCount * multiplier);
+		CHECK(totals.getWords() == wordCount * multiplier);
+
+		// The percentage should be the same as above
+		CHECK(testData.getPerecentageOfCode() >= (percentage * 100) - 1);
+		CHECK(testData.getPerecentageOfCode() <= (percentage * 100) + 1);
+	}
 }
