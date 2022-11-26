@@ -138,6 +138,7 @@
     <ClCompile Include="..\wconsteroids\FileStatistics.cpp" />
     <ClCompile Include="..\wconsteroids\ProgramOptions.cpp" />
     <ClCompile Include="..\wconsteroids\ReportWriter.cpp" />
+    <ClCompile Include="testFileStatistics.cpp" />
     <ClCompile Include="unitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
