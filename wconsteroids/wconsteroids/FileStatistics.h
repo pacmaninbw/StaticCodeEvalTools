@@ -25,7 +25,7 @@ public:
 	FileStatistics();
 	FileStatistics(std::string inFileName);
 	void setFileName(std::string inFileName) { fileName = inFileName; }
-	std::string getFileName() { return fileName; }
+	std::string getFileName() const { return fileName; }
 	void addTotals(FileStatistics &allFiles);
 	void addToLineCount(std::size_t lineCount) { totalLineCount += lineCount; }
 	void setToLineCount(std::size_t lineCount) { totalLineCount = lineCount; }
@@ -58,7 +58,9 @@ public:
 	std::size_t getWidestLine() const { return widestLine; }
 	std::size_t getPerecentageOfCode() const {
 		// 100 * codeLineCount / totalLineCount, plus ½ to round to nearest
-		return (codeLineCount * 200 + totalLineCount) / totalLineCount / 2;
+		return (totalLineCount > 0) ?
+			(codeLineCount * 200 + totalLineCount) / totalLineCount / 2 :
+			0;
 	}
 };
 

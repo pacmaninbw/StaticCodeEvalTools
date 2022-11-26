@@ -25,10 +25,3 @@ void FileStatistics::addTotals(FileStatistics &allFiles)
 	allFiles.blankLineCount += blankLineCount;
 	allFiles.updateWidestLine(widestLine);
 }
-
-#ifndef DOCTEST_CONFIG_DISABLE
-TEST_CASE("")
-{
-
-}
-#endif
