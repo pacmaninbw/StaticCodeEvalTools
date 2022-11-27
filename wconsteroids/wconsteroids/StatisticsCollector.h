@@ -12,7 +12,11 @@ public:
 	StatisticsCollector(FileStatistics& fileStats);
 	void analyzeBuffer(std::string_view inputBuffer) noexcept;
 
+#ifdef DOCTEST_CONFIG_DISABLE
+// If we are unit testing allow these functions to be public for testing
+// purposes
 protected:
+#endif
 	void updateWidestLine(std::string_view::const_iterator& currentChar,
 		std::string_view::const_iterator end) noexcept;
 	void countWordsAndWhiteSpace(std::string_view inputBuffer) noexcept;
