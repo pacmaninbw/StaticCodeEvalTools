@@ -54,7 +54,7 @@ TEST_CASE("Final Statistics Unit Test")
 	bool found = false;
 
 	found = FindUnitTestDirectorRoot(unitTestFile);
-	CHECK(found == true);
+	REQUIRE(found == true);
 
 	SUBCASE("Smaller overall functionality test")
 	{
@@ -62,33 +62,24 @@ TEST_CASE("Final Statistics Unit Test")
 		// and CmdLineFileExtractor.cpp as of the time of the creation of this test
 		// case. The source of these 2 files is in smallerStatTest.txt.
 
-		if (found)
-		{
-			unitTestFile /= "smallerStatTest.txt";
-			FileStatistics smallerTestStat(unitTestFile.string());
-			StatisticsCollector smallerTest(smallerTestStat);
-			std::ifstream inStream(unitTestFile);
-			if (inStream.is_open())
-			{
-				std::stringstream inputBuffer;
-				inputBuffer << inStream.rdbuf();
-				smallerTest.analyzeBuffer(inputBuffer.str());
+		unitTestFile /= "smallerStatTest.txt";
+		FileStatistics smallerTestStat(unitTestFile.string());
+		StatisticsCollector smallerTest(smallerTestStat);
+		std::ifstream inStream(unitTestFile);
 
-				CHECK(smallerTestStat.getFileName().empty() == false);
-				CHECK(smallerTestStat.getFileName() == unitTestFile);
-				CHECK(smallerTestStat.getCharacters() == 18304);
-				CHECK(smallerTestStat.getWidestLine() == 182);
-				CHECK(smallerTestStat.getWords() == 1687);
-				CHECK(smallerTestStat.getTotalLines() == 308);
-				inStream.close();
-			}
-			else
-			{
-				found = false;
-				CHECK(inStream.is_open() == true);
-				std::cerr << "Cant open " << unitTestFile << " for input!\n";
-			}
-		}
+		REQUIRE(inStream.is_open() == true);
+
+		std::stringstream inputBuffer;
+		inputBuffer << inStream.rdbuf();
+		smallerTest.analyzeBuffer(inputBuffer.str());
+
+		CHECK(smallerTestStat.getFileName().empty() == false);
+		CHECK(smallerTestStat.getFileName() == unitTestFile);
+		CHECK(smallerTestStat.getCharacters() == 18304);
+		CHECK(smallerTestStat.getWidestLine() == 182);
+		CHECK(smallerTestStat.getWords() == 1687);
+		CHECK(smallerTestStat.getTotalLines() == 308);
+		inStream.close();
 	}
 
 	SUBCASE("Larger overall functionality test")
@@ -97,32 +88,23 @@ TEST_CASE("Final Statistics Unit Test")
 		// and unitTest as of the time of the creation of this test case. All of
 		// the source files are contained in bigStatisticsTest.txt.
 
-		if (found)
-		{
-			unitTestFile /= "bigStatisticsTest.txt";
-			FileStatistics biggerTestStat(unitTestFile.string());
-			StatisticsCollector biggerTest(biggerTestStat);
-			std::ifstream inStream(unitTestFile);
-			if (inStream.is_open())
-			{
-				std::stringstream inputBuffer;
-				inputBuffer << inStream.rdbuf();
-				biggerTest.analyzeBuffer(inputBuffer.str());
+		unitTestFile /= "bigStatisticsTest.txt";
+		FileStatistics biggerTestStat(unitTestFile.string());
+		StatisticsCollector biggerTest(biggerTestStat);
+		std::ifstream inStream(unitTestFile);
 
-				CHECK(biggerTestStat.getFileName().empty() == false);
-				CHECK(biggerTestStat.getFileName() == unitTestFile);
-				CHECK(biggerTestStat.getCharacters() == 89868);
-				CHECK(biggerTestStat.getWidestLine() == 202);
-				CHECK(biggerTestStat.getWords() == 7705);
-				CHECK(biggerTestStat.getTotalLines() == 1544);
-				inStream.close();
-			}
-			else
-			{
-				found = false;
-				CHECK(inStream.is_open() == true);
-				std::cerr << "Cant open " << unitTestFile << " for input!\n";
-			}
-		}
+		REQUIRE(inStream.is_open() == true);
+
+		std::stringstream inputBuffer;
+		inputBuffer << inStream.rdbuf();
+		biggerTest.analyzeBuffer(inputBuffer.str());
+
+		CHECK(biggerTestStat.getFileName().empty() == false);
+		CHECK(biggerTestStat.getFileName() == unitTestFile);
+		CHECK(biggerTestStat.getCharacters() == 89868);
+		CHECK(biggerTestStat.getWidestLine() == 202);
+		CHECK(biggerTestStat.getWords() == 7705);
+		CHECK(biggerTestStat.getTotalLines() == 1544);
+		inStream.close();
 	}
 }
