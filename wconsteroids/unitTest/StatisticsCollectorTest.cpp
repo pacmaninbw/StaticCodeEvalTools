@@ -80,10 +80,13 @@ TEST_CASE("Final Statistics Unit Test")
 				CHECK(smallerTestStat.getWidestLine() == 182);
 				CHECK(smallerTestStat.getWords() == 1687);
 				CHECK(smallerTestStat.getTotalLines() == 308);
+				inStream.close();
 			}
 			else
 			{
-				std::cerr << "Cant open " << unitTestFile << " for input!";
+				found = false;
+				CHECK(inStream.is_open() == true);
+				std::cerr << "Cant open " << unitTestFile << " for input!\n";
 			}
 		}
 	}
@@ -112,10 +115,13 @@ TEST_CASE("Final Statistics Unit Test")
 				CHECK(biggerTestStat.getWidestLine() == 202);
 				CHECK(biggerTestStat.getWords() == 7705);
 				CHECK(biggerTestStat.getTotalLines() == 1544);
+				inStream.close();
 			}
 			else
 			{
-				std::cerr << "Cant open " << unitTestFile << " for input!";
+				found = false;
+				CHECK(inStream.is_open() == true);
+				std::cerr << "Cant open " << unitTestFile << " for input!\n";
 			}
 		}
 	}
