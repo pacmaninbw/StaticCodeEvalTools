@@ -43,6 +43,19 @@ static bool FindUnitTestDirectorRoot(std::filesystem::path& testDir)
 	return exitStatus;
 }
 
+// The numbers used in testing are from running wconsteroids on
+// the test file. With the exception of the widest line value
+// they should match the core utils wc output. See the comment
+// in the source code for why widest line value is different.
+static constexpr std::size_t smallCharCount = 18304;
+static constexpr std::size_t smallWidestLine = 182;
+static constexpr std::size_t smallWordCount = 1687;
+static constexpr std::size_t smallLineCount = 308;
+static constexpr std::size_t bigCharCount = 89868;
+static constexpr std::size_t bigWidestLine = 202;
+static constexpr std::size_t bigWordCount = 7705;
+static constexpr std::size_t bigLineCount = 1544;
+
 TEST_CASE("Final Statistics Unit Test")
 {
 	// This test case should be run after all the other tests in this file
@@ -79,10 +92,10 @@ TEST_CASE("Final Statistics Unit Test")
 
 		CHECK(smallerTestStat.getFileName().empty() == false);
 		CHECK(smallerTestStat.getFileName() == unitTestFile);
-		CHECK(smallerTestStat.getCharacters() == 18304);
-		CHECK(smallerTestStat.getWidestLine() == 182);
-		CHECK(smallerTestStat.getWords() == 1687);
-		CHECK(smallerTestStat.getTotalLines() == 308);
+		CHECK(smallerTestStat.getCharacters() == smallCharCount);
+		CHECK(smallerTestStat.getWidestLine() == smallWidestLine);
+		CHECK(smallerTestStat.getWords() == smallWordCount);
+		CHECK(smallerTestStat.getTotalLines() == smallLineCount);
 		inStream.close();
 	}
 
@@ -110,10 +123,10 @@ TEST_CASE("Final Statistics Unit Test")
 
 		CHECK(biggerTestStat.getFileName().empty() == false);
 		CHECK(biggerTestStat.getFileName() == unitTestFile);
-		CHECK(biggerTestStat.getCharacters() == 89868);
-		CHECK(biggerTestStat.getWidestLine() == 202);
-		CHECK(biggerTestStat.getWords() == 7705);
-		CHECK(biggerTestStat.getTotalLines() == 1544);
+		CHECK(biggerTestStat.getCharacters() == bigCharCount);
+		CHECK(biggerTestStat.getWidestLine() == bigWidestLine);
+		CHECK(biggerTestStat.getWords() == bigWordCount);
+		CHECK(biggerTestStat.getTotalLines() == bigLineCount);
 		inStream.close();
 	}
 }
