@@ -3,12 +3,10 @@
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <fstream>
 #include <filesystem>
-#include <iostream>
 #include <string>
 #include "FileStatistics.h"
 #include "StatisticsCollector.h"
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
-
 
 static const std::string testRoot = "wconsteroids";
 
@@ -21,7 +19,9 @@ static bool FindUnitTestDirectorRoot(std::filesystem::path& testDir)
 	auto found = MyPath.find(testRoot);
 	if (found == std::string::npos)
 	{
-		std::cerr << "The current directory " << testDir << " is not within the " << testRoot << " directory structure\n";
+		std::string failMessage = "The current directory \"" + testDir.string() +
+			"\" is not within the \"" + testRoot + "\" directory structure\n";
+		FAIL(failMessage);
 		exitStatus = false;
 	}
 	else
@@ -54,7 +54,6 @@ TEST_CASE("Final Statistics Unit Test")
 	bool found = false;
 
 	found = FindUnitTestDirectorRoot(unitTestFile);
-	REQUIRE(found == true);
 
 	SUBCASE("Smaller overall functionality test")
 	{
@@ -63,12 +62,17 @@ TEST_CASE("Final Statistics Unit Test")
 		// case. The source of these 2 files is in smallerStatTest.txt.
 
 		unitTestFile /= "smallerStatTest.txt";
-		FileStatistics smallerTestStat(unitTestFile.string());
-		StatisticsCollector smallerTest(smallerTestStat);
 		std::ifstream inStream(unitTestFile);
 
-		REQUIRE(inStream.is_open() == true);
+		if (!inStream.is_open())
+		{
+			std::string failMessage = "Can't open file \"" + unitTestFile.string() +
+				"\" for input!\n";
+			FAIL(failMessage);
+		}
 
+		FileStatistics smallerTestStat(unitTestFile.string());
+		StatisticsCollector smallerTest(smallerTestStat);
 		std::stringstream inputBuffer;
 		inputBuffer << inStream.rdbuf();
 		smallerTest.analyzeBuffer(inputBuffer.str());
@@ -89,12 +93,17 @@ TEST_CASE("Final Statistics Unit Test")
 		// the source files are contained in bigStatisticsTest.txt.
 
 		unitTestFile /= "bigStatisticsTest.txt";
-		FileStatistics biggerTestStat(unitTestFile.string());
-		StatisticsCollector biggerTest(biggerTestStat);
 		std::ifstream inStream(unitTestFile);
 
-		REQUIRE(inStream.is_open() == true);
+		if (!inStream.is_open())
+		{
+			std::string failMessage = "Can't open file \"" + unitTestFile.string() +
+				"\" for input!\n";
+			FAIL(failMessage);
+		}
 
+		FileStatistics biggerTestStat(unitTestFile.string());
+		StatisticsCollector biggerTest(biggerTestStat);
 		std::stringstream inputBuffer;
 		inputBuffer << inStream.rdbuf();
 		biggerTest.analyzeBuffer(inputBuffer.str());
