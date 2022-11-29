@@ -23,8 +23,18 @@ void StatisticsCollector::analyzeBuffer(std::string_view inputBuffer) noexcept
 {
 	auto endBuffer = inputBuffer.end();
 	auto startBuffer = inputBuffer.begin();
+	std::uintmax_t bufferSize = 0;
 
-	std::uintmax_t bufferSize = std::filesystem::file_size(fileStatistics.getFileName());
+#ifdef DOCTEST_CONFIG_DISABLE
+	bufferSize = std::filesystem::file_size(fileStatistics.getFileName());
+#else
+	// During unit testing the input to this function may not be from a file,
+	// check if the file exists.
+	std::filesystem::path fileSpec = fileStatistics.getFileName();
+	bufferSize = (std::filesystem::exists(fileSpec))?
+		std::filesystem::file_size(fileStatistics.getFileName()):
+		endBuffer - startBuffer;
+#endif
 	fileStatistics.setCharCount(bufferSize);
 
 	std::size_t lineCount = std::count(startBuffer, endBuffer, '\n');
