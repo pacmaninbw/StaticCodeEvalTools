@@ -29,7 +29,8 @@ void StatisticsCollector::analyzeBuffer(std::string_view inputBuffer) noexcept
 	bufferSize = std::filesystem::file_size(fileStatistics.getFileName());
 #else
 	// During unit testing the input to this function may not be from a file,
-	// check if the file exists.
+	// check if the file exists. This prevents an exception from being thrown
+	// during unit test.
 	std::filesystem::path fileSpec = fileStatistics.getFileName();
 	bufferSize = (std::filesystem::exists(fileSpec)) ?
 		std::filesystem::file_size(fileStatistics.getFileName()) :
