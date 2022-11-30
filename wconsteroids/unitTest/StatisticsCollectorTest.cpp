@@ -36,7 +36,7 @@ static std::vector<struct Test1ExpectedResults> testOneExpectedValues =
 	{13, 2, 3, 29},
 	{36, 7, 7, 36},
 	{5, 0, 5, 37},
-	{17, 0, 16, 16},
+	{16, 0, 16, 16},
 	{37, 6, 14, 101},
 };
 constexpr std::size_t widestLineIndex = 6;
