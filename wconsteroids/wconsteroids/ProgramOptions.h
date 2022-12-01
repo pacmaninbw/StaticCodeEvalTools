@@ -47,6 +47,31 @@ public:
 
 		return *this;
 	}
+	bool operator==(const ProgramOptions& rhs)
+	{
+		// The first 3 comparisons are the possible default values,
+		// these are the most likely to change. The first 4 values
+		// are flags inherited from core utilities wc. All the others
+		// are enhacements, or future enhancements. The last 2 should
+		// be constant.
+		return (byteCount == rhs.byteCount) &&
+			(wordCount == rhs.wordCount) &&
+			(lineCount == rhs.lineCount) &&
+			(maxLineWidth == rhs.maxLineWidth) &&
+			(recurseSubDirectories == rhs.recurseSubDirectories) &&
+			(whitespaceCount == rhs.whitespaceCount) &&
+			(charCount == rhs.charCount) &&
+			(enableExecutionTime == rhs.enableExecutionTime) &&
+			(codeCount == rhs.codeCount) &&
+			(commentCount == rhs.commentCount) &&
+			(percentages == rhs.percentages) &&
+			(version == rhs.version) &&
+			(programName == rhs.programName);
+	}
+	bool operator!=(const ProgramOptions& rhs)
+	{
+		return !operator== (rhs);
+	}
 
 	// Output control variables
 	bool blankLineCount = false;
@@ -86,6 +111,12 @@ public:
 protected:
 	void printHelpMessage() const;
 	void printVersion() const noexcept;
+
+#ifndef DOCTEST_CONFIG_DISABLE
+	// For unit testing the following 2 functions should be public
+	// so that they can be unit tested
+public:
+#endif
 	void processSingleDashOptions(std::string_view currentArg);
 	void processDoubleDashOptions(std::string_view currentArg);
 
