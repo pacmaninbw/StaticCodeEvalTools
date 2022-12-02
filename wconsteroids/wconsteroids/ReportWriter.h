@@ -24,7 +24,7 @@ public:
 	std::string getResultText(FileStatistics& resultsForOutput) noexcept;
 	std::ostream& printColumnHeadings(std::ostream& os) noexcept;
 	// Returns 2 lines of properly formatted text
-	std::vector<std::string> getColumneHeadingsText() noexcept;
+//	std::vector<std::string> getColumneHeadingsText() noexcept;
 	std::string getColumnHeadingAsOneString() noexcept;
 
 private:
