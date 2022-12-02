@@ -113,9 +113,10 @@ protected:
 	void printVersion() const noexcept;
 
 #ifndef DOCTEST_CONFIG_DISABLE
-	// For unit testing the following 2 functions should be public
-	// so that they can be unit tested
+	// For unit testing the following 3 functions should be public
+	// so that they can be unit tested.
 public:
+	bool isDefaultFlagsSet() { return useDefaultFlags; }
 #endif
 	void processSingleDashOptions(std::string_view currentArg);
 	void processDoubleDashOptions(std::string_view currentArg);
