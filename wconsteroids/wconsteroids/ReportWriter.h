@@ -14,7 +14,7 @@ class FileStatistics;
 class ReportWriter
 {
 public:
-	// ExecutionCrtlValues is passed in so that the report writer know what
+	// ProgramOptions is passed in so that the report writer know what
 	// output to generate.
 	ReportWriter(const ProgramOptions& progOptions)
 		: options { progOptions }
