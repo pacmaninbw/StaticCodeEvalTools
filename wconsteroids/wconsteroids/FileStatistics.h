@@ -26,6 +26,7 @@ public:
 	FileStatistics(std::string inFileName);
 	void setFileName(std::string inFileName) { fileName = inFileName; }
 	std::string getFileName() const { return fileName; }
+	bool areResultsEmpty();
 	void addTotals(FileStatistics &allFiles);
 	void addToLineCount(std::size_t lineCount) { totalLineCount += lineCount; }
 	void setToLineCount(std::size_t lineCount) { totalLineCount = lineCount; }
