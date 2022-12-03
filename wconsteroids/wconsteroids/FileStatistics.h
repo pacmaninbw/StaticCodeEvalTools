@@ -22,7 +22,7 @@ private:
 	std::string fileName = {};
 
 public:
-	FileStatistics();
+	FileStatistics() = default;
 	FileStatistics(std::string inFileName);
 	void setFileName(std::string inFileName) { fileName = inFileName; }
 	std::string getFileName() const { return fileName; }
