@@ -3,6 +3,7 @@
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <vector>
 #include "FileStatistics.h"
+#include "unitTest.h"
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 // Guess estimates of the ratio of code to comments and blank lines
@@ -20,9 +21,9 @@ static constexpr std::size_t characterCount = totalLineCount * 51;
 static constexpr std::size_t wordCount = totalLineCount * 7;
 static constexpr std::size_t whiteSpaceCount = wordCount - 1;
 
-TEST_CASE("Test A FileStatistics Constructors")
+TEST_CASE(FILE_STATISTICS_TEST_ID"1 FileStatistics Constructors")
 {
-	SUBCASE("Constructor with name")
+	SUBCASE(FILE_STATISTICS_TEST_ID"1.1 Constructor with name")
 	{
 		std::string name("Constructor has name");
 		FileStatistics constructorWithName(name);
@@ -40,7 +41,7 @@ TEST_CASE("Test A FileStatistics Constructors")
 		CHECK(constructorWithName.getPerecentageOfCode() == 0);
 	}
 
-	SUBCASE("Constructor with no name")
+	SUBCASE(FILE_STATISTICS_TEST_ID"1.2 Constructor with no name")
 	{
 		FileStatistics constructorWithNoName;
 		CHECK(constructorWithNoName.getFileName().empty() == true);
@@ -57,9 +58,8 @@ TEST_CASE("Test A FileStatistics Constructors")
 	}
 }
 
-TEST_CASE("Test B FileStatistics Increment Functions")
+TEST_CASE(FILE_STATISTICS_TEST_ID"2 FileStatistics Increment Functions")
 {
-
 	FileStatistics testIncrement("Test Increment");
 
 	// First test every increment function individually
@@ -123,7 +123,7 @@ TEST_CASE("Test B FileStatistics Increment Functions")
 	CHECK(testIncrement.getWords() == wordCount);
 }
 
-TEST_CASE("Test C FileStatistics Widest Line")
+TEST_CASE(FILE_STATISTICS_TEST_ID"3 FileStatistics Widest Line")
 {
 	constexpr std::size_t widestLine = 85;
 	std::vector<std::size_t> widths = {33, 32, 64, 73, widestLine, 21, 53, 42, 67, 33};
@@ -138,7 +138,7 @@ TEST_CASE("Test C FileStatistics Widest Line")
 	CHECK(WidestLine.getWidestLine() == widestLine);
 }
 
-TEST_CASE("Test D FileStatistics Code Percentage and Add Totals")
+TEST_CASE(FILE_STATISTICS_TEST_ID"4 FileStatistics Code Percentage and Add Totals")
 {
 	FileStatistics testData("Percentage");
 	testData.setCharCount(characterCount);
@@ -168,13 +168,13 @@ TEST_CASE("Test D FileStatistics Code Percentage and Add Totals")
 	double percentage = static_cast<double>(
 		static_cast<double>(codeLineCount) / static_cast<double>(totalLineCount));
 
-	SUBCASE("Code Percentage")
+	SUBCASE(FILE_STATISTICS_TEST_ID"4.1 Code Percentage")
 	{
 		CHECK(testData.getPerecentageOfCode() >= (percentage * 100) - 1);
 		CHECK(testData.getPerecentageOfCode() <= (percentage * 100) + 1);
 	}
 
-	SUBCASE("Add Totals")
+	SUBCASE(FILE_STATISTICS_TEST_ID"4.2 Add Totals")
 	{
 		constexpr std::size_t multiplier = 6;
 		FileStatistics totals("totals");
