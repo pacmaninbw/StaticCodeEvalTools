@@ -24,7 +24,7 @@ static void checkWhatFailed(ProgramOptions expectedData, ProgramOptions testData
 	CHECK(expectedData.wordCount == testData.wordCount);
 }
 
-TEST_CASE("Program Options Unit Test 1: Constructor")
+TEST_CASE("Test D Program Options: Constructor")
 {
 	ProgramOptions testConstructor;
 	CHECK(testConstructor.blankLineCount == false);
@@ -43,7 +43,7 @@ TEST_CASE("Program Options Unit Test 1: Constructor")
 	CHECK(testConstructor.useDefaultFlags == true);
 }
 
-TEST_CASE("Program Options Unit Test 2: Set Defaults When No Flags")
+TEST_CASE("Test E Program Options: Set Defaults When No Flags")
 {
 	ProgramOptions expectData;
 	expectData.byteCount = true;
@@ -59,7 +59,7 @@ TEST_CASE("Program Options Unit Test 2: Set Defaults When No Flags")
 	}
 }
 
-TEST_CASE("Program Options Unit Test 3: Single Dash Arguments")
+TEST_CASE("Test F Program Options: Single Dash Arguments")
 {
 	SUBCASE("Single Dash Arguments Sub Test 1")
 	{
@@ -141,7 +141,7 @@ TEST_CASE("Program Options Unit Test 3: Single Dash Arguments")
 	}
 }
 
-TEST_CASE("Program Options Unit Test 4: Double Dash Arguments")
+TEST_CASE("Test G Program Options: Double Dash Arguments")
 {
 	SUBCASE("Double Dash Arguments Sub Test 1")
 	{
@@ -202,7 +202,7 @@ TEST_CASE("Program Options Unit Test 4: Double Dash Arguments")
 	}
 }
 
-TEST_CASE("Program Options Unit Test 5: Process Arguments")
+TEST_CASE("Test H Program Options: Process Arguments")
 {
 	SUBCASE("Process Argument Sub Test 1")
 	{

@@ -7,6 +7,7 @@ DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <string_view>
 #include "FileStatistics.h"
 #include "StatisticsCollector.h"
+#include "unitTest.h"
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 // This vector is input for the first 3 unit tests
@@ -60,7 +61,7 @@ static std::string mergeOneLineTests(Test1ExpectedResults& totals)
 	return mergedTestInputStr;
 }
 
-TEST_CASE("Statistics Collection Test 1: Count Words and White Space")
+TEST_CASE("Test I Statistics Collection: Count Words and White Space")
 {
 	SUBCASE("Sub Test 1: Test One Liners")
 	{
@@ -90,7 +91,7 @@ TEST_CASE("Statistics Collection Test 1: Count Words and White Space")
 	}
 }
 
-TEST_CASE("Statistics Collection Test 2: Widest Line")
+TEST_CASE("Test J Statistics Collection: Widest Line")
 {
 	SUBCASE("Sub Test 3: Test Widest One Liners")
 	{
@@ -129,7 +130,7 @@ TEST_CASE("Statistics Collection Test 2: Widest Line")
 	}
 }
 
-TEST_CASE("Statistics Collection Test 3: Analyze Buffer")
+TEST_CASE("Test K Statistics Collection: Analyze Buffer")
 {
 	SUBCASE("Sub Test 5: Analyze Buffer Test One Liners")
 	{
@@ -169,40 +170,7 @@ TEST_CASE("Statistics Collection Test 3: Analyze Buffer")
  * Final StatisticsCollector Unit Test
  * Use actual source files to test the statistics collection.
  */
-static const std::string testRoot = "wconsteroids";
 
-static bool FindUnitTestDirectorRoot(std::filesystem::path& testDir)
-{
-	testDir = std::filesystem::current_path();
-	bool exitStatus = true;
-
-	std::string MyPath = testDir.string();
-	auto found = MyPath.find(testRoot);
-	if (found == std::string::npos)
-	{
-		std::string failMessage = "The current directory \"" + testDir.string() +
-			"\" is not within the \"" + testRoot + "\" directory structure\n";
-		FAIL(failMessage);
-		exitStatus = false;
-	}
-	else
-	{
-		while (testDir.filename() != testRoot)
-		{
-			testDir = testDir.parent_path();
-		}
-		// Due to how the wconsteroids was first created with visual studio
-		// there are 2 wconsteroids directories, the top one is the one we
-		// are looking for.
-		if (testDir.parent_path().filename() == testRoot)
-		{
-			testDir = testDir.parent_path();
-		}
-		testDir /= "unitTest";
-	}
-
-	return exitStatus;
-}
 
 // The numbers used in testing are from running wconsteroids on
 // the test file. With the exception of the widest line value
@@ -217,17 +185,16 @@ static constexpr std::size_t bigWidestLine = 202;
 static constexpr std::size_t bigWordCount = 7705;
 static constexpr std::size_t bigLineCount = 1544;
 
-TEST_CASE("Final Statistics Unit Test")
+TEST_CASE("Test L Final Statistics Unit Test")
 {
 	// This test case should be run after all the other tests in this file
 	// have passed.
 	// These 2 sub tests will pass as long as the unitTest program is run
 	// anywhere in the wconsteroids directory tree
 
-	std::filesystem::path unitTestFile;
-	bool found = false;
 
-	found = FindUnitTestDirectorRoot(unitTestFile);
+	std::string unitTestFile = FindUnitTestDirectorRoot();
+	REQUIRE(unitTestFile.empty() == false);
 
 	SUBCASE("Smaller overall functionality test")
 	{
@@ -235,17 +202,17 @@ TEST_CASE("Final Statistics Unit Test")
 		// and CmdLineFileExtractor.cpp as of the time of the creation of this test
 		// case. The source of these 2 files is in smallerStatTest.txt.
 
-		unitTestFile /= "smallerStatTest.txt";
+		unitTestFile += "/smallerStatTest.txt";
 		std::ifstream inStream(unitTestFile);
 
 		if (!inStream.is_open())
 		{
-			std::string failMessage = "Can't open file \"" + unitTestFile.string() +
+			std::string failMessage = "Can't open file \"" + unitTestFile +
 				"\" for input!\n";
 			FAIL(failMessage);
 		}
 
-		FileStatistics smallerTestStat(unitTestFile.string());
+		FileStatistics smallerTestStat(unitTestFile);
 		StatisticsCollector smallerTest(smallerTestStat);
 		std::stringstream inputBuffer;
 		inputBuffer << inStream.rdbuf();
@@ -266,17 +233,17 @@ TEST_CASE("Final Statistics Unit Test")
 		// and unitTest as of the time of the creation of this test case. All of
 		// the source files are contained in bigStatisticsTest.txt.
 
-		unitTestFile /= "bigStatisticsTest.txt";
+		unitTestFile += "/bigStatisticsTest.txt";
 		std::ifstream inStream(unitTestFile);
 
 		if (!inStream.is_open())
 		{
-			std::string failMessage = "Can't open file \"" + unitTestFile.string() +
+			std::string failMessage = "Can't open file \"" + unitTestFile +
 				"\" for input!\n";
 			FAIL(failMessage);
 		}
 
-		FileStatistics biggerTestStat(unitTestFile.string());
+		FileStatistics biggerTestStat(unitTestFile);
 		StatisticsCollector biggerTest(biggerTestStat);
 		std::stringstream inputBuffer;
 		inputBuffer << inStream.rdbuf();

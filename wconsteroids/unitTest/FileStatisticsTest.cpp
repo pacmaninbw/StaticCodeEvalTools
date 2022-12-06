@@ -20,7 +20,7 @@ static constexpr std::size_t characterCount = totalLineCount * 51;
 static constexpr std::size_t wordCount = totalLineCount * 7;
 static constexpr std::size_t whiteSpaceCount = wordCount - 1;
 
-TEST_CASE("Test Constructors")
+TEST_CASE("Test A FileStatistics Constructors")
 {
 	SUBCASE("Constructor with name")
 	{
@@ -57,7 +57,7 @@ TEST_CASE("Test Constructors")
 	}
 }
 
-TEST_CASE("Test FileStatistics Increment Functions")
+TEST_CASE("Test B FileStatistics Increment Functions")
 {
 
 	FileStatistics testIncrement("Test Increment");
@@ -123,7 +123,7 @@ TEST_CASE("Test FileStatistics Increment Functions")
 	CHECK(testIncrement.getWords() == wordCount);
 }
 
-TEST_CASE("Test Widest Line")
+TEST_CASE("Test C FileStatistics Widest Line")
 {
 	constexpr std::size_t widestLine = 85;
 	std::vector<std::size_t> widths = {33, 32, 64, 73, widestLine, 21, 53, 42, 67, 33};
@@ -138,7 +138,7 @@ TEST_CASE("Test Widest Line")
 	CHECK(WidestLine.getWidestLine() == widestLine);
 }
 
-TEST_CASE("Test Code Percentage and Add Totals")
+TEST_CASE("Test D FileStatistics Code Percentage and Add Totals")
 {
 	FileStatistics testData("Percentage");
 	testData.setCharCount(characterCount);
