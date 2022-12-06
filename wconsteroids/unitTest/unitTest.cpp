@@ -66,13 +66,21 @@ int main(int argc, char** argv)
 	std::string testPath = FindUnitTestDirectorRoot();
 	if (testPath.empty())
 	{
+		// Shouldn't get here, but for sanity check anyway.
 		return EXIT_FAILURE;
 	}
 
 	doctest::Context context;
 
-	// The tests are ordered A through Z, the order builds from the simplest building
-	// blocks to agregated assemblies, testing the least complex code first.
+	/*
+	 * The tests are ordered A through Z, the order builds from the simplest building
+	 * blocks to agregated assemblies, testing the least complex code first.
+	 * - A FileStatistics
+	 * - B ProgramOptions
+	 * - C StatisticsCollector
+	 * - D ReportWriter (currently there are no unit tests)
+	 * - E FileProcessor
+	 */
 	context.setOption("order-by", "name");
 
 	context.applyCommandLine(argc, argv);
