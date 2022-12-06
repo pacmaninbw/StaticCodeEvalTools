@@ -6,6 +6,7 @@ DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <string>
 #include <string_view>
 #include "ProgramOptions.h"
+#include "unitTest.h"
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
 static void checkWhatFailed(ProgramOptions expectedData, ProgramOptions testData)
@@ -24,7 +25,7 @@ static void checkWhatFailed(ProgramOptions expectedData, ProgramOptions testData
 	CHECK(expectedData.wordCount == testData.wordCount);
 }
 
-TEST_CASE("Test D Program Options: Constructor")
+TEST_CASE(PROGRAM_OPTIONS_TEST_ID"1 Program Options: Constructor")
 {
 	ProgramOptions testConstructor;
 	CHECK(testConstructor.blankLineCount == false);
@@ -43,7 +44,7 @@ TEST_CASE("Test D Program Options: Constructor")
 	CHECK(testConstructor.useDefaultFlags == true);
 }
 
-TEST_CASE("Test E Program Options: Set Defaults When No Flags")
+TEST_CASE(PROGRAM_OPTIONS_TEST_ID"2 Program Options: Set Defaults When No Flags")
 {
 	ProgramOptions expectData;
 	expectData.byteCount = true;
@@ -59,9 +60,9 @@ TEST_CASE("Test E Program Options: Set Defaults When No Flags")
 	}
 }
 
-TEST_CASE("Test F Program Options: Single Dash Arguments")
+TEST_CASE(PROGRAM_OPTIONS_TEST_ID"3 Program Options: Single Dash Arguments")
 {
-	SUBCASE("Single Dash Arguments Sub Test 1")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"3.1 Single Dash Arguments")
 	{
 		// When a single output flag is set, only that output should be expected
 		ProgramOptions expectData;
@@ -79,7 +80,7 @@ TEST_CASE("Test F Program Options: Single Dash Arguments")
 		}
 	}
 
-	SUBCASE("Single Dash Arguments Sub Test 2")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"3.2 Single Dash Arguments")
 	{
 		// -R, recursive file search should not affect default flags
 		ProgramOptions expectData;
@@ -99,7 +100,7 @@ TEST_CASE("Test F Program Options: Single Dash Arguments")
 		}
 	}
 
-	SUBCASE("Single Dash Arguments Sub Test 3")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"3.3 Single Dash Arguments")
 	{
 		// -t, time execution should not affect default flags
 		ProgramOptions expectData;
@@ -119,7 +120,7 @@ TEST_CASE("Test F Program Options: Single Dash Arguments")
 		}
 	}
 
-	SUBCASE("Single Dash Arguments Sub Test 4: Multiple Flags")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"3.4 Single Dash Arguments - Multiple Flags")
 	{
 		ProgramOptions expectData;
 		std::string_view inputData = "-RtLlc";
@@ -141,9 +142,9 @@ TEST_CASE("Test F Program Options: Single Dash Arguments")
 	}
 }
 
-TEST_CASE("Test G Program Options: Double Dash Arguments")
+TEST_CASE(PROGRAM_OPTIONS_TEST_ID"4 Program Options: Double Dash Arguments")
 {
-	SUBCASE("Double Dash Arguments Sub Test 1")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"4.1 Double Dash Arguments")
 	{
 		// When a single output flag is set, only that output should be expected
 		ProgramOptions expectData;
@@ -161,7 +162,7 @@ TEST_CASE("Test G Program Options: Double Dash Arguments")
 		}
 	}
 
-	SUBCASE("Double Dash Arguments Sub Test 2")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"4.2 Double Dash Arguments")
 	{
 		// -R, recursive file search should not affect default flags
 		ProgramOptions expectData;
@@ -181,7 +182,7 @@ TEST_CASE("Test G Program Options: Double Dash Arguments")
 		}
 	}
 
-	SUBCASE("Double Dash Arguments Sub Test 3")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"4.3 Double Dash Arguments")
 	{
 		// -t, time execution should not affect default flags
 		ProgramOptions expectData;
@@ -202,9 +203,9 @@ TEST_CASE("Test G Program Options: Double Dash Arguments")
 	}
 }
 
-TEST_CASE("Test H Program Options: Process Arguments")
+TEST_CASE(PROGRAM_OPTIONS_TEST_ID"5 Program Options: Process Arguments")
 {
-	SUBCASE("Process Argument Sub Test 1")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"5.1 Process Argument")
 	{
 		// When a single output flag is set, only that output should be expected
 		ProgramOptions expectData;
@@ -222,7 +223,7 @@ TEST_CASE("Test H Program Options: Process Arguments")
 		}
 	}
 
-	SUBCASE("Process Argument Sub Test 2")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"5.2 Process Argument")
 	{
 		// -R, recursive file search should not affect default flags
 		ProgramOptions expectData;
@@ -242,7 +243,7 @@ TEST_CASE("Test H Program Options: Process Arguments")
 		}
 	}
 
-	SUBCASE("Process Argument Sub Test 3")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"5.3 Process Argument")
 	{
 		// -t, time execution should not affect default flags
 		ProgramOptions expectData;
@@ -262,7 +263,7 @@ TEST_CASE("Test H Program Options: Process Arguments")
 		}
 	}
 
-	SUBCASE("Process Argument Sub Test 4: Multiple Flags")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"5.4 Process Argument - Multiple Flags")
 	{
 		ProgramOptions expectData;
 		std::string_view inputData = "-RtLlc";
@@ -283,7 +284,7 @@ TEST_CASE("Test H Program Options: Process Arguments")
 		}
 	}
 
-	SUBCASE("Process Argument Sub Test 5")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"5.5 Process Argument")
 	{
 		// When a single output flag is set, only that output should be expected
 		ProgramOptions expectData;
@@ -301,7 +302,7 @@ TEST_CASE("Test H Program Options: Process Arguments")
 		}
 	}
 
-	SUBCASE("Process Argument Sub Test 6")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"5.6 Process Argument")
 	{
 		// -R, recursive file search should not affect default flags
 		ProgramOptions expectData;
@@ -321,7 +322,7 @@ TEST_CASE("Test H Program Options: Process Arguments")
 		}
 	}
 
-	SUBCASE("Process Arguments Sub Test 7")
+	SUBCASE(PROGRAM_OPTIONS_TEST_ID"5.7 Process Arguments")
 	{
 		// -t, time execution should not affect default flags
 		ProgramOptions expectData;
