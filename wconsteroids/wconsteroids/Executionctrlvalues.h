@@ -14,7 +14,6 @@
  */
 #include <vector>
 #include <string>
-#include <string_view>
 #include "ProgramOptions.h"
 
 struct ExecutionCtrlValues
