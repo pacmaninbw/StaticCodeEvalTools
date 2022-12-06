@@ -1,8 +1,9 @@
-﻿// unitTest.h : Include file for standard system include files,
-// or project specific include files.
+﻿#ifndef UNIT_TEST_H
+#define UNIT_TEST_H
 
-#pragma once
-
+#include <string>
 #include <iostream>
 
-// TODO: Reference additional headers your program requires here.
+extern std::string FindUnitTestDirectorRoot(void);
+
+#endif // UNIT_TEST_H
