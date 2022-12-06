@@ -61,9 +61,9 @@ static std::string mergeOneLineTests(Test1ExpectedResults& totals)
 	return mergedTestInputStr;
 }
 
-TEST_CASE("Test I Statistics Collection: Count Words and White Space")
+TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"1 Statistics Collection: Count Words and White Space")
 {
-	SUBCASE("Sub Test 1: Test One Liners")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"1.1 Test One Liners")
 	{
 		std::size_t testIndex = 0;
 		for (auto line : oneLineTestInput)
@@ -77,7 +77,7 @@ TEST_CASE("Test I Statistics Collection: Count Words and White Space")
 		}
 	}
 
-	SUBCASE("Sub Test 2: All One Liners Together")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"1.2 All One Liners Together")
 	{
 		Test1ExpectedResults totals = { 0 };
 		std::string temp = mergeOneLineTests(totals);
@@ -91,9 +91,9 @@ TEST_CASE("Test I Statistics Collection: Count Words and White Space")
 	}
 }
 
-TEST_CASE("Test J Statistics Collection: Widest Line")
+TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"2 Statistics Collection: Widest Line")
 {
-	SUBCASE("Sub Test 3: Test Widest One Liners")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"2.1 Test Widest One Liners")
 	{
 		std::size_t testIndex = 0;
 		for (auto line : oneLineTestInput)
@@ -109,7 +109,7 @@ TEST_CASE("Test J Statistics Collection: Widest Line")
 		}
 	}
 
-	SUBCASE("Sub Test 4: Test Widest Line Merged")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"2.2 Test Widest Line Merged")
 	{
 		Test1ExpectedResults totals = { 0 };
 		std::string temp = mergeOneLineTests(totals);
@@ -130,9 +130,9 @@ TEST_CASE("Test J Statistics Collection: Widest Line")
 	}
 }
 
-TEST_CASE("Test K Statistics Collection: Analyze Buffer")
+TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"3 Statistics Collection: Analyze Buffer")
 {
-	SUBCASE("Sub Test 5: Analyze Buffer Test One Liners")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"3.1 Analyze Buffer Test One Liners")
 	{
 		std::size_t testIndex = 0;
 		for (auto line : oneLineTestInput)
@@ -149,7 +149,7 @@ TEST_CASE("Test K Statistics Collection: Analyze Buffer")
 		}
 	}
 
-	SUBCASE("Sub Test 6: Analyze Buffer Merged Test")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"3.2 Analyze Buffer Merged Test")
 	{
 		Test1ExpectedResults totals = { 0 };
 		std::string temp = mergeOneLineTests(totals);
@@ -185,7 +185,7 @@ static constexpr std::size_t bigWidestLine = 202;
 static constexpr std::size_t bigWordCount = 7705;
 static constexpr std::size_t bigLineCount = 1544;
 
-TEST_CASE("Test L Final Statistics Unit Test")
+TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"4 Final Statistics Unit Test")
 {
 	// This test case should be run after all the other tests in this file
 	// have passed.
@@ -196,7 +196,7 @@ TEST_CASE("Test L Final Statistics Unit Test")
 	std::string unitTestFile = FindUnitTestDirectorRoot();
 	REQUIRE(unitTestFile.empty() == false);
 
-	SUBCASE("Smaller overall functionality test")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"4.1 Smaller overall functionality test")
 	{
 		// Test the statistics collection against the source of CmdLineFileExtractor.h
 		// and CmdLineFileExtractor.cpp as of the time of the creation of this test
@@ -227,7 +227,7 @@ TEST_CASE("Test L Final Statistics Unit Test")
 		inStream.close();
 	}
 
-	SUBCASE("Larger overall functionality test")
+	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"4.2 Larger overall functionality test")
 	{
 		// Test the statistics collection against the source of both wconsteroids
 		// and unitTest as of the time of the creation of this test case. All of
