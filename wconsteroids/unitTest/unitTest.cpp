@@ -62,7 +62,7 @@ std::string FindUnitTestDirectorRoot()
 int main(int argc, char** argv)
 {
 	// If the test is not being run in the source directory tree some of the
-	// tests will fail. The the user and quit.
+	// tests will fail. Tell the user and quit.
 	std::string testPath = FindUnitTestDirectorRoot();
 	if (testPath.empty())
 	{
@@ -74,12 +74,15 @@ int main(int argc, char** argv)
 
 	/*
 	 * The tests are ordered A through Z, the order builds from the simplest building
-	 * blocks to agregated assemblies, testing the least complex code first.
+	 * blocks to agregated assemblies, testing the least complex code first. The
+	 * of test execution can be changed by altering the ID macros in unitTest.h
 	 * - A FileStatistics
 	 * - B ProgramOptions
 	 * - C StatisticsCollector
 	 * - D ReportWriter (currently there are no unit tests)
 	 * - E FileProcessor
+	 * - F CmdLineFileExtractor
+	 * - G CommandLineParser
 	 */
 	context.setOption("order-by", "name");
 

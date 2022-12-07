@@ -157,6 +157,7 @@
     <ClInclude Include="..\wconsteroids\ProgramOptions.h" />
     <ClInclude Include="..\wconsteroids\ReportWriter.h" />
     <ClInclude Include="..\wconsteroids\UtilityTimer.h" />
+    <ClInclude Include="FileProcessorTest.h" />
     <ClInclude Include="unitTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

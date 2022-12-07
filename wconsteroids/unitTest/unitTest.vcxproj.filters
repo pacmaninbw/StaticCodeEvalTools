@@ -92,5 +92,8 @@
     <ClInclude Include="unitTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileProcessorTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
