@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 project(wconsteroids)
 add_subdirectory(wconsteroids)
+enable_testing()
 add_subdirectory(unitTest)
