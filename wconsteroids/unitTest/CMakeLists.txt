@@ -30,3 +30,6 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # lots of warnings and all warnings as errors
     target_compile_options(unitTest PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
+
+add_test(NAME unit_test COMMAND unitTest)
+

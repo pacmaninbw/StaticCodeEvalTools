@@ -32,6 +32,16 @@ cmake -DCMAKE_BUILD_TYPE=Release -B build
 cmake --build build -j -t install
 ```
 
+## Unit Testing  
+To perform unit testing, follow this command sequence:  
+
+```
+cmake -B build
+cmake --build build -j
+cd build  
+ctest -C Debug
+```
+
 The code compiles on Windows 10 and Linux in either Visual Studio or g++. The code was developed using C++20. Portability was enabled primarily by using the C++ std::filesystem library for directory access and manipulation. There are very limited conditional compilation statements.  
 
 This has become an Open Source project. Contributions have been added by users tms13 and beroset.
