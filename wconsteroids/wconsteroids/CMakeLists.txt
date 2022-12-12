@@ -11,7 +11,7 @@ add_executable (wconsteroids
                 StatisticsCollector.cpp
 )
 
-target_include_directories(wconsteroids PUBLIC ../doctest)
+target_include_directories(wconsteroids PUBLIC ${DOCTEST_INCLUDE_DIR})
 target_compile_features(wconsteroids PUBLIC cxx_std_20)
 target_compile_definitions(wconsteroids PRIVATE DOCTEST_CONFIG_DISABLE)
 
