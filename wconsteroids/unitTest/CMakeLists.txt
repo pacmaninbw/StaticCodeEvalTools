@@ -5,13 +5,13 @@ cmake_minimum_required (VERSION 3.15)
 
 # Add source to this project's executable.
 add_executable (unitTest unitTest.cpp
-    ../wconsteroids/CmdLineFileExtractor.cpp
-    ../wconsteroids/CommandLineParser.cpp
-    ../wconsteroids/FileProcessor.cpp
-    ../wconsteroids/FileStatistics.cpp
-    ../wconsteroids/ProgramOptions.cpp
-    ../wconsteroids/ReportWriter.cpp
-    ../wconsteroids/StatisticsCollector.cpp
+    ${WCONSTEROIDS_INCLUDE_DIR}/CmdLineFileExtractor.cpp
+    ${WCONSTEROIDS_INCLUDE_DIR}/CommandLineParser.cpp
+    ${WCONSTEROIDS_INCLUDE_DIR}/FileProcessor.cpp
+    ${WCONSTEROIDS_INCLUDE_DIR}/FileStatistics.cpp
+    ${WCONSTEROIDS_INCLUDE_DIR}/ProgramOptions.cpp
+    ${WCONSTEROIDS_INCLUDE_DIR}/ReportWriter.cpp
+    ${WCONSTEROIDS_INCLUDE_DIR}/StatisticsCollector.cpp
     CmdLineFileExtractorTest.cpp
     CommandLineParserTest.cpp
     FileProcessorTest.cpp
@@ -20,7 +20,7 @@ add_executable (unitTest unitTest.cpp
     ReportWriterTest.cpp
     StatisticsCollectorTest.cpp
 )
-target_include_directories(unitTest PUBLIC ../doctest ../wconsteroids)
+target_include_directories(unitTest PUBLIC ${DOCTEST_INCLUDE_DIR} ${WCONSTEROIDS_INCLUDE_DIR})
 target_compile_features(unitTest PUBLIC cxx_std_20)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")

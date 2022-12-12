@@ -1,15 +1,16 @@
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <filesystem>
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <vector>
 #include "ProgramOptions.h"
 #include "unitTest.h"
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END
 
-static void checkWhatFailed(ProgramOptions expectedData, ProgramOptions testData)
+static void checkWhatFailed(const ProgramOptions& expectedData, const ProgramOptions& testData)
 {
 	CHECK(expectedData.blankLineCount == testData.blankLineCount);
 	CHECK(expectedData.byteCount == testData.byteCount);
@@ -342,3 +343,4 @@ TEST_CASE(PROGRAM_OPTIONS_TEST_ID"5 Program Options: Process Arguments")
 		}
 	}
 }
+

@@ -1,4 +1,4 @@
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <vector>
@@ -64,49 +64,49 @@ TEST_CASE(FILE_STATISTICS_TEST_ID"2 FileStatistics Increment Functions")
 
 	// First test every increment function individually
 
-	for (int i = 0; i < totalLineCount; i++)
+	for (std::size_t i = 0; i < totalLineCount; i++)
 	{
 		testIncrement.incrementTotalLines();
 	}
 	CHECK(testIncrement.getTotalLines() == totalLineCount);
 
-	for (int i = 0; i < commentLineCount; i++)
+	for (std::size_t i = 0; i < commentLineCount; i++)
 	{
 		testIncrement.incrementCommentsLines();
 	}
 	CHECK(testIncrement.getCommentLines() == commentLineCount);
 
-	for (int i = 0; i < codeWithCommentCount; i++)
+	for (std::size_t i = 0; i < codeWithCommentCount; i++)
 	{
 		testIncrement.incrementCodeWithComment();
 	}
 	CHECK(testIncrement.getCodeWithComment() == codeWithCommentCount);
 
-	for (int i = 0; i < blankLineCount; i++)
+	for (std::size_t i = 0; i < blankLineCount; i++)
 	{
 		testIncrement.incrementBlankLines();
 	}
 	CHECK(testIncrement.getBlankLines() == blankLineCount);
 
-	for (int i = 0; i < codeLineCount; i++)
+	for (std::size_t i = 0; i < codeLineCount; i++)
 	{
 		testIncrement.incrementCodeLines();
 	}
 	CHECK(testIncrement.getCodeLines() == codeLineCount);
 
-	for (int i = 0; i < whiteSpaceCount; i++)
+	for (std::size_t i = 0; i < whiteSpaceCount; i++)
 	{
 		testIncrement.incrementWhitespace();
 	}
 	CHECK(testIncrement.getWhitespace() == whiteSpaceCount);
 
-	for (int i = 0; i < characterCount; i++)
+	for (std::size_t i = 0; i < characterCount; i++)
 	{
 		testIncrement.incrementCharacter();
 	}
 	CHECK(testIncrement.getCharacters() == characterCount);
 
-	for (int i = 0; i < wordCount; i++)
+	for (std::size_t i = 0; i < wordCount; i++)
 	{
 		testIncrement.incrementWords();
 	}
@@ -144,23 +144,23 @@ TEST_CASE(FILE_STATISTICS_TEST_ID"4 FileStatistics Code Percentage and Add Total
 	testData.setCharCount(characterCount);
 	testData.setToLineCount(totalLineCount);
 	testData.addToWordCount(wordCount);
-	for (int i = 0; i < commentLineCount; i++)
+	for (std::size_t i = 0; i < commentLineCount; i++)
 	{
 		testData.incrementCommentsLines();
 	}
-	for (int i = 0; i < codeWithCommentCount; i++)
+	for (std::size_t i = 0; i < codeWithCommentCount; i++)
 	{
 		testData.incrementCodeWithComment();
 	}
-	for (int i = 0; i < blankLineCount; i++)
+	for (std::size_t i = 0; i < blankLineCount; i++)
 	{
 		testData.incrementBlankLines();
 	}
-	for (int i = 0; i < codeLineCount; i++)
+	for (std::size_t i = 0; i < codeLineCount; i++)
 	{
 		testData.incrementCodeLines();
 	}
-	for (int i = 0; i < whiteSpaceCount; i++)
+	for (std::size_t i = 0; i < whiteSpaceCount; i++)
 	{
 		testData.incrementWhitespace();
 	}
@@ -179,7 +179,7 @@ TEST_CASE(FILE_STATISTICS_TEST_ID"4 FileStatistics Code Percentage and Add Total
 		constexpr std::size_t multiplier = 6;
 		FileStatistics totals("totals");
 
-		for (int i = 0; i < multiplier; i++)
+		for (std::size_t i = 0; i < multiplier; i++)
 		{
 			testData.addTotals(totals);
 		}
@@ -197,3 +197,4 @@ TEST_CASE(FILE_STATISTICS_TEST_ID"4 FileStatistics Code Percentage and Add Total
 		CHECK(testData.getPerecentageOfCode() <= (percentage * 100) + 1);
 	}
 }
+

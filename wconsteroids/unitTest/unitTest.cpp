@@ -1,6 +1,6 @@
 ﻿//#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #define DOCTEST_CONFIG_IMPLEMENT
-#include <doctest/doctest.h>
+#include <doctest.h>
 DOCTEST_MSVC_SUPPRESS_WARNING_WITH_PUSH(4007) // 'function' : must be 'attribute' - see issue #182
 DOCTEST_MSVC_SUPPRESS_WARNING_POP
 
@@ -92,3 +92,4 @@ int main(int argc, char** argv)
 
 	return res;
 }
+

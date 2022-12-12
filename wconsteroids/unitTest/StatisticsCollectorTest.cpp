@@ -1,4 +1,4 @@
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <fstream>
@@ -258,3 +258,4 @@ TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"4 Final Statistics Unit Test")
 		inStream.close();
 	}
 }
+
