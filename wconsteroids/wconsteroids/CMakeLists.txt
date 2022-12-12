@@ -19,6 +19,12 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     # warning level 4 and all warnings as errors
     target_compile_options(wconsteroids PRIVATE /W4 /WX -D_CRT_SECURE_NO_WARNINGS)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        # require at least gcc 12 to support ranges and views
+        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 12)
+            message(FATAL_ERROR "GCC version must be at least 12!")
+        endif()
+    endif()
     # lots of warnings and all warnings as errors
     target_compile_options(wconsteroids PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
