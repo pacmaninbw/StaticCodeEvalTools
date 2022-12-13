@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\PaulC\Documents\ProjectsNfwsi\StaticCodeEvalTools\wconsteroids\wconsteroids;C:\Users\PaulC\Documents\ProjectsNfwsi\StaticCodeEvalTools\wconsteroids\doctest;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\PaulC\Documents\ProjectsNfwsi\StaticCodeEvalTools\wconsteroids\wconsteroids;C:\Users\PaulC\Documents\ProjectsNfwsi\StaticCodeEvalTools\wconsteroids\build\doctest\src\doctest\doctest;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
