@@ -53,7 +53,7 @@ std::string FindUnitTestDirectorRoot()
 		{
 			testDir = testDir.parent_path();
 		}
-		testDir /= "unitTest";
+		testDir /= "testInputFiles";
 	}
 
 	return testDir.string();
