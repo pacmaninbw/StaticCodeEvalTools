@@ -1,7 +1,6 @@
 #include <doctest.h>
 
 DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
-#include <cstring>
 #include <fstream>
 #include <filesystem>
 #include <string>
@@ -81,8 +80,7 @@ TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"1 Statistics Collection: Count Words and 
 
 	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"1.2 All One Liners Together")
 	{
-		Test1ExpectedResults totals;
-		memset(&totals, 0, sizeof(totals));
+		Test1ExpectedResults totals{};
 		std::string temp = mergeOneLineTests(totals);
 		std::string_view mergedTestInput = temp;
 
@@ -114,8 +112,7 @@ TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"2 Statistics Collection: Widest Line")
 
 	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"2.2 Test Widest Line Merged")
 	{
-		Test1ExpectedResults totals;
-		memset(&totals, 0, sizeof(totals));
+		Test1ExpectedResults totals{};
 		std::string temp = mergeOneLineTests(totals);
 		std::string_view mergedTestInput = temp;
 
@@ -155,8 +152,7 @@ TEST_CASE(STATISTICS_COLLECTOR_TEST_ID"3 Statistics Collection: Analyze Buffer")
 
 	SUBCASE(STATISTICS_COLLECTOR_TEST_ID"3.2 Analyze Buffer Merged Test")
 	{
-		Test1ExpectedResults totals;
-		memset(&totals, 0, sizeof(totals));
+		Test1ExpectedResults totals{};
 		std::string temp = mergeOneLineTests(totals);
 		std::string_view mergedTestInput = temp;
 
