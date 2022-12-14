@@ -35,7 +35,7 @@ TEST_CASE("E1 File Processor: Test processFile")
 	{
 		std::string realFileSpec = FindUnitTestDirectorRoot();
 		CHECK(realFileSpec.empty() == false);
-		realFileSpec += "/unitTest.h";
+		realFileSpec += "/smallerStatTest.txt";
 		FileStatistics testTotals;
 		std::string resultString = processFile(testOptions, realFileSpec, testTotals);
 		CHECK(resultString.empty() == false);
