@@ -2,7 +2,7 @@
 #define FILE_PROCESSOR_UNIT_TEST_H
 
 /*
- * The cide in this file tests static functions in FileProcessor.cpp, so
+ * The code in this file tests static functions in FileProcessor.cpp, so
  * it needs to be included by the source file.
  */
 #include "../unitTest/unitTest.h"
@@ -14,6 +14,7 @@ TEST_CASE("E1 File Processor: Test processFile")
 	SUBCASE("E.1: Test Empty File Name")
 	{
 		FileStatistics testTotals;
+		// This test does generate an error message in the outpuit.
 		std::string resultString = processFile(testOptions, "", testTotals);
 		// If process file threw an exception then there should be no results
 		// to report
@@ -24,6 +25,7 @@ TEST_CASE("E1 File Processor: Test processFile")
 	SUBCASE("E1.2: Test File That Doesn't Exist")
 	{
 		FileStatistics testTotals;
+		// This test does generate an error message in the outpuit.
 		std::string resultString = processFile(testOptions, "notAFile.txt", testTotals);
 		// If process file threw an exception then there should be no results
 		// to report
