@@ -6,6 +6,7 @@ DOCTEST_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN
 #include <filesystem>
 #include <iterator>
 #include <ranges>
+#include <regex>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -64,7 +65,7 @@ static bool SearchSubDirs;
 static std::vector<std::string> fileList;
 // fileExtentions needs to be a vector string, there are bugs introduced
 // when it is a string_view, at least in MSVC++ 2022.
-static std::vector<std::string> fileExtensions;
+static std::vector<std::string> fileNamePatterns;
 static std::vector<std::string_view> nonFlagArgs;
 static std::vector<SubDirNode> subDirectories;
 
@@ -127,28 +128,70 @@ static void discoverAllSubDirs()
 	}
 }
 
-static bool containsWildCard(std::string_view fileSpec)
+static const std::string questionMarkReplacement("[a-zA-Z0-9:$@#-_./]");
+static const std::string starReplacement(questionMarkReplacement + "*");
+
+static std::string convertWildCards(std::string possiblePattern)
 {
-	return fileSpec.find('*') != std::string::npos;
+	std::string regexString;
+	try
+	{
+		std::regex qmark("\\?");
+		regexString = std::regex_replace(possiblePattern, qmark, questionMarkReplacement);
+		std::regex asterisk("\\*");
+		regexString = std::regex_replace(regexString, asterisk, starReplacement);
+	}
+	catch (std::regex_error re)
+	{
+		std::cerr << "Programmer Error: Regex Error: " << re.what() << "\n";
+		std::cerr << possiblePattern << "\n";
+		throw;
+	}
+
+	return regexString;
 }
 
-static auto searchDirectoryForFilesByType(SubDirNode currentDir, std::string type)
+static bool containsWildCard(std::string_view fileSpec)
+{
+	// 12/22/2022 Expanded definition of wild cards to include '?'.
+	return fileSpec.find('*') != std::string::npos
+		|| fileSpec.find('?') != std::string::npos;
+}
+
+// 12/22/2022 Use pattern matching of files rather than matching file extensions.
+static auto searchDirectoryForFilesByPattern(SubDirNode currentDir,
+	std::string partialFileSpec)
 {
 	auto is_missing = [](const std::string& branch) {
 		return std::ranges::find(fileList, branch) == fileList.end();
 	};
 
-	auto is_type = [&type](auto& f) { return f.path().extension().string() == type; };
+	std::vector<std::string> newFiles = {};
+	std::string patternString = convertWildCards(partialFileSpec);
+	// Handle any programmer regex errors.
+	try
+	{
+		std::string dir = currentDir.fileSpec.string();
+		std::regex pattern(patternString);
+		auto is_match = [pattern](auto f) {
+			return std::regex_search(f.path().string(), pattern);
+		};
 
-	auto files = fsys::directory_iterator{ currentDir.fileSpec }
-	| std::views::filter([](auto& f) { return f.is_regular_file() ||
-		f.is_character_file(); })
-		| std::views::filter(is_type)
-		| std::views::transform([](auto& f) { return f.path().string(); })
-		| std::views::filter(is_missing);
+		auto files = fsys::directory_iterator{ currentDir.fileSpec }
+			| std::views::filter([](auto& f) { return f.is_regular_file() ||
+				f.is_character_file(); })
+			| std::views::filter(is_match)
+			| std::views::transform([](auto& f) { return f.path().string(); })
+			| std::views::filter(is_missing);
 
-	auto newFiles = std::vector<std::string>{};
-	std::ranges::copy(files, std::back_inserter(newFiles));
+		std::ranges::copy(files, std::back_inserter(newFiles));
+	}
+	catch (std::regex_error& re)
+	{
+		std::cerr << "Programmer Error: Regex Error: " << re.what() << "\n";
+		std::cerr << patternString << "\n";
+		throw;
+	}
 
 	return newFiles;
 }
@@ -157,10 +200,10 @@ static void searchDirectoryForFiles(SubDirNode currentDir)
 {
 	// In the case of wildcard specification add the files to the file list in
 	// the order they were specified.
-	for (auto fileType : fileExtensions)
+	for (auto fileNamePattern : fileNamePatterns)
 	{
 		std::vector<std::string> newFiles =
-			searchDirectoryForFilesByType(currentDir, fileType);
+			searchDirectoryForFilesByPattern(currentDir, fileNamePattern);
 		std::copy(newFiles.begin(), newFiles.end(), std::back_inserter(fileList));
 	}
 }
@@ -194,7 +237,7 @@ static std::vector<std::string_view> findAllFileTypeSpecs()
 	return fileSpecTypes;
 }
 
-static std::vector<std::string> getFileTypes()
+static std::vector<std::string> getFileNamePatterns()
 {
 	std::vector<std::string> fileTypes;
 	std::vector<std::string_view> fileSpecTypes = findAllFileTypeSpecs();
@@ -227,7 +270,7 @@ static void addListedFilesToFileList()
 static void findAllInputFiles()
 {
 	// if there is nothing to search for quit.
-	if (!SearchSubDirs && fileExtensions.size() == 0)
+	if (!SearchSubDirs || fileNamePatterns.empty())
 	{
 		return;
 	}
@@ -265,8 +308,8 @@ CmdLineFileExtractor::CmdLineFileExtractor(
 
 void CmdLineFileExtractor::findAllRequiredFiles() noexcept
 {
-	fileExtensions.clear();
-	fileExtensions = getFileTypes();
+	fileNamePatterns.clear();
+	fileNamePatterns = getFileNamePatterns();
 	addListedFilesToFileList();
 	findAllInputFiles();
 }
