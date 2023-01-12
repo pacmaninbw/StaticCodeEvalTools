@@ -128,7 +128,7 @@ static void discoverAllSubDirs()
 	}
 }
 
-static const std::string questionMarkReplacement("[a-zA-Z0-9:$@#-_./]");
+static const std::string questionMarkReplacement("[A-Za-z0-9-_\\.]");
 static const std::string starReplacement(questionMarkReplacement + "*");
 
 static std::string convertWildCards(std::string possiblePattern)
@@ -140,6 +140,9 @@ static std::string convertWildCards(std::string possiblePattern)
 		regexString = std::regex_replace(possiblePattern, qmark, questionMarkReplacement);
 		std::regex asterisk("\\*");
 		regexString = std::regex_replace(regexString, asterisk, starReplacement);
+		std::string dotReplacement = "\\.";
+		std::regex findDot(dotReplacement);
+		regexString = std::regex_replace(regexString, findDot, dotReplacement);
 	}
 	catch (std::regex_error re)
 	{
@@ -173,14 +176,14 @@ static auto searchDirectoryForFilesByPattern(SubDirNode currentDir,
 	{
 		std::string dir = currentDir.fileSpec.string();
 		std::regex pattern(patternString);
-		auto is_match = [pattern](auto f) {
+		auto has_pattern = [pattern](auto f) {
 			return std::regex_search(f.path().string(), pattern);
 		};
 
 		auto files = fsys::directory_iterator{ currentDir.fileSpec }
 			| std::views::filter([](auto& f) { return f.is_regular_file() ||
 				f.is_character_file(); })
-			| std::views::filter(is_match)
+			| std::views::filter(has_pattern)
 			| std::views::transform([](auto& f) { return f.path().string(); })
 			| std::views::filter(is_missing);
 
