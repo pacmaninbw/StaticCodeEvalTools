@@ -170,7 +170,7 @@ static auto searchDirectoryForFilesByPattern(SubDirNode currentDir,
 	};
 
 	std::vector<std::string> newFiles = {};
-	std::string patternString = convertWildCards(partialFileSpec);
+	std::string patternString = convertWildCards(partialFileSpec) + "$";
 	// Handle any programmer regex errors.
 	try
 	{
@@ -273,7 +273,7 @@ static void addListedFilesToFileList()
 static void findAllInputFiles()
 {
 	// if there is nothing to search for quit.
-	if (!SearchSubDirs || fileNamePatterns.empty())
+	if (!SearchSubDirs && fileNamePatterns.empty())
 	{
 		return;
 	}
