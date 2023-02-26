@@ -128,7 +128,7 @@ static void discoverAllSubDirs()
 	}
 }
 
-static const std::string questionMarkReplacement("[A-Za-z0-9-_\\.]");
+static const std::string questionMarkReplacement("[a-zA-Z0-9:$@#-_./]");
 static const std::string starReplacement(questionMarkReplacement + "*");
 
 static std::string convertWildCards(std::string possiblePattern)
@@ -140,11 +140,8 @@ static std::string convertWildCards(std::string possiblePattern)
 		regexString = std::regex_replace(possiblePattern, qmark, questionMarkReplacement);
 		std::regex asterisk("\\*");
 		regexString = std::regex_replace(regexString, asterisk, starReplacement);
-		std::string dotReplacement = "\\.";
-		std::regex findDot(dotReplacement);
-		regexString = std::regex_replace(regexString, findDot, dotReplacement);
 	}
-	catch (std::regex_error re)
+	catch (std::regex_error& re)
 	{
 		std::cerr << "Programmer Error: Regex Error: " << re.what() << "\n";
 		std::cerr << possiblePattern << "\n";
@@ -170,20 +167,20 @@ static auto searchDirectoryForFilesByPattern(SubDirNode currentDir,
 	};
 
 	std::vector<std::string> newFiles = {};
-	std::string patternString = convertWildCards(partialFileSpec) + "$";
+	std::string patternString = convertWildCards(partialFileSpec);
 	// Handle any programmer regex errors.
 	try
 	{
 		std::string dir = currentDir.fileSpec.string();
 		std::regex pattern(patternString);
-		auto has_pattern = [pattern](auto f) {
+		auto is_match = [pattern](auto f) {
 			return std::regex_search(f.path().string(), pattern);
 		};
 
 		auto files = fsys::directory_iterator{ currentDir.fileSpec }
 			| std::views::filter([](auto& f) { return f.is_regular_file() ||
 				f.is_character_file(); })
-			| std::views::filter(has_pattern)
+			| std::views::filter(is_match)
 			| std::views::transform([](auto& f) { return f.path().string(); })
 			| std::views::filter(is_missing);
 
@@ -273,7 +270,7 @@ static void addListedFilesToFileList()
 static void findAllInputFiles()
 {
 	// if there is nothing to search for quit.
-	if (!SearchSubDirs && fileNamePatterns.empty())
+	if (!SearchSubDirs || fileNamePatterns.empty())
 	{
 		return;
 	}
